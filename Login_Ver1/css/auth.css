@@ -1,0 +1,28 @@
+body { font-family: 'Inter', sans-serif; }
+
+/* Hiệu ứng chuyển động mượt mà */
+.transition-height {
+    transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out, margin 0.3s ease;
+}
+
+/* Animation quay tròn cho loading */
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+.animate-spin {
+    animation: spin 1s linear infinite;
+}
+
+/* Ẩn hiện input */
+.hidden-field {
+    max-height: 0;
+    opacity: 0;
+    margin: 0;
+    overflow: hidden;
+    pointer-events: none;
+}
+.visible-field {
+    max-height: 100px; /* Đủ lớn để chứa input */
+    opacity: 1;
+    margin-bottom: 1.25rem; /* Tương đương space-y-5 */
+}

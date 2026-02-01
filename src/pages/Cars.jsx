@@ -120,7 +120,7 @@ function Cars() {
         }}
       >
         <h2>Cars Management</h2>
-        <button className="add-car-btn" onClick={() => setShowModal(true)}>
+        <button className="add-btn" onClick={() => setShowModal(true)}>
           Add Car
         </button>
       </div>
@@ -137,8 +137,8 @@ function Cars() {
               <th>Price</th>
               <th>Year</th>
               <th>Origin</th>
-              <th>Condition</th>
               <th>Description</th>
+              <th>Condition</th>
               <th>Status</th>
               <th>Action</th>
             </tr>
@@ -146,7 +146,7 @@ function Cars() {
           <tbody>
             {cars.length === 0 ? (
               <tr>
-                <td colSpan="10" style={{ textAlign: "center", fontSize: "20px", padding: "20px", fontWeight: "500" }}>
+                <td colSpan="11" style={{ textAlign: "center", fontSize: "20px", padding: "20px", fontWeight: "500" }}>
                   No cars yet
                 </td>
               </tr>

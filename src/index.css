@@ -122,7 +122,7 @@ body {
   font-weight: 600;
 }
 
-.logout-btn, .add-car-btn {
+.logout-btn, .add-btn {
   background: #111827;
   color: white;
   padding: 7px 14px;
@@ -132,11 +132,11 @@ body {
   transition: 0.2s;
 }
 
-.logout-btn, .add-car-btn:hover {
+.logout-btn, .add-btn:hover {
   background: #000;
 }
 
-.add-car-btn {
+.add-btn {
   font-weight: 600;
 }
 

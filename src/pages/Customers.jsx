@@ -15,10 +15,9 @@ function Users() {
   const [nationalId, setNationalId] = useState(""); // Thay cho condition (CCCD/ID Card)
   const [country, setCountry] = useState("");
   const [address, setAddress] = useState("");
-
+  const [role, setRole] = useState("Standard"); // Mặc định là khách hàng tiêu chuẩn, thay cho brand
   // Trạng thái & UI
   const [status, setStatus] = useState("Active"); // Active/Locked
-  const [preview, setPreview] = useState(null);
   const [loading, setLoading] = useState(false);
 
   // State cho chức năng Edit/Delete
@@ -30,6 +29,7 @@ function Users() {
     setStatus(e.target.checked ? "Active" : "Locked");
   };
 
+  // Cập nhật hàm handleSubmit để lưu thông tin khách hàng
   const handleSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
@@ -37,35 +37,58 @@ function Users() {
     const userData = {
       id: editingUser ? editingUser.id : Date.now(),
       name: userName,
-      brand,
-      price,
-      year,
-      country,
-      address,
-      condition,
-      status,
-      image: image
-        ? URL.createObjectURL(image)
-        : editingUser
-          ? editingUser.image
-          : "https://via.placeholder.com/80",
+      email: email, // Cập nhật từ email state
+      phone: phone, // Cập nhật từ phone state
+      dob: dob, // Cập nhật từ dob state
+      nationalId: nationalId,
+      country: country,
+      address: address,
+      password: password,
+      status: status,
+      role: role,
     };
 
     setTimeout(() => {
       if (editingUser) {
-        // Logic Cập nhật
-        setUsers(users.map((c) => (c.id === editingUser.id ? userData : c)));
+        setUsers(users.map((u) => (u.id === editingUser.id ? userData : u)));
       } else {
-        // Logic Thêm mới
         setUsers((prev) => [...prev, userData]);
       }
-
-      // Reset và đóng modal
       setLoading(false);
       setShowModal(false);
-      setEditingUser(null); // Quan trọng: Xóa trạng thái đang edit
       resetForm();
     }, 500);
+  };
+
+  // Cập nhật hàm handleEdit để đổ dữ liệu khách hàng lên form
+  const handleEdit = (user) => {
+    setEditingUser(user);
+    setUserName(user.name);
+    setEmail(user.email);
+    setPassword(user.password);
+    setPhone(user.phone);
+    setDob(user.dob);
+    setNationalId(user.nationalId);
+    setCountry(user.country);
+    setAddress(user.address);
+    setStatus(user.status);
+    setRole(user.role);
+    setShowModal(true);
+  };
+
+  // Hàm resetForm chuẩn cho khách hàng
+  const resetForm = () => {
+    setEditingUser(null);
+    setUserName("");
+    setEmail("");
+    setPassword("");
+    setPhone("");
+    setDob("");
+    setNationalId("");
+    setCountry("");
+    setAddress("");
+    setStatus("Active");
+    setRole("Standard");
   };
 
   const confirmDelete = (userId) => {
@@ -77,31 +100,6 @@ function Users() {
     setUsers(users.filter((user) => user.id !== userToDelete));
     setShowDeleteModal(false);
     setUserToDelete(null);
-  };
-
-  const handleEdit = (user) => {
-    setEditingUser(user);
-    setUserName(user.name);
-    setBrand(user.brand);
-    setPrice(user.price);
-    setYear(user.year);
-    setCountry(user.country);
-    setCondition(user.condition);
-    setAddress(user.address);
-    setStatus(user.status);
-    setShowModal(true);
-  };
-
-  // Hàm reset form tiện ích
-  const resetForm = () => {
-    setUserName("");
-    setBrand("");
-    setPrice("");
-    setYear("");
-    setCountry("");
-    setAddress("");
-    setCondition("New");
-    setStatus("Active");
   };
 
   return (
@@ -126,13 +124,12 @@ function Users() {
           <thead>
             <tr>
               <th>#</th>
-              <th>Image</th>
-              <th>User Name</th>
-              <th>Brand</th>
-              <th>Price</th>
-              <th>Year</th>
-              <th>From</th>
-              <th>Condition</th>
+              <th>Full Name</th>
+              <th>Role</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>ID Card</th>
+              <th>Birthday</th>
               <th>Address</th>
               <th>Status</th>
               <th>Action</th>
@@ -141,61 +138,47 @@ function Users() {
           <tbody>
             {users.length === 0 ? (
               <tr>
-                <td
-                  colSpan="11"
-                  style={{
-                    textAlign: "center",
-                    fontSize: "20px",
-                    padding: "20px",
-                    fontWeight: "500",
-                  }}
-                >
-                  No customer yet
+                <td colSpan="10" style={{ textAlign: "center", fontSize: "20px", padding: "20px", fontWeight: "500" }}>
+                  No customers yet
                 </td>
               </tr>
-            ) : (
-              users.map((user, index) => (
-                <tr key={user.id}>
-                  <td>{index + 1}</td>
-                  <td>
-                    <img
-                      src={user.image}
-                      width="80"
-                      alt=""
-                      style={{ borderRadius: "4px" }}
-                    />
-                  </td>
-                  <td>{user.name}</td>
-                  <td>{user.brand}</td>
-                  <td>${user.price}</td>
-                  <td>{user.year}</td>
-                  <td>{user.country}</td>
-                  <td className="text-truncate">{user.address}</td>
-                  <td>{user.condition}</td>
-                  <td>
-                    <span
-                      className={`badge ${user.status === "Active" ? "green" : "red"}`}
-                    >
-                      {user.status}
-                    </span>
-                  </td>
-                  <td>
-                    <button
-                      className="btn-edit"
-                      onClick={() => handleEdit(user)}
-                    >
-                      Edit
-                    </button>
-                    <button
-                      className="btn-delete"
-                      onClick={() => confirmDelete(user.id)}
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              ))
-            )}
+            ) : (users.map((user, index) => (
+              <tr key={user.id}>
+                <td>{index + 1}</td>
+                <td>
+                  <strong>{user.name}</strong>
+                </td>
+                <td>
+                  <strong>{user.role}</strong>
+                </td>
+                <td>{user.email}</td>
+                <td>{user.phone}</td>
+                <td>{user.nationalId}</td>
+                <td>{user.dob}</td>
+                <td className="text-truncate" style={{ maxWidth: "150px" }}>
+                  {user.address}
+                </td>
+                <td>
+                  <span
+                    className={`badge ${user.status === "Active" ? "green" : "red"}`}
+                  >
+                    {user.status}
+                  </span>
+                </td>
+                <td>
+                  <button className="btn-edit" onClick={() => handleEdit(user)}>
+                    Edit
+                  </button>
+                  <button
+                    className="btn-delete"
+                    onClick={() => confirmDelete(user.id)}
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))
+         )}
           </tbody>
         </table>
       </div>
@@ -205,52 +188,96 @@ function Users() {
         <div className="modal-overlay">
           <div className="modal-box">
             <form onSubmit={handleSubmit} className="modal-form">
-              <h3>{editingUser ? "Update User Info" : "Add New User"}</h3>
+              <h3>
+                {editingUser ? "Update Customer Info" : "Add New Customer"}
+              </h3>
 
-              {/* Row 1: User Name */}
-              <div className="form-group">
-                <label>User Name</label>
-                <input
-                  type="text"
-                  placeholder="e.g. John Smith"
-                  value={userName}
-                  onChange={(e) => setUserName(e.target.value)}
-                  required
-                />
-              </div>
-
-              {/* Row 2: Brand, Price & Status */}
+              {/* Row 1: Full Name & Email & Password */}
               <div className="form-row">
                 <div className="form-group">
-                  <label>Brand</label>
-                  <select
-                    className="custom-select"
-                    value={brand}
-                    onChange={(e) => setBrand(e.target.value)}
-                    required
-                  >
-                    <option value="" disabled>
-                      Select a brand
-                    </option>
-                    <option value="Ferrari">Ferrari</option>
-                    <option value="Porsche">Porsche</option>
-                    <option value="Mercedes">Mercedes</option>
-                    <option value="Mclaren">Mclaren</option>
-                    <option value="Lamborghini">Lamborghini</option>
-                  </select>
-                </div>
-                <div className="form-group">
-                  <label>Price ($)</label>
+                  <label>Full Name</label>
                   <input
-                    type="number"
-                    placeholder="0.00"
-                    value={price}
-                    onChange={(e) => setPrice(e.target.value)}
+                    type="text"
+                    value={userName}
+                    onChange={(e) => setUserName(e.target.value)}
                     required
                   />
                 </div>
                 <div className="form-group">
-                  <label>Status</label>
+                  <label>Email Address</label>
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Password</label>
+                  <input
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                  />
+                </div>
+              </div>
+
+              {/* Row 2: Phone & National ID */}
+              <div className="form-row">
+                <div className="form-group">
+                  <label>Date of Birth</label>
+                  <input
+                    type="date"
+                    value={dob}
+                    onChange={(e) => setDob(e.target.value)}
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Phone Number</label>
+                  <input
+                    type="text"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                  />
+                </div>
+                <div className="form-group">
+                  <label>National ID / ID Card</label>
+                  <input
+                    type="text"
+                    placeholder="12-digit number"
+                    value={nationalId}
+                    onChange={(e) => setNationalId(e.target.value)}
+                  />
+                </div>
+              </div>
+
+              {/* Row 3: Country & Role & Status */}
+              <div className="form-row">
+                <div className="form-group">
+                  <label>Country</label>
+                  <input
+                    type="text"
+                    value={country}
+                    onChange={(e) => setCountry(e.target.value)}
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Customer Role</label>
+                  <select
+                    className="custom-select"
+                    value={role}
+                    onChange={(e) => setRole(e.target.value)}
+                    required
+                  >
+                      <option value="Standard">Standard</option>
+                      <option value="V.I.P">V.I.P</option>
+                      <option value="S-V.I.P">S-V.I.P</option>
+                      <option value="Potential">Potential</option>
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label>Account Status</label>
                   <div className="toggle-switch-wrapper">
                     <span
                       className={`status-text ${status === "Locked" ? "active" : ""}`}
@@ -262,7 +289,9 @@ function Users() {
                         type="checkbox"
                         checked={status === "Active"}
                         onChange={(e) =>
-                          setStatus(e.target.checked ? "Active" : "Locked")
+                          setStatus(
+                            e.target.checked ? "Active" : "Locked",
+                          )
                         }
                       />
                       <span className="slider round"></span>
@@ -276,83 +305,15 @@ function Users() {
                 </div>
               </div>
 
-              {/* Row 3: Year, Country & Condition */}
-              <div className="form-row">
-                <div className="form-group">
-                  <label>Year</label>
-                  <input
-                    type="number"
-                    placeholder="e.g 2024"
-                    value={year}
-                    onChange={(e) => setYear(e.target.value)}
-                  />
-                </div>
-                <div className="form-group">
-                  <label>Country</label>
-                  <input
-                    type="text"
-                    placeholder="e.g. Vietnam"
-                    value={country}
-                    onChange={(e) => setCountry(e.target.value)}
-                  />
-                </div>
-                <div className="form-group">
-                  <label>Condition</label>
-                  <div className="segmented-control">
-                    <div
-                      className={`selection-slider ${condition === "Used" ? "is-used" : ""}`}
-                    ></div>
-
-                    <button
-                      type="button"
-                      className={condition === "New" ? "active" : ""}
-                      onClick={() => setCondition("New")}
-                    >
-                      New
-                    </button>
-
-                    <button
-                      type="button"
-                      className={condition === "Used" ? "active" : ""}
-                      onClick={() => setCondition("Used")}
-                    >
-                      Used
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              {/* Row 4: Address */}
+              {/* Row 5: Address */}
               <div className="form-group">
                 <label>Address</label>
                 <textarea
-                  rows="3"
-                  placeholder="Briefly describe the user features..."
+                  rows="2"
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
                   className="custom-textarea"
                 />
-              </div>
-
-              {/* Row 5: User Image & Preview */}
-              <div className="form-group">
-                <label>User Image</label>
-                <input
-                  type="file"
-                  className="file-input"
-                  onChange={handleImageChange}
-                />
-
-                {/* Khung Preview nằm ngay dưới Input File */}
-                <div className="image-preview-container">
-                  {preview ? (
-                    <img src={preview} alt="Preview" className="img-fill" />
-                  ) : (
-                    <div className="no-image-placeholder">
-                      <span>No image selected</span>
-                    </div>
-                  )}
-                </div>
               </div>
 
               <div className="modal-actions">
@@ -360,19 +321,14 @@ function Users() {
                   type="button"
                   onClick={() => {
                     setShowModal(false);
-                    setEditingUser(null);
                     resetForm();
                   }}
                   className="cancel-btn"
                 >
                   Cancel
                 </button>
-                <button type="submit" className="submit-btn" disabled={loading}>
-                  {loading
-                    ? "Saving..."
-                    : editingUser
-                      ? "Update User"
-                      : "Add User"}
+                <button type="submit" className="submit-btn">
+                  {editingUser ? "Update" : "Add Customer"}
                 </button>
               </div>
             </form>
@@ -386,8 +342,7 @@ function Users() {
             <div className="confirm-icon">⚠️</div>
             <h3>Are you sure?</h3>
             <p>
-              Do you really want to delete this User? <br /> This action cannot
-              be undone.
+              Do you really want to delete this User? <br /> This action cannot be undone.
             </p>
             <div className="modal-actions confirm-actions">
               <button

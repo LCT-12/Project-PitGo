@@ -380,7 +380,7 @@ input:checked + .slider:before {
   z-index: 0;
 }
 
-/* Khi chọn 'Used', slider trượt sang phải */
+/* Slider trượt 'New' - 'Used' */
 .selection-slider.is-used {
   transform: translateX(100%);
 }
@@ -411,7 +411,7 @@ input:checked + .slider:before {
 .img-fill {
   width: 100%;
   height: 100%;
-  object-fit: contain; /* Hoặc 'cover' tùy bạn muốn thấy toàn bộ hay lấp đầy */
+  object-fit: contain; /* Hoặc 'cover' - toàn bộ hoặc lấp đầy */
 }
 
 .no-image-placeholder {

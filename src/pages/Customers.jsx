@@ -149,7 +149,9 @@ function Users() {
                   <strong>{user.name}</strong>
                 </td>
                 <td>
-                  <strong>{user.role}</strong>
+                  <span className={`role-badge ${user.role?.toLowerCase()}`}>
+                    {user.role}
+                  </span>
                 </td>
                 <td>{user.email}</td>
                 <td>{user.phone}</td>
@@ -271,8 +273,8 @@ function Users() {
                     required
                   >
                       <option value="Standard">Standard</option>
-                      <option value="V.I.P">V.I.P</option>
-                      <option value="S-V.I.P">S-V.I.P</option>
+                      <option value="VIP">V.I.P</option>
+                      <option value="S-VIP">S-VIP</option>
                       <option value="Potential">Potential</option>
                   </select>
                 </div>

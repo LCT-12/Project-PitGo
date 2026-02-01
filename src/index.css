@@ -504,6 +504,7 @@ input:focus {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
 /* Delete Modal */
 .confirm-box {
   max-width: 400px;
@@ -546,4 +547,35 @@ input:focus {
 .confirm-actions {
   justify-content: center !important;
   gap: 20px !important;
+}
+
+/* Role Badge Styles */
+.role-badge {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.role-badge.standard { 
+  background: #e2e8f0; 
+  color: #475569; 
+}
+
+.role-badge.vip { 
+  background: #fef9c3; 
+  color: #a16207; 
+  border: 1px solid #fde047; 
+}
+
+.role-badge.s-vip { 
+  background: #fae8ff; 
+  color: #86198f; 
+  border: 1px solid #f5d0fe; 
+}
+
+.role-badge.potential {
+   background: #dbeafe; 
+   color: #1e40af; 
 }

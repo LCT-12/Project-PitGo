@@ -223,7 +223,7 @@ function Users() {
                 </div>
               </div>
 
-              {/* Row 2: Phone & National ID */}
+              {/* Row 2: DOB & Phone & National ID */}
               <div className="form-row">
                 <div className="form-group">
                   <label>Date of Birth</label>

@@ -1,0 +1,67 @@
+export const mockCars = [
+  {
+    id: 101,
+    carName: "Lamborghini Aventador",
+    brand: "Lamborghini",
+    price: 520000,
+    image: "https://via.placeholder.com/120",
+    year: 2024,
+    origin: "Italy",
+    condition: "New",
+    description: "V12 supercar with 770HP",
+    status: "In Stock",
+    createdAt: "2025-01-01"
+  },
+  {
+    id: 102,
+    carName: "Ferrari SF90 Stradale",
+    brand: "Ferrari",
+    price: 610000,
+    image: "https://via.placeholder.com/120",
+    year: 2023,
+    origin: "Italy",
+    condition: "New",
+    description: "Hybrid hypercar",
+    status: "Reserved",
+    createdAt: "2025-01-05"
+  },
+  {
+    id: 103,
+    carName: "Porsche 911 Turbo S",
+    brand: "Porsche",
+    price: 230000,
+    image: "https://via.placeholder.com/120",
+    year: 2024,
+    origin: "Germany",
+    condition: "New",
+    description: "Legendary sports car with AWD",
+    status: "In Stock",
+    createdAt: "2025-02-01"
+  },
+  {
+    id: 104,
+    carName: "McLaren 720S",
+    brand: "McLaren",
+    price: 310000,
+    image: "https://via.placeholder.com/120",
+    year: 2022,
+    origin: "UK",
+    condition: "Used",
+    description: "Lightweight carbon fiber supercar",
+    status: "Sold",
+    createdAt: "2025-02-10"
+  },
+  {
+    id: 105,
+    carName: "Bugatti Chiron",
+    brand: "Bugatti",
+    price: 3000000,
+    image: "https://via.placeholder.com/120",
+    year: 2024,
+    origin: "France",
+    condition: "New",
+    description: "1500HP hypercar masterpiece",
+    status: "Reserved",
+    createdAt: "2025-02-20"
+  }
+];

@@ -16,6 +16,7 @@ function Users() {
   const [country, setCountry] = useState("");
   const [address, setAddress] = useState("");
   const [role, setRole] = useState("Standard"); // Mặc định là khách hàng tiêu chuẩn, thay cho brand
+  
   // Trạng thái & UI
   const [status, setStatus] = useState("Active"); // Active/Locked
   const [loading, setLoading] = useState(false);

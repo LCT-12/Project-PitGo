@@ -38,9 +38,9 @@ function Users() {
     const userData = {
       id: editingUser ? editingUser.id : Date.now(),
       name: userName,
-      email: email, // Cập nhật từ email state
-      phone: phone, // Cập nhật từ phone state
-      dob: dob, // Cập nhật từ dob state
+      email: email,
+      phone: phone,
+      dob: dob,
       nationalId: nationalId,
       country: country,
       address: address,

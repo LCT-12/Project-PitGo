@@ -65,7 +65,7 @@ function Cars() {
       // Reset và đóng modal
       setLoading(false);
       setShowModal(false);
-      setEditingCar(null); // Quan trọng: Xóa trạng thái đang edit
+      setEditingCar(null);
       resetForm();
     }, 500);
   };

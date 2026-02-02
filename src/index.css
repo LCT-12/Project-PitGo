@@ -271,7 +271,7 @@ body {
   margin-bottom: 15px;
 }
 
-/* Brands Selection */
+/* CSS Selection */
 .custom-select {
   padding: 10px 12px;
   border: 1px solid #ddd;
@@ -716,4 +716,117 @@ input:focus {
 
 .status-btn:hover:not(.active) {
   background: #f8fafc;
+}
+
+/* CSS Selection Order */
+.custom-select-order {
+  width: 100%;             /* Chiếm hết chiều rộng của cột cha */
+  padding: 10px 12px;      /* Khoảng cách đệm bên trong */
+  border: 1px solid #e2e8f0; 
+  border-radius: 8px;      /* Bo góc theo style hiện đại */
+  background-color: #fff;
+  font-size: 14px;
+  color: #334155;
+  outline: none;
+  box-sizing: border-box;  /* Rất quan trọng: Giữ padding không làm giãn khung */
+  display: block;          /* Đưa về dạng khối để dễ kiểm soát */
+  text-align: left;        /* Căn chữ về bên trái */
+  cursor: pointer;
+  appearance: none;        /* Xóa bỏ định dạng mặc định của hệ điều hành */
+  
+  /* Thêm icon mũi tên xuống để trông chuyên nghiệp hơn */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+}
+
+.custom-select-order:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+}
+
+.order-grid {
+  display: flex;          /* Sử dụng Flexbox thay vì Grid đơn thuần */
+  gap: 24px;              /* Khoảng cách giữa cột Customer và Car */
+  margin-top: 20px;
+  align-items: flex-start;/* Căn lề trên cùng cho hai cột */
+}
+
+.info-section {
+  flex: 1;                /* Mỗi cột chiếm đúng 50% */
+  min-width: 0;           /* Ngăn chặn việc nội dung dài làm giãn cột */
+  display: flex;
+  flex-direction: column;
+}
+
+.info-section h4 {
+  margin-bottom: 12px;
+  font-size: 16px;
+  color: #1e293b;
+}
+
+/* Radio button & Auto-fill info */
+.radio-group {
+  display: flex;
+  align-items: center;
+  background: #f8fafc;
+  padding: 10px 0px;
+  border-radius: 8px;
+  gap: 10px;
+}
+
+.radio-label {
+  font-weight: 600;
+  color: #334155;
+  white-space: nowrap;
+}
+
+.radio-options {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.radio-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+/* Tùy chọn: Chỉnh kích thước input radio cho nhỏ gọn */
+.radio-item input[type="radio"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.auto-fill-info {
+  margin-top: 15px;
+  padding: 12px;
+  background: #f0f7ff;
+  border-left: 4px solid #2563eb;
+  border-radius: 4px;
+  animation: fadeIn 0.3s ease;
+}
+
+.auto-fill-info p {
+  margin: 5px 0;
+  font-size: 13px;
+  color: #1e293b;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.new-customer-inputs input, .new-customer-inputs textarea {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
 }

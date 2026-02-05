@@ -732,9 +732,7 @@ input:focus {
   display: block;          /* Đưa về dạng khối để dễ kiểm soát */
   text-align: left;        /* Căn chữ về bên trái */
   cursor: pointer;
-  appearance: none;        /* Xóa bỏ định dạng mặc định của hệ điều hành */
-  
-  /* Thêm icon mũi tên xuống để trông chuyên nghiệp hơn */
+  appearance: none; /* Xóa icon mặc định của trình duyệt */
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 12px center;
@@ -829,4 +827,168 @@ input:focus {
   padding: 8px;
   border: 1px solid #ddd;
   border-radius: 4px;
+}
+
+/* ================= Constacts-page CSS ================= */
+.tabs-container {
+  display: flex;
+  gap: 10px;
+  margin: 20px 0;
+  border-bottom: 2px solid #f1f5f9;
+}
+
+.tab-btn {
+  padding: 10px 20px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.tab-btn.active {
+  color: #2563eb;
+  border-bottom: 2px solid #2563eb;
+}
+
+.unread-row {
+  background-color: #ececec;
+  font-weight: bold;
+}
+
+.message-content-box {
+  background: #f8fafc;
+  padding: 20px;
+  border-radius: 8px;
+  margin-top: 20px;
+  border: 1px solid #e2e8f0;
+}
+
+.msg-text {
+  line-height: 1.6;
+  white-space: pre-wrap; /* Giữ nguyên xuống dòng của lời nhắn */
+}
+
+/* Khung chứa bao quanh input và nút X */
+.search-container {
+  position: relative;
+  width: 300px;
+}
+
+/* Ô input tìm kiếm */
+.search-input {
+  width: 100%;
+  padding: 10px 35px 10px 15px; /* Padding-right 35px để chữ không bị nút X đè lên */
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  outline: none;
+  box-sizing: border-box;
+}
+
+/* Nút X xóa nhanh */
+.clear-search-btn {
+  position: absolute;
+  right: 10px;    /* Cách lề phải của input 10px */
+  top: 50%;       /* Đưa xuống giữa theo chiều dọc */
+  transform: translateY(-50%); /* Căn chỉnh chính xác trọng tâm */
+  background: none;
+  border: none;
+  color: #94a3b8;
+  font-size: 15px;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  transition: color 0.2s;
+}
+
+.clear-search-btn:hover {
+  color: #ef4444; /* Đổi sang màu đỏ khi hover để báo hiệu xóa */
+}
+
+.custom-select-status {
+  width: 25%;
+  padding: 10px 12px;      /* Khoảng cách đệm bên trong */
+  border: 1px solid #e2e8f0; 
+  border-radius: 8px;      /* Bo góc theo style hiện đại */
+  background-color: #fff;
+  font-size: 14px;
+  outline: none;
+  text-align:start;        /* Căn chữ về bên trái */
+  cursor: pointer;
+  appearance: none; /* Xóa icon mặc định của trình duyệt */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+}
+
+.custom-select-status:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+}
+
+.important-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.checkbox-important {
+  display: none;
+}
+
+.slider-contact {
+  width: 44px;
+  height: 24px;
+  background: #ccc;
+  border-radius: 50px;
+  position: relative;
+  transition: 0.3s;
+}
+
+.slider-contact::before {
+  content: "";
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  left: 3px;
+  top: 3px;
+  background: white;
+  border-radius: 50%;
+  transition: 0.3s;
+}
+
+.checkbox-important:checked + .slider-contact {
+  background: #d4af37;
+}
+
+.checkbox-important:checked + .slider-contact::before {
+  transform: translateX(20px);
+}
+
+.checkbox-important:checked ~ .label-text {
+  color: #d4af37;
+}
+
+.important-icon {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  object-fit: contain;
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.copy-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+.btn-undo{
+  background: #10b981;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 10px;
 }

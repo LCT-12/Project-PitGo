@@ -6,6 +6,8 @@ import Dashboard from "./pages/Dashboard";
 import Cars from "./pages/Cars";
 import Customers from "./pages/Customers";
 import Orders from "./pages/Orders";
+import Contacts from "./pages/Contacts";
+import Settings from "./pages/Settings";
 
 function App() {
   return (
@@ -21,6 +23,8 @@ function App() {
             <Route path="/cars" element={<Cars />} />
             <Route path="/customers" element={<Customers />} />
             <Route path="/orders" element={<Orders />} />
+            <Route path="/contacts" element={<Contacts />} />
+            <Route path="/settings" element={<Settings />} />
           </Routes>
         </div>
       </div>

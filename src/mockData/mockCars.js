@@ -22,7 +22,7 @@ export const mockCars = [
     origin: "Italy",
     condition: "New",
     description: "Hybrid hypercar",
-    status: "Reserved",
+    status: "In Stock",
     createdAt: "2025-01-05"
   },
   {
@@ -48,7 +48,7 @@ export const mockCars = [
     origin: "UK",
     condition: "Used",
     description: "Lightweight carbon fiber supercar",
-    status: "Sold",
+    status: "In Stock",
     createdAt: "2025-02-10"
   },
   {
@@ -61,7 +61,20 @@ export const mockCars = [
     origin: "France",
     condition: "New",
     description: "1500HP hypercar masterpiece",
-    status: "Reserved",
+    status: "In Stock",
     createdAt: "2025-02-20"
+  },
+  {
+    id: 106,
+    carName: "GTR R35",
+    brand: "Nissan",
+    price:  150000,
+    image: "https://via.placeholder.com/120",
+    year:   2023,
+    origin: "Japan",
+    condition: "New",
+    description: "600HP performance car",
+    status: "In Stock",
+    createdAt: "2025-03-01"
   }
 ];

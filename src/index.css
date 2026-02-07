@@ -888,21 +888,27 @@ input:focus {
 /* Nút X xóa nhanh */
 .clear-search-btn {
   position: absolute;
-  right: 10px;    /* Cách lề phải của input 10px */
-  top: 50%;       /* Đưa xuống giữa theo chiều dọc */
-  transform: translateY(-50%); /* Căn chỉnh chính xác trọng tâm */
-  background: none;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 22px;
+  height: 22px; 
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border: none;
-  color: #94a3b8;
-  font-size: 15px;
+  color: #646e7d;
+  background-color: #e0e0e0;
   cursor: pointer;
   padding: 0;
-  line-height: 1;
-  transition: color 0.2s;
+  transition: all 0.2s;
+  font-size: 12px;
+  font-weight: bold;
 }
 
 .clear-search-btn:hover {
-  color: #ef4444; /* Đổi sang màu đỏ khi hover để báo hiệu xóa */
+  color: #ef4444;
 }
 
 .custom-select-status {

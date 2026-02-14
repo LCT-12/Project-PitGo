@@ -1,17 +1,38 @@
-import React, { useState } from "react";
-import { mockContacts } from "../mockData/mockContacts";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+// import { mockContacts } from "../mockData/mockContacts";
 import starFilled from "../assets/icons/important-filled.png";
 import starOutline from "../assets/icons/important-outline.png";
 import copy from "../assets/copy.svg";
 
 function Contacts() {
-  const [contacts, setContacts] = useState(mockContacts);
+  const [contacts, setContacts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
   const [activeTab, setActiveTab] = useState("messages"); // "messages" hoặc "trash"
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedMsg, setSelectedMsg] = useState(null);
   const [mgToDelete, setMgToDelete] = useState(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-  // 1. Logic lọc dữ liệu
+  // Hàm useEffect để lấy dữ liệu
+  useEffect(() => {
+    const fetchContacts = async () => {
+      try {
+        // Gọi đến đúng route đã đăng ký ở server.js
+        const response = await axios.get("http://localhost:5000/api/contact");
+        setContacts(response.data); // Cập nhật dữ liệu vào state
+        setLoading(false);
+      } catch (error) {
+        console.error("Lỗi khi lấy dữ liệu contacts:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchContacts();
+  }, []);
+
+  // Logic lọc dữ liệu
   const filteredData = contacts.filter((item) => {
     const matchesTab =
       activeTab === "messages" ? !item.isDeleted : item.isDeleted;
@@ -22,7 +43,7 @@ function Contacts() {
     return matchesTab && matchesSearch;
   });
 
-  // 2. Các hàm chức năng
+  // Các hàm chức năng
   const handleView = (msg) => {
     setSelectedMsg(msg);
     // Tự động chuyển Unread -> Read
@@ -58,19 +79,23 @@ function Contacts() {
     setShowDeleteModal(true);
   };
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     if (mgToDelete) {
-      setContacts(
-        contacts.map((m) =>
-          m.id === mgToDelete ? { ...m, isDeleted: true } : m,
-        ),
-      );
-      setShowDeleteModal(false);
-      setMgToDelete(null);
+      try {
+        // Gọi API PATCH để cập nhật isDeleted: true lên MongoDB
+        await axios.patch(`http://localhost:5000/api/contact/${mgToDelete}`, {
+          isDeleted: true
+        });
+        
+        // Cập nhật lại giao diện ngay lập tức
+        setContacts(contacts.map(m => m.id === mgToDelete ? { ...m, isDeleted: true } : m));
+        setShowDeleteModal(false);
+        setMgToDelete(null);
+      } catch (error) {
+        alert("Không thể xóa tin nhắn, vui lòng thử lại!");
+      }
     }
   };
-
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   // Hàm copy email
   const copyEmail = (email) => {
@@ -84,6 +109,8 @@ function Contacts() {
       contacts.map((m) => (m.id === id ? { ...m, isDeleted: false } : m)),
     );
   };
+
+  if (loading) return <div>Đang tải dữ liệu...</div>;
 
   return (
     <div style={{ padding: "25px" }}>
@@ -150,11 +177,11 @@ function Contacts() {
           {filteredData.length > 0 ? (
             filteredData.map((msg) => (
               <tr
-                key={msg.id}
+                key={msg._id}
                 className={msg.status === "Unread" ? "unread-row" : ""}
               >
                 <td
-                  onClick={() => toggleImportant(msg.id)}
+                  onClick={() => toggleImportant(msg._id)}
                   style={{ cursor: "pointer" }}
                 >
                   <img

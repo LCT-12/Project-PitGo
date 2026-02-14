@@ -118,43 +118,51 @@ function Orders() {
           </tr>
         </thead>
         <tbody>
-          {orders.map((order) => {
-            const customer = getCustomer(order.userId);
-            const car = getCar(order.carId);
-            return (
-              <tr key={order.id}>
-                <td>
-                  <strong>#{order.id}</strong>
-                </td>
-                <td>{customer?.userName || order.tempCustomerName}</td>{" "}
-                {/* Hiển thị tên khách mới nếu có */}
-                <td>
-                  {car?.carName}
-                  <br />
-                  <small>{car?.brand}</small>
-                </td>
-                <td style={{ color: "#118C4F", fontWeight: "700" }}>
-                  ${order.totalPrice.toLocaleString()}
-                </td>
-                <td>{order.orderDate}</td>
-                <td>
-                  <span
-                    className={`badge-status ${order.status.toLowerCase()}`}
-                  >
-                    {order.status}
-                  </span>
-                </td>
-                <td>
-                  <button
-                    className="btn-view"
-                    onClick={() => openDetails(order)}
-                  >
-                    Details
-                  </button>
+          {orders.length === 0 ? (
+              <tr>
+                <td colSpan="10" style={{ textAlign: "center", padding: "20px", color: "#666" }}>
+                  No customers yet
                 </td>
               </tr>
-            );
-          })}
+            ) : (
+            orders.map((order) => {
+              const customer = getCustomer(order.userId);
+              const car = getCar(order.carId);
+              return (
+                <tr key={order.id}>
+                  <td>
+                    <strong>#{order.id}</strong>
+                  </td>
+                  <td>{customer?.userName || order.tempCustomerName}</td>{" "}
+                  {/* Hiển thị tên khách mới nếu có */}
+                  <td>
+                    {car?.carName}
+                    <br />
+                    <small>{car?.brand}</small>
+                  </td>
+                  <td style={{ color: "#118C4F", fontWeight: "700" }}>
+                    ${order.totalPrice.toLocaleString()}
+                  </td>
+                  <td>{order.orderDate}</td>
+                  <td>
+                    <span
+                      className={`badge-status ${order.status.toLowerCase()}`}
+                    >
+                      {order.status}
+                    </span>
+                  </td>
+                  <td>
+                    <button
+                      className="btn-view"
+                      onClick={() => openDetails(order)}
+                    >
+                      Details
+                    </button>
+                  </td>
+                </tr>
+              )
+            })
+            )}
         </tbody>
       </table>
 

@@ -139,7 +139,7 @@ function Users() {
           <tbody>
             {users.length === 0 ? (
               <tr>
-                <td colSpan="10" style={{ textAlign: "center", fontSize: "20px", padding: "20px", fontWeight: "500" }}>
+                <td colSpan="10" style={{ textAlign: "center", padding: "20px", color: "#666" }}>
                   No customers yet
                 </td>
               </tr>

@@ -146,7 +146,7 @@ function Cars() {
           <tbody>
             {cars.length === 0 ? (
               <tr>
-                <td colSpan="11" style={{ textAlign: "center", fontSize: "20px", padding: "20px", fontWeight: "500" }}>
+                <td colSpan="11" style={{ textAlign: "center", padding: "20px", color: "#666" }}>
                   No cars yet
                 </td>
               </tr>

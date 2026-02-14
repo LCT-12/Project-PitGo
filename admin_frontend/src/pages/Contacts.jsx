@@ -224,8 +224,10 @@ function Contacts() {
             ))
           ) : (
             <tr>
-              <td colSpan="6" style={{ textAlign: "center", padding: "20px" }}>
-                No messages found matching "{searchTerm}"
+              <td colSpan="6" style={{ textAlign: "center", padding: "20px", color: "#666" }}>
+                {searchTerm.trim() !== "" 
+                  ? `No messages found matching "${searchTerm}"` 
+                  : "No message yet"}
               </td>
             </tr>
           )}

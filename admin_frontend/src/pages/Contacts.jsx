@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-// import { mockContacts } from "../mockData/mockContacts";
 import starFilled from "../assets/icons/important-filled.png";
 import starOutline from "../assets/icons/important-outline.png";
 import copy from "../assets/copy.svg";
+import Loading from "../components/Loading";
+import Error from "../components/Error";
 
 function Contacts() {
   const [contacts, setContacts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const [activeTab, setActiveTab] = useState("messages"); // "messages" hoặc "trash"
+  const [activeTab, setActiveTab] = useState("messages");
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedMsg, setSelectedMsg] = useState(null);
   const [mgToDelete, setMgToDelete] = useState(null);
@@ -19,16 +21,15 @@ function Contacts() {
   useEffect(() => {
     const fetchContacts = async () => {
       try {
-        // Gọi đến đúng route đã đăng ký ở server.js
         const response = await axios.get("http://localhost:5000/api/contact");
-        setContacts(response.data); // Cập nhật dữ liệu vào state
-        setLoading(false);
-      } catch (error) {
-        console.error("Lỗi khi lấy dữ liệu contacts:", error);
+        setContacts(response.data);
+        setError(null);
+      } catch (err) {
+        setError("Unable to retrieve messages. Please check the server!");
+      } finally {
         setLoading(false);
       }
     };
-
     fetchContacts();
   }, []);
 
@@ -44,34 +45,38 @@ function Contacts() {
   });
 
   // Các hàm chức năng
-  const handleView = (msg) => {
-    setSelectedMsg(msg);
-    // Tự động chuyển Unread -> Read
-    if (msg.status === "Unread") {
-      const updated = contacts.map((m) =>
-        m.id === msg.id ? { ...m, status: "Read" } : m,
-      );
-      setContacts(updated);
+  const handleView = async (msg) => {
+  setSelectedMsg(msg);
+  if (msg.status === "Unread") {
+    try {
+      const response = await axios.patch(`http://localhost:5000/api/contact/${msg._id}`, {
+        status: "Read"
+      });
+      setContacts(contacts.map((m) => (m._id === msg._id ? response.data : m)));
+    } catch (error) {
+      console.error("Failed to update read status");
     }
-  };
+  }
+};
 
   const toggleStatus = (id, newStatus) => {
     setContacts(
-      contacts.map((m) => (m.id === id ? { ...m, status: newStatus } : m)),
+      contacts.map((m) => (m._id === id ? { ...m, status: newStatus } : m)),
     );
-    if (selectedMsg?.id === id)
+    if (selectedMsg?._id === id)
       setSelectedMsg({ ...selectedMsg, status: newStatus });
   };
 
-  const toggleImportant = (id) => {
-    setContacts(
-      contacts.map((m) =>
-        m.id === id ? { ...m, isImportant: !m.isImportant } : m,
-      ),
-    );
-    if (selectedMsg?.id === id)
-      setSelectedMsg({ ...selectedMsg, isImportant: !selectedMsg.isImportant });
-  };
+  const toggleImportant = async (id, currentStatus) => {
+  try {
+    const response = await axios.patch(`http://localhost:5000/api/contact/${id}`, {
+      isImportant: !currentStatus
+    });
+    setContacts(contacts.map(m => m._id === id ? response.data : m));
+  } catch (error) {
+    console.error("Lỗi cập nhật!");
+  }
+};
 
   // Hàm Delete và Modal xác nhận
   const confirmDelete = (id) => {
@@ -88,11 +93,11 @@ function Contacts() {
         });
         
         // Cập nhật lại giao diện ngay lập tức
-        setContacts(contacts.map(m => m.id === mgToDelete ? { ...m, isDeleted: true } : m));
+        setContacts(contacts.map(m => m._id === mgToDelete ? { ...m, isDeleted: true } : m));
         setShowDeleteModal(false);
         setMgToDelete(null);
       } catch (error) {
-        alert("Không thể xóa tin nhắn, vui lòng thử lại!");
+        alert("Unable to delete message. Please try again!");
       }
     }
   };
@@ -104,13 +109,20 @@ function Contacts() {
   };
 
   // Hàm Undo Delete
-  const handleUndo = (id) => {
-    setContacts(
-      contacts.map((m) => (m.id === id ? { ...m, isDeleted: false } : m)),
-    );
-  };
+  const handleUndo = async (id) => {
+  try {
+    const response = await axios.patch(`http://localhost:5000/api/contact/${id}`, {
+      isDeleted: false
+    });
+    // Cập nhật state bằng dữ liệu thật từ Server trả về
+    setContacts(contacts.map((m) => (m._id === id ? response.data : m)));
+  } catch (error) {
+    alert("Unable to restore message!");
+  }
+};
 
-  if (loading) return <div>Đang tải dữ liệu...</div>;
+  if (error) return <Error message={error} />;
+  if (loading) return <Loading message="Loading messages..." />;
 
   return (
     <div style={{ padding: "25px" }}>
@@ -207,14 +219,14 @@ function Contacts() {
                   {activeTab === "messages" ? (
                     <button
                       className="btn-delete"
-                      onClick={() => confirmDelete(msg.id)}
+                      onClick={() => confirmDelete(msg._id)}
                     >
                       Delete
                     </button>
                   ) : (
                     <button
                       className="btn-undo"
-                      onClick={() => handleUndo(msg.id)}
+                      onClick={() => handleUndo(msg._id)}
                     >
                       Undo
                     </button>
@@ -270,7 +282,7 @@ function Contacts() {
                     className="custom-select-status"
                     value={selectedMsg.status}
                     onChange={(e) =>
-                      toggleStatus(selectedMsg.id, e.target.value)
+                      toggleStatus(selectedMsg._id, e.target.value)
                     }
                     style={{ marginLeft: "10px" }}
                   >
@@ -283,7 +295,7 @@ function Contacts() {
                     className="checkbox-important"
                     type="checkbox"
                     checked={selectedMsg.isImportant}
-                    onChange={() => toggleImportant(selectedMsg.id)}
+                    onChange={() => toggleImportant(selectedMsg._id)}
                   />
                   <span className="slider-contact"></span>
                   <span className="label-text">Important</span>
@@ -300,7 +312,7 @@ function Contacts() {
                 href={`mailto:${selectedMsg.email}?subject=Re: ${selectedMsg.subject}`}
                 className="submit-btn"
                 style={{ textDecoration: "none", textAlign: "center" }}
-                onClick={() => toggleStatus(selectedMsg.id, "Replied")}
+                onClick={() => toggleStatus(selectedMsg._id, "Replied")}
               >
                 Reply via Email (Gmail)
               </a>

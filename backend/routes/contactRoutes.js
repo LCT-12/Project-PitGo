@@ -2,8 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Contact = require('../models/contact');
 
-// 1. Lấy danh sách tin nhắn (GET)
-// Tự động sắp xếp tin nhắn mới nhất lên đầu
+// 1. Lấy danh sách (GET)
 router.get('/', async (req, res) => {
     try {
         const contacts = await Contact.find().sort({ createdAt: -1 });
@@ -13,33 +12,35 @@ router.get('/', async (req, res) => {
     }
 });
 
-// 2. Cập nhật tin nhắn (PATCH)
-// Dùng cho: Đổi trạng thái Read/Replied, Đánh dấu Important, hoặc Xóa mềm (isDeleted)
+// 2. Cập nhật "Tất cả trong một" (PATCH)
+// Thay thế cho: important, undo, và update status
 router.patch('/:id', async (req, res) => {
     try {
         const updatedContact = await Contact.findByIdAndUpdate(
             req.params.id, 
-            req.body, 
-            { new: true } // Trả về bản ghi sau khi đã cập nhật
+            req.body, // Frontend gửi {isImportant: true} hoặc {isDeleted: false},...
+            { new: true }
         );
-        if (!updatedContact) {
-            return res.status(404).json({ message: "Không tìm thấy tin nhắn" });
-        }
+        if (!updatedContact) return res.status(404).json({ message: "Không tìm thấy" });
         res.json(updatedContact);
     } catch (err) {
         res.status(400).json({ message: err.message });
     }
 });
 
-// 3. Tạo tin nhắn mới (POST) - Dùng khi khách hàng gửi form từ website
-router.post('/', async (req, res) => {
-    const contact = new Contact({
-        name: req.body.name,
-        email: req.body.email,
-        subject: req.body.subject,
-        message: req.body.message
-    });
+// 3. Xóa vĩnh viễn (DELETE)
+router.delete('/:id', async (req, res) => {
+    try {
+        await Contact.findByIdAndDelete(req.params.id);
+        res.json({ message: "Deleted permanently" });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
 
+// 4. Tạo mới (POST)
+router.post('/', async (req, res) => {
+    const contact = new Contact(req.body);
     try {
         const newContact = await contact.save();
         res.status(201).json(newContact);
@@ -48,5 +49,4 @@ router.post('/', async (req, res) => {
     }
 });
 
-// QUAN TRỌNG: Xuất router để server.js có thể sử dụng
 module.exports = router;

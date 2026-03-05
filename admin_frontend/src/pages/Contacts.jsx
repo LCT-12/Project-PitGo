@@ -17,11 +17,13 @@ function Contacts() {
   const [mgToDelete, setMgToDelete] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-  // Hàm useEffect để lấy dữ liệu
+  const API = "http://localhost:5000/api/contact";
+
+  /* ================= FETCH DATA ================= */
   useEffect(() => {
     const fetchContacts = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/contact");
+        const response = await axios.get(API);
         setContacts(response.data);
         setError(null);
       } catch (err) {
@@ -33,7 +35,7 @@ function Contacts() {
     fetchContacts();
   }, []);
 
-  // Logic lọc dữ liệu
+  /* ================= FILTER DATA SEARCH ================= */
   const filteredData = contacts.filter((item) => {
     const matchesTab =
       activeTab === "messages" ? !item.isDeleted : item.isDeleted;
@@ -49,7 +51,7 @@ function Contacts() {
   setSelectedMsg(msg);
   if (msg.status === "Unread") {
     try {
-      const response = await axios.patch(`http://localhost:5000/api/contact/${msg._id}`, {
+      const response = await axios.patch(`${API}/${msg._id}`, {
         status: "Read"
       });
       setContacts(contacts.map((m) => (m._id === msg._id ? response.data : m)));
@@ -69,7 +71,7 @@ function Contacts() {
 
   const toggleImportant = async (id, currentStatus) => {
   try {
-    const response = await axios.patch(`http://localhost:5000/api/contact/${id}`, {
+    const response = await axios.patch(`${API}/${id}`, {
       isImportant: !currentStatus
     });
     setContacts(contacts.map(m => m._id === id ? response.data : m));
@@ -78,7 +80,7 @@ function Contacts() {
   }
 };
 
-  // Hàm Delete và Modal xác nhận
+  /* ================= DELETE ================= */
   const confirmDelete = (id) => {
     setMgToDelete(id);
     setShowDeleteModal(true);
@@ -88,7 +90,7 @@ function Contacts() {
     if (mgToDelete) {
       try {
         // Gọi API PATCH để cập nhật isDeleted: true lên MongoDB
-        await axios.patch(`http://localhost:5000/api/contact/${mgToDelete}`, {
+        await axios.patch(`${API}/${mgToDelete}`, {
           isDeleted: true
         });
         
@@ -102,16 +104,16 @@ function Contacts() {
     }
   };
 
-  // Hàm copy email
+  /* ================= COPY EMAIL ================= */
   const copyEmail = (email) => {
     navigator.clipboard.writeText(email);
     alert("Email copied!");
   };
 
-  // Hàm Undo Delete
+  /* ================= UNDO DELETE ================= */
   const handleUndo = async (id) => {
   try {
-    const response = await axios.patch(`http://localhost:5000/api/contact/${id}`, {
+    const response = await axios.patch(`${API}/${id}`, {
       isDeleted: false
     });
     // Cập nhật state bằng dữ liệu thật từ Server trả về
@@ -121,9 +123,11 @@ function Contacts() {
   }
 };
 
+  /* ================= STATES ================= */
   if (error) return <Error message={error} />;
   if (loading) return <Loading message="Loading messages..." />;
 
+  /* ================= UI ================= */
   return (
     <div style={{ padding: "25px" }}>
       <div

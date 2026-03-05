@@ -1,0 +1,208 @@
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import Loading from "../components/Loading";
+import Error from "../components/Error";
+
+function Cars() {
+  const [cars, setCars] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const [showModal, setShowModal] = useState(false);
+
+  const [carName, setCarName] = useState("");
+  const [brand, setBrand] = useState("");
+  const [price, setPrice] = useState("");
+  const [image, setImage] = useState(null);
+  const [year, setYear] = useState("");
+  const [origin, setOrigin] = useState("");
+  const [condition, setCondition] = useState("New");
+  const [description, setDescription] = useState("");
+  const [status, setStatus] = useState("In Stock");
+  const [preview, setPreview] = useState(null);
+
+  const [editingCar, setEditingCar] = useState(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [carToDelete, setCarToDelete] = useState(null);
+
+  const API = "http://localhost:5000/api/car";
+
+  /* ================= FETCH DATA ================= */
+  useEffect(() => {
+    const fetchCars = async () => {
+      try {
+        const res = await axios.get(API);
+        setCars(res.data);
+      } catch (err) {
+        setError("Unable to load cars. Please try again!");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchCars();
+  }, []);
+
+  /* ================= IMAGE ================= */
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImage(file);
+      setPreview(URL.createObjectURL(file));
+    }
+  };
+
+  /* ================= SUBMIT ================= */
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      const formData = new FormData();
+      formData.append("name", carName);
+      formData.append("brand", brand);
+      formData.append("price", price);
+      formData.append("year", year);
+      formData.append("origin", origin);
+      formData.append("condition", condition);
+      formData.append("description", description);
+      formData.append("status", status);
+      if (image) formData.append("image", image);
+
+      let res;
+
+      if (editingCar) {
+        res = await axios.put(`${API}/${editingCar._id}`, formData);
+        setCars(cars.map((c) => (c._id === editingCar._id ? res.data : c)));
+      } else {
+        res = await axios.post(API, formData);
+        setCars((prev) => [...prev, res.data]);
+      }
+
+      setShowModal(false);
+      setEditingCar(null);
+      resetForm();
+    } catch (err) {
+      alert("Failed to save car.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  /* ================= DELETE ================= */
+  const confirmDelete = (id) => {
+    setCarToDelete(id);
+    setShowDeleteModal(true);
+  };
+
+  const handleDelete = async () => {
+    try {
+      await axios.delete(`${API}/${carToDelete}`);
+      setCars(cars.filter((c) => c._id !== carToDelete));
+      setShowDeleteModal(false);
+    } catch {
+      alert("Unable to delete car.");
+    }
+  };
+
+  /* ================= EDIT ================= */
+  const handleEdit = (car) => {
+    setEditingCar(car);
+    setCarName(car.name);
+    setBrand(car.brand);
+    setPrice(car.price);
+    setYear(car.year);
+    setOrigin(car.origin);
+    setCondition(car.condition);
+    setDescription(car.description);
+    setStatus(car.status);
+    setPreview(car.image);
+    setShowModal(true);
+  };
+
+  /* ================= RESET ================= */
+  const resetForm = () => {
+    setCarName("");
+    setBrand("");
+    setPrice("");
+    setYear("");
+    setOrigin("");
+    setDescription("");
+    setCondition("New");
+    setStatus("In Stock");
+    setPreview(null);
+    setImage(null);
+  };
+
+  /* ================= STATES ================= */
+  if (error) return <Error message={error} />;
+  if (loading) return <Loading message="Loading cars..." />;
+
+  /* ================= UI ================= */
+  return (
+    <div style={{ padding: "25px" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "20px" }}>
+        <h2>Cars Management</h2>
+        <button className="add-btn" onClick={() => setShowModal(true)}>
+          Add Car
+        </button>
+      </div>
+
+      <table className="admin-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Image</th>
+            <th>Name</th>
+            <th>Brand</th>
+            <th>Price</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {cars.length === 0 ? (
+            <tr>
+              <td colSpan="7" style={{ textAlign: "center", padding: "20px" }}>
+                No cars yet
+              </td>
+            </tr>
+          ) : (
+            cars.map((car, i) => (
+              <tr key={car._id}>
+                <td>{i + 1}</td>
+                <td><img src={car.image} width="80" alt="" /></td>
+                <td>{car.name}</td>
+                <td>{car.brand}</td>
+                <td>${car.price}</td>
+                <td>
+                  <span className={`badge ${car.status === "In Stock" ? "green" : "red"}`}>
+                    {car.status}
+                  </span>
+                </td>
+                <td>
+                  <button className="btn-edit" onClick={() => handleEdit(car)}>Edit</button>
+                  <button className="btn-delete" onClick={() => confirmDelete(car._id)}>Delete</button>
+                </td>
+              </tr>
+            ))
+          )}
+        </tbody>
+      </table>
+
+      {/* DELETE MODAL */}
+      {showDeleteModal && (
+        <div className="modal-overlay">
+          <div className="modal-box confirm-box">
+            <h3>Delete the selected car?</h3>
+            <div className="modal-actions">
+              <button className="cancel-btn" onClick={() => setShowDeleteModal(false)}>Cancel</button>
+              <button className="delete-confirm-btn" onClick={handleDelete}>Delete</button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default Cars;

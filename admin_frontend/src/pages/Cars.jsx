@@ -1,7 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import Loading from "../components/Loading";
+import Error from "../components/Error";
 
 function Cars() {
   const [cars, setCars] = useState([]);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
+
   const [showModal, setShowModal] = useState(false);
 
   const [carName, setCarName] = useState("");
@@ -13,17 +19,34 @@ function Cars() {
   const [condition, setCondition] = useState("New");
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState("In Stock");
-  const [loading, setLoading] = useState(false);
   const [preview, setPreview] = useState(null);
 
   const [editingCar, setEditingCar] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [carToDelete, setCarToDelete] = useState(null);
 
+  const API = "http://localhost:5000/api/car";
+
+/* ================= FETCH DATA ================= */
+  useEffect(() => {
+    const fetchCars = async () => {
+      try {
+        const res = await axios.get(API);
+        setCars(res.data);
+      } catch (err) {
+        setError("Unable to load cars. Please try again!");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchCars();
+  }, []);
+
   const handleStatusChange = (e) => {
     setStatus(e.target.checked ? "In Stock" : "Out of Stock");
   };
 
+  /* ================= IMAGE ================= */
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -32,58 +55,66 @@ function Cars() {
     }
   };
 
-  const handleSubmit = (e) => {
+  /* ================= SUBMIT ================= */
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
-    const carData = {
-      id: editingCar ? editingCar.id : Date.now(),
-      name: carName,
-      brand,
-      price,
-      year,
-      origin,
-      description,
-      condition,
-      status,
-      image: image
-        ? URL.createObjectURL(image)
-        : editingCar
-          ? editingCar.image
-          : "https://via.placeholder.com/80",
-    };
+    try {
+      const formData = new FormData();
+      formData.append("carName", carName);
+      formData.append("brand", brand);
+      formData.append("price", price);
+      formData.append("year", year);
+      formData.append("origin", origin);
+      formData.append("condition", condition);
+      formData.append("description", description);
+      formData.append("status", status);
+      if (image) formData.append("image", image);
 
-    setTimeout(() => {
+      let res;
+
       if (editingCar) {
-        // Logic Cập nhật
-        setCars(cars.map((c) => (c.id === editingCar.id ? carData : c)));
+        res = await axios.put(`${API}/${editingCar._id}`, formData);
+        setCars(cars.map((c) => (c._id === editingCar._id ? res.data : c)));
       } else {
-        // Logic Thêm mới
-        setCars((prev) => [...prev, carData]);
+        res = await axios.post(API, formData);
+        setCars((prev) => [...prev, res.data]);
       }
 
-      // Reset và đóng modal
-      setLoading(false);
       setShowModal(false);
       setEditingCar(null);
       resetForm();
-    }, 500);
+    } catch (err) {
+      console.log(err);
+      if (err.response && err.response.status === 400) {
+        alert("Failed to save car: " + err.response.data.message);
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const confirmDelete = (carId) => {
-  setCarToDelete(carId);
-  setShowDeleteModal(true);
+/* ================= DELETE ================= */
+  const confirmDelete = (id) => {
+    setCarToDelete(id);
+    setShowDeleteModal(true);
   };
 
-  const handleDelete = (id) => {
-    setCars(cars.filter((car) => car.id !== carToDelete));
-    setShowDeleteModal(false);
-    setCarToDelete(null);
+  const handleDelete = async () => {
+    try {
+      await axios.delete(`${API}/${carToDelete}`);
+      setCars(cars.filter((c) => c._id !== carToDelete));
+      setShowDeleteModal(false);
+    } catch {
+      alert("Unable to delete car.");
+    }
   };
 
+ /* ================= EDIT ================= */
   const handleEdit = (car) => {
     setEditingCar(car);
-    setCarName(car.name);
+    setCarName(car.carName);
     setBrand(car.brand);
     setPrice(car.price);
     setYear(car.year);
@@ -95,7 +126,7 @@ function Cars() {
     setShowModal(true);
   };
 
-  // Hàm reset form tiện ích
+  /* ================= RESET ================= */
   const resetForm = () => {
     setCarName("");
     setBrand("");
@@ -109,6 +140,11 @@ function Cars() {
     setImage(null);
   };
 
+  /* ================= STATES ================= */
+  if (error) return <Error message={error} />;
+  if (loading) return <Loading message="Loading cars..." />;
+
+  /* ================= UI ================= */
   return (
     <div style={{ padding: "25px" }}>
       {/* Header */}
@@ -152,10 +188,10 @@ function Cars() {
               </tr>
             ) : (
               cars.map((car, index) => (
-                <tr key={car.id}>
+                <tr key={car._id}>
                   <td>{index + 1}</td>
                   <td><img src={car.image} width="80" alt="" style={{borderRadius: '4px'}} /></td>
-                  <td>{car.name}</td>
+                  <td>{car.carName}</td>
                   <td>{car.brand}</td>
                   <td>${car.price}</td>
                   <td>{car.year}</td>
@@ -165,7 +201,7 @@ function Cars() {
                   <td><span className={`badge ${car.status === "In Stock" ? "green" : "red"}`}>{car.status}</span></td>
                   <td>
                     <button className="btn-edit" onClick={() => handleEdit(car)}>Edit</button>
-                    <button className="btn-delete" onClick={() => confirmDelete(car.id)}>Delete</button>
+                    <button className="btn-delete" onClick={() => confirmDelete(car._id)}>Delete</button>
                   </td>
                 </tr>
               ))

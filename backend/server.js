@@ -11,6 +11,7 @@ const carRoutes = require('./routes/carRoutes');
 
 dotenv.config();
 connectDB();
+require("dotenv").config();
 
 const app = express();
 connectDB();

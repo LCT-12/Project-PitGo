@@ -122,7 +122,7 @@ function Cars() {
     setCondition(car.condition);
     setDescription(car.description);
     setStatus(car.status);
-    setPreview(car.image);
+    setPreview(`http://localhost:5000${car.image}`);
     setShowModal(true);
   };
 

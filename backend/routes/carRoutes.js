@@ -30,14 +30,14 @@ router.get('/:id', async (req, res) => {
 // ================= CREATE =================
 router.post("/", upload.single("image"), async (req, res) => {
   try {
-    const carData = {
+    const car = await Car.create({
       ...req.body,
-      image: req.file?.path || null
-    };
+      image: req.file ? `/uploads/${req.file.filename}` : null,
+    });
 
-    const newCar = await Car.create(carData);
-    res.status(201).json(newCar);
+    res.status(201).json(car);
   } catch (err) {
+    console.log(err);
     res.status(400).json({ message: err.message });
   }
 });
@@ -46,19 +46,19 @@ router.post("/", upload.single("image"), async (req, res) => {
 // ================= UPDATE =================
 router.put("/:id", upload.single("image"), async (req, res) => {
   try {
-    const updateData = {
-      ...req.body
-    };
+    const updateData = { ...req.body };
 
-    if (req.file) updateData.image = req.file.path;
+    if (req.file) {
+      updateData.image = `/uploads/${req.file.filename}`;
+    }
 
-    const updatedCar = await Car.findByIdAndUpdate(
+    const updated = await Car.findByIdAndUpdate(
       req.params.id,
       updateData,
       { new: true }
     );
 
-    res.json(updatedCar);
+    res.json(updated);
   } catch (err) {
     res.status(400).json({ message: err.message });
   }

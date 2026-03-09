@@ -1,0 +1,559 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  /* font-family: "Segoe UI", sans-serif; */
+  /* font-family: "SUSE", cursive; */
+  /* font-family: "Roboto", sans-serif; */
+  /* font-family: "Montserrat", sans-serif; */
+  /* font-family: "Poppins", sans-serif */
+  font-family: "Be Vietnam Pro", sans-serif;
+}
+
+html,
+body #root {
+  height: 100%;
+}
+
+/* ===== BODY LAYOUT ===== */
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: #f1f3f7;
+}
+
+/* ================= PUBLIC LAYOUT (TRANG CHỦ) ================= */
+.public-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #F3F4F6; /* Màu nền xanh nhạt y như Axure */
+}
+
+.public-content {
+  flex: 1;
+}
+
+/* --- HEADER --- */
+.public-header {
+  background: white;
+  width: 100%;
+}
+
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;           /* Tràn hết chiều ngang màn hình */
+  padding: 15px 50px;    /* 50px này phải bằng hệt với padding của thanh menu xanh */
+  box-sizing: border-box; 
+  background-color: #fff;
+}
+
+/* Quan trọng: Xóa các margin âm cũ nếu bạn đã thêm */
+.header-logo, .header-actions {
+  margin: 0; 
+}
+
+.header-search {
+  display: flex;
+  align-items: center;
+  border: 2px solid #333;
+  border-radius: 20px;
+  padding: 5px 15px;
+  width: 40%;            /* Thanh tìm kiếm chiếm 40% chiều rộng header */
+  max-width: 600px;      /* Kích thước thanh search */
+}
+
+.header-search input {
+  border: none;
+  outline: none;
+  width: 100%;
+  font-size: 15px;
+}
+
+.search-icon {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.search-icon img {
+  width: 18px; /* Chỉnh kích thước icon kính lúp cho vừa vặn */
+  height: 18px;
+  transition: transform 0.2s ease;
+}
+
+/* Hiệu ứng mượt mà khi rê chuột vào kính lúp */
+.search-icon:hover img {
+  transform: scale(1.15);
+}
+
+.header-actions {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.action-btn {
+  background: none;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  white-space: nowrap;   /* Giúp chữ "Đăng nhập" không bị rớt xuống dòng khi thu nhỏ */
+  font-size: 15px; /* Chỉnh kích thước chữ của nút */
+}
+
+.action-icon {
+  width: 25px;    /* Chỉnh kích thước icon */
+  height: 25px;
+}
+
+/* Hiệu ứng khi rê chuột vào nút */
+.action-btn:hover {
+  background-color: #f8fafc; /* Nền chuyển xám nhạt */
+  border-color: #339AC0; /* Viền chuyển màu xanh dương */
+  color: #339AC0; /* Chữ chuyển màu xanh dương */
+}
+
+/* --- THANH MENU XANH GIỮ NGUYÊN GỐC --- */
+.header-nav {
+  background-color: #339AC0;
+  width: 100%;
+  padding: 15px 50px;
+  box-sizing: border-box;
+  position: relative; /* Bắt buộc phải có dòng này để làm điểm neo cho menu thả xuống */
+}
+
+.header-nav ul {
+  list-style: none;
+  display: flex;
+  gap: 40px;
+  margin: 0;
+  padding: 0;
+}
+
+/* Kiểu dáng chữ Sản phẩm, Dịch vụ */
+.nav-title {
+  color: black;
+  font-weight: bold;
+  font-size: 15px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: color 0.2s ease;
+  user-select: none;
+}
+
+/* Rê chuột vào chữ Sản phẩm sẽ đổi màu trắng */
+.nav-title:hover {
+  color: #ffffff;
+}
+
+/* --- CSS CHO MŨI TÊN BẰNG ẢNH PNG --- */
+.nav-arrow {
+  width: 12px;
+  height: auto;
+  margin-left: 8px;
+  transition: transform 0.3s ease, filter 0.3s ease;
+  
+  /* Tạo một lớp bóng đen mỏng 0.5px bao quanh hình ảnh */
+  filter: drop-shadow(0px 0px 0.5px rgba(0, 0, 0, 0.8)); 
+}
+
+/* Hiệu ứng xoay khi mở menu */
+.nav-arrow.open {
+  transform: rotate(180deg);
+}
+
+/* Đổi sang màu trắng (và vẫn giữ độ đậm) khi rê chuột vào */
+.nav-title:hover .nav-arrow {
+  /* Kết hợp 3 lệnh: Đổi màu trắng -> Xóa bóng đen cũ -> Đổ bóng trắng mới để làm đậm */
+  filter: brightness(0) invert(1) drop-shadow(0px 0px 0.5px rgba(255, 255, 255, 0.8));
+}
+
+/* --- BẢNG MEGA MENU XỔ XUỐNG ĐÈ LÊN BANNER --- */
+.mega-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100vw;
+  background-color: #ffffff;
+  box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+  padding: 10px 0 30px 0; /* Trên 15px, trái/phải 0, dưới 30px */
+  z-index: 9999;
+}
+
+/* --- DÃY TAB CHỌN HÃNG XE --- */
+.brand-tabs {
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  padding: 0;
+  margin: 0px auto 50px auto; /* Khoảng cách từ dãy tab xuống hình xe */
+  max-width: 1000px;
+  border-bottom: 1px solid #e0e0e0; /* Đường kẻ xám nhạt chạy ngang giống Toyota */
+}
+
+.brand-tab {
+  padding: 10px 30px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #666; /* Màu chữ xám mặc định */
+  cursor: pointer;
+  text-transform: uppercase;
+  position: relative;
+  transition: color 0.3s ease;
+  margin-bottom: -1px; /* Kéo tab xuống đè lên đường viền xám ở dưới */
+}
+
+/* Rê chuột vào sẽ đổi sang màu chữ tối hơn */
+.brand-tab:hover {
+  color: #111;
+}
+
+/* Tab đang được chọn (Active) */
+.brand-tab.active {
+  color: #111; /* Chữ đậm màu */
+}
+
+/* Đường kẻ màu đỏ phía dưới tab đang chọn (Tạo hiệu ứng cực ngầu) */
+.brand-tab.active::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: #d32f2f; /* Màu đỏ thể thao */
+}
+
+/* --- Tinh chỉnh lưới xe khi có tab --- */
+.car-grid {
+  display: flex;
+  justify-content: center;
+  gap: 30px; /* Khoảng cách giữa 4 chiếc xe vừa vặn */
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-top: 20px;
+}
+
+/* Thiết kế từng chiếc xe */
+.car-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: #333;
+  width: 260px; /* Cố định chiều rộng để 4 xe nằm ngang đẹp mắt */
+  
+  /* DÙNG !IMPORTANT ĐỂ ÉP XÓA HOÀN TOÀN CÁI KHUNG */
+  background: transparent !important; /* Xóa nền trắng */
+  border: none !important;            /* Xóa viền */
+  box-shadow: none !important;        /* Xóa bóng mờ */
+  border-radius: 0 !important;        /* Xóa bo góc */
+}
+
+/* --- Tinh chỉnh hình ảnh xe --- */
+.car-card img {
+  width: 100%;
+  height: 120px;
+  object-fit: contain;
+  margin-bottom: 15px;
+  
+  /* Chuyển hiệu ứng mượt mà vào chính tấm ảnh */
+  transition: transform 0.4s ease; 
+}
+
+/* HIỆU ỨNG: Rê chuột vào xe -> Ảnh xe to lên một chút */
+.car-card:hover img {
+  transform: scale(1.15); /* Phóng to ảnh lên 15%. Bạn có thể chỉnh 1.1 hoặc 1.2 tùy ý thích */
+}
+
+.car-card h4 {
+  margin: 0 0 5px 0;
+  font-size: 16px;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.car-card p {
+  margin: 0;
+  font-size: 13px;
+  color: #d32f2f; 
+}
+
+/* --- TRANG CHỦ (HOME) --- */
+.home-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding-bottom: 50px;
+}
+
+/* --- PHẦN BANNER --- */
+.hero-banner {
+  width: 100vw;       /* Ép chiều rộng bằng 100% màn hình thiết bị */
+  position: relative;
+  left: 50%;          /* Đẩy sang giữa */
+  right: 50%;
+  margin-left: -50vw; /* Kéo ngược lại sát mép trái màn hình */
+  margin-right: -50vw;
+  padding: 0;
+  overflow: hidden;   /* Đảm bảo không bị hiện thanh cuộn ngang */
+}
+
+.banner-img {
+  width: 100%;
+  height: auto;       /* Tự động co giãn chiều cao theo tỷ lệ ảnh */
+  display: block;
+  object-fit: cover;  /* Giúp ảnh luôn đẹp trên mọi màn hình điện thoại/máy tính */
+}
+
+/* --- Nút hình viên thuốc (Pill Button) --- */
+.section-pill-btn {
+  text-align: center;
+  margin: 40px 0;
+}
+
+.section-pill-btn span {
+  background-color: #339AC0;
+  color: white;
+  padding: 12px 40px;
+  border-radius: 30px;
+  font-size: 18px;
+  font-weight: bold;
+  display: inline-block;
+}
+
+/* --- Lưới xe (Car Grid) --- */
+.cars-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 cột đều nhau */
+  gap: 30px;
+  padding: 0 50px;
+  max-width: 1280px; /* Đảm bảo thẳng hàng với header */
+  margin: 0 auto;
+}
+
+/* Thêm .cars-grid phía trước để ghi đè lại lệnh !important 
+  của Mega Menu, giúp thẻ xe lấy lại nền trắng và bóng mờ.
+*/
+.cars-grid .car-card {
+  background: #ffffff !important; 
+  border-radius: 12px !important; /* Bo góc mềm mại hơn */
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08) !important; /* Bóng đổ sang trọng như hình 2 */
+  overflow: hidden !important;
+  display: flex;
+  flex-direction: column;
+  width: 100% !important; /* Phủ kín cột grid */
+  border: none !important;
+  height: 100% !important;
+}
+
+.cars-grid .car-image-box {
+  height: 220px;
+  background: #fff;
+  border-bottom: 1px solid #eaeaea; /* Đường kẻ mờ phân cách ảnh và chữ */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* Hiệu ứng phóng to ảnh khi rê chuột (vẫn giữ lại cho xịn) */
+.cars-grid .car-image-box img {
+  width: 90%;
+  height: auto;
+  object-fit: contain;
+  transition: transform 0.4s ease;
+}
+
+.cars-grid .car-card:hover .car-image-box img {
+  transform: scale(1.1);
+}
+
+.cars-grid .car-info {
+  padding: 15px;
+  text-align: left;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  align-items: flex-start; 
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.cars-grid .car-price {
+  color: #1C2C5E !important; 
+  font-weight: 700;
+  font-size: 18px; /* kích thước giá tiền  */
+  margin-bottom: 8px;
+}
+
+.cars-grid .car-name {
+  color: #000 !important;
+  font-weight: 700;
+  font-size: 16px;
+  margin-bottom: 10px;
+  text-transform: none; 
+}
+
+/* .cars-grid .car-desc {
+  color: #666;
+  font-size: 13px;
+  margin: 0;
+  white-space: normal; 
+  word-break: break-word; 
+  overflow-wrap: break-word;
+} */
+ 
+/* Viền đen phần Vì sao chọn chúng tôi */
+.about-section {
+  padding: 0 50px;
+  margin-top: 50px;
+}
+
+.about-box {
+  background: #d7d7d7; /* Màu xám theo Axure */
+  border: 3px solid #000; /* Viền đen dày y hệt ảnh */
+  border-radius: 10px;
+  padding: 30px;
+  margin-bottom: 30px;
+}
+
+.text-box p {
+  color: #000;
+  font-size: 15px;
+  line-height: 1.6;
+  text-align: justify;
+}
+
+.contact-box {
+  display: flex;
+  align-items: center;
+}
+
+.contact-logo {
+  flex: 1;
+  text-align: center;
+  font-size: 40px;
+  font-weight: bold;
+}
+
+.contact-info {
+  flex: 2;
+  border-left: 1px solid #ccc;
+  padding-left: 40px;
+}
+
+.contact-info h3 {
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+.info-row {
+  display: flex;
+  margin-bottom: 15px;
+  font-size: 14px;
+}
+
+.info-row .label {
+  width: 80px;
+  color: #333;
+}
+
+.address-lines p {
+  margin-bottom: 10px;
+}
+
+/* --- FOOTER MỚI --- */
+.public-footer {
+  background-color: #2B2E33; /* Màu xám đen chính xác từ Axure */
+  color: white;
+  padding: 40px 50px 20px;
+}
+
+.footer-container {
+  display: flex;
+  max-width: 100%;
+  margin: 0 auto;
+  gap: 100px;
+}
+
+.footer-links-container {
+  display: flex;
+  justify-content: flex-start; /* Dàn hàng từ trái sang */
+  gap: 150px;                 /* Khoảng cách rộng giữa các cột giống thiết kế */
+  padding-bottom: 5px;       /* Tạo khoảng trống trước khi đến đường kẻ ngang */
+}
+
+.footer-column {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;                  /* Khoảng cách giữa các dòng link */
+}
+
+/* Kiểu chữ cho tiêu đề cột (Các dòng xe, Mua xe...) */
+.footer-column h4 {
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: bold;
+  margin: 0;
+  margin-bottom: 10px;        /* Khoảng cách dưới tiêu đề */
+  white-space: nowrap;
+}
+
+/* Kiểu chữ cho các đường link */
+.footer-link-item {
+  color: #ffffff;             /* Màu trắng hoặc xám nhạt tùy bạn chọn */
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.3s ease;
+  opacity: 0.9;               /* Làm mờ nhẹ để nổi bật tiêu đề h4 */
+}
+
+.footer-link-item:hover {
+  color: #339AC0;             /* Hiệu ứng đổi màu xanh thương hiệu */
+  opacity: 1;
+}
+
+.footer-bottom {
+  max-width: 100%;
+  margin: 40px auto 0;
+  padding-top: 20px;
+  border-top: 2px solid #797979; /* Đường kẻ ngang màu xám nhạt */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+}
+
+.social-icons {
+  display: flex;
+  gap: 15px; /* Khoảng cách giữa các icon y hệt bản thiết kế */
+  align-items: center;
+}
+
+.social-icons a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.social-icons img {
+  width: 28px; /* Kích thước chuẩn của icon, bạn có thể tăng giảm tùy ý */
+  height: 28px;
+  transition: transform 0.2s ease;
+}
+
+/* Thêm chút hiệu ứng phóng to nhẹ khi người dùng đưa chuột vào icon */
+.social-icons img:hover {
+  transform: scale(1.15);
+}

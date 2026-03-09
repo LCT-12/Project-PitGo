@@ -829,7 +829,7 @@ input:focus {
   border-radius: 4px;
 }
 
-/* ================= Constacts-page CSS ================= */
+/* ================= Contacts-page CSS ================= */
 .tabs-container {
   display: flex;
   gap: 10px;
@@ -997,4 +997,209 @@ input:focus {
   border: none;
   padding: 8px 15px;
   border-radius: 10px;
+}
+
+/* ================= Settings-page CSS ================= */
+/* Các thẻ Card */
+.settings-card {
+    background: #fff;
+    border-radius: 10px;
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border: 1px solid #f0f0f0;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 15px;
+
+}
+
+.section-title {
+    margin: 0;
+    font-size: 1.15rem;
+    color: #2c3e50;
+}
+
+.label {
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: #555;
+
+    margin-bottom: 5px;
+}
+
+.data-text {
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 10px;
+}
+
+/* Chia cột cho Contact */
+.grid-2-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+}
+
+.truncate {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
+
+/* Nút Edit */
+.btn-edit {
+    background-color: #212529;
+    color: #fff;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 5px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.btn-edit:hover {
+    background-color: #343a40;
+}
+
+/* Custom Switch cho Shutdown */
+.switch-container {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.switch-input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.switch-label {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 24px;
+}
+
+.switch-label:before {
+    position: absolute;
+    content: "";
+    height: 18px; width: 18px;
+    left: 3px; bottom: 3px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+.switch-input:checked + .switch-label {
+    background-color: #212529;
+}
+
+.switch-input:checked + .switch-label:before {
+    transform: translateX(26px);
+}
+
+/* Lớp phủ toàn màn hình */
+.custom-modal-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1050;
+    backdrop-filter: blur(2px);
+}
+
+/* Khung Modal */
+.custom-modal-dialog {
+    background: #fff;
+    width: 90%;
+    max-width: 500px;
+    border-radius: 12px;
+    overflow: hidden;
+    animation: slideDown 0.3s ease-out;
+}
+
+.custom-modal-dialog.modal-lg {
+    max-width: 800px;
+}
+
+@keyframes slideDown {
+    from { transform: translateY(-20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.modal-header, .modal-footer {
+    padding: 15px 20px;
+    background: #fcfcfc;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-body {
+    padding: 20px;
+}
+
+/* Form trong Modal */
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.form-group input, .form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    box-sizing: border-box; /* Rất quan trọng */
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+/* Nút trong Modal */
+.btn-cancel {
+    background: #eee;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-save {
+    background: #212529;
+    color: #fff;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-close-x {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    line-height: 1;
 }

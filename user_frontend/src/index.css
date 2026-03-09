@@ -89,7 +89,7 @@ body {
 
 /* Hiệu ứng mượt mà khi rê chuột vào kính lúp */
 .search-icon:hover img {
-  transform: scale(1.15);
+  transform: scale(1.1);
 }
 
 .header-actions {
@@ -273,7 +273,7 @@ body {
 
 /* HIỆU ỨNG: Rê chuột vào xe -> Ảnh xe to lên một chút */
 .car-card:hover img {
-  transform: scale(1.15); /* Phóng to ảnh lên 15%. Bạn có thể chỉnh 1.1 hoặc 1.2 tùy ý thích */
+  transform: scale(1.1); /* Phóng to ảnh lên 15%. Bạn có thể chỉnh 1.1 hoặc 1.2 tùy ý thích */
 }
 
 .car-card h4 {

@@ -1,14 +1,22 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import Loading from "../components/Loading";
+import Error from "../components/Error";
 
-const Settings = () => {
+function Settings() {
+
+    const [error, setError] = useState(null);
+    const [loading, setLoading] = useState(true);
+
   // 1. Khai báo state để giữ dữ liệu từ MongoDB
+  // Cài đặt chung (General Settings)
   const [generalData, setGeneralData] = useState({
     site_title: "",
     site_about: "",
     shutdown: false,
   });
 
+  // Thông tin liên hệ (Contact Details)
   const [contactData, setContactData] = useState({
     address: "",
     gmap: "",
@@ -20,11 +28,18 @@ const Settings = () => {
     tw: "",
   });
 
-  const [tempData, setTempData] = useState({}); // Giữ dữ liệu tạm khi đang nhập
+  // Đổi mật khẩu (Password Change)
+  const [showPassModal, setShowPassModal] = useState(false);
+  const [passData, setPassData] = useState({
+    old_pass: "",
+    new_pass: "",
+    confirm_pass: "",
+  });
+
+  const [tempData, setTempData] = useState({});
   const [showGeneralModal, setShowGeneralModal] = useState(false);
   const [showContactModal, setShowContactModal] = useState(false);
   const [tempContactData, setTempContactData] = useState({});
-  const [loading, setLoading] = useState(true);
 
   // 2. Hàm gọi API từ Backend (Cổng 5000)
   const fetchSettings = async () => {
@@ -45,7 +60,7 @@ const Settings = () => {
 
       setLoading(false);
     } catch (error) {
-      console.error("Failed to retrieve data from the server.:", error);
+      console.error("Failed to retrieve data from the server:", error);
       setLoading(false);
     }
   };
@@ -65,8 +80,6 @@ const Settings = () => {
     setTempContactData(contactData); // Copy dữ liệu hiện tại vào bản tạm
     setShowContactModal(true);
 };
-
-  if (loading) return <div className="p-4">Loading data...</div>;
 
   const updateGeneralSettings = async () => {
     try {
@@ -132,9 +145,44 @@ const Settings = () => {
     } catch (error) {
         alert("Failed to update contact details.");
     }
-};
+    };
 
-  return (
+    const handleUpdatePassword = async () => {
+        // 1. Kiểm tra trống
+        if(!passData.old_pass || !passData.new_pass || !passData.confirm_pass) {
+            alert("Please fill in all fields!");
+            return;
+        }
+
+        // 2. Kiểm tra mật khẩu mới và xác nhận mật khẩu
+        if(passData.new_pass !== passData.confirm_pass) {
+            alert("New password and confirmation do not match!");
+            return;
+        }
+
+        try {
+            // Gửi tới API đổi mật khẩu (Bạn sẽ cần viết API này ở Backend)
+            const response = await axios.post('http://localhost:5000/api/admin/change-password', passData);
+            
+            if(response.data.success) {
+                alert("Password updated successfully!");
+                setShowPassModal(false);
+                setPassData({ old_pass: '', new_pass: '', confirm_pass: '' }); // Reset form
+            } else {
+                alert(response.data.message || "Failed to update password.");
+            }
+        } catch (error) {
+            console.error("Change password error:", error);
+            alert(error.response?.data?.message || "An error occurred.");
+        }
+    };
+
+    /* ================= STATES ================= */
+  if (error) return <Error message={error} />;
+  if (loading) return <Loading message="Loading data..." />;
+
+  /* ================= UI ================= */
+    return (
     <div style={{ padding: "25px" }}>
     {/* Header */}
       <div
@@ -213,6 +261,21 @@ const Settings = () => {
             </div>
         </div>
     </div>
+
+    {/* Security Settings Card */}
+<div className="settings-card">
+    <div className="card-header">
+        <h5 className="section-title">Security Settings</h5>
+        <button className="btn-edit" onClick={() => setShowPassModal(true)}>
+            <i className="bi bi-shield-lock"></i> CHANGE PASSWORD
+        </button>
+    </div>
+    <div className="card-content">
+        <p className="text-muted">
+            It is recommended to update your password periodically to ensure the security of your account.
+        </p>
+    </div>
+</div>
 
     {/* General Modal */}
     {showGeneralModal && (
@@ -293,8 +356,51 @@ const Settings = () => {
                     <button className="btn-save" onClick={updateContactDetails}>Save Changes</button>
                 </div>
             </div>
+        </div> 
+    )}
+
+    {/* Change Password Modal */}
+    {showPassModal && (
+        <div className="custom-modal-overlay">
+            <div className="custom-modal-dialog">
+                <div className="modal-header">
+                    <h5>Change Admin Password</h5>
+                    <button className="btn-close-x" onClick={() => setShowPassModal(false)}>&times;</button>
+                </div>
+                <div className="modal-body">
+                    <div className="form-group">
+                        <label>Current Password</label>
+                        <input 
+                            type="password" 
+                            value={passData.old_pass}
+                            onChange={(e) => setPassData({...passData, old_pass: e.target.value})}
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label>New Password</label>
+                        <input 
+                            type="password" 
+                            value={passData.new_pass}
+                            onChange={(e) => setPassData({...passData, new_pass: e.target.value})}
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label>Confirm New Password</label>
+                        <input 
+                            type="password" 
+                            value={passData.confirm_pass}
+                            onChange={(e) => setPassData({...passData, confirm_pass: e.target.value})}
+                        />
+                    </div>
+                </div>
+                <div className="modal-footer">
+                    <button className="btn-cancel" onClick={() => setShowPassModal(false)}>Cancel</button>
+                    <button className="btn-save" onClick={handleUpdatePassword}>Update Password</button>
+                </div>
+            </div>
         </div>
     )}
+
 </div>
   );
 };

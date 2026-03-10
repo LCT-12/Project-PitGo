@@ -6,16 +6,16 @@ function Users() {
 
   // Thông tin định danh & Liên lạc
   const [userName, setUserName] = useState("");
-  const [email, setEmail] = useState(""); // Thay cho brand
-  const [password, setPassword] = useState(""); // Thay cho price
-  const [phone, setPhone] = useState(""); // Thêm mới
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [phone, setPhone] = useState("");
 
   // Thông tin cá nhân & Địa chỉ
-  const [dob, setDob] = useState(""); // Thay cho year (Ngày sinh)
-  const [nationalId, setNationalId] = useState(""); // Thay cho condition (CCCD/ID Card)
+  const [dob, setDob] = useState("");
+  const [nationalId, setNationalId] = useState("");
   const [country, setCountry] = useState("");
   const [address, setAddress] = useState("");
-  const [role, setRole] = useState("Standard"); // Mặc định là khách hàng tiêu chuẩn, thay cho brand
+  const [role, setRole] = useState("Standard");
   
   // Trạng thái & UI
   const [status, setStatus] = useState("Active"); // Active/Locked

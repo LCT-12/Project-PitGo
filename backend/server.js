@@ -1,59 +1,94 @@
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
-const connectDB = require('./config/db');
+const bcrypt = require('bcrypt');
 
-const settingRoutes = require('./routes/settingRoutes');
+// Import cấu hình và Models
+const connectDB = require('./config/db');
 const Setting = require('./models/setting');
+const Admin = require('./models/admin');
+
+// Import Routes
+const settingRoutes = require('./routes/settingRoutes');
 const contactRoutes = require('./routes/contactRoutes');
 const carRoutes = require('./routes/carRoutes');
-// const userRoutes = require('./routes/userRoutes');
-// const orderRoutes = require('./routes/orderRoutes'); 
+const adminRoutes = require('./routes/adminRoutes');
 
+// 1. Cấu hình môi trường (Luôn để đầu tiên)
 dotenv.config();
-connectDB();
-require("dotenv").config();
 
 const app = express();
-connectDB();
+
+// 2. Middlewares cơ bản
 app.use(cors());
 app.use(express.json());
+app.use("/uploads", express.static("uploads")); // Phục vụ ảnh xe
 
-// Đăng ký route
-app.use('/api/setting', settingRoutes);
-app.use('/api/contact', contactRoutes);
-app.use('/api/car', carRoutes); 
-// app.use('/api/user', userRoutes);
-// app.use('/api/order', orderRoutes);
+// 3. Hàm tạo Admin mặc định (Định nghĩa trực tiếp để tránh lỗi file seed)
+const createAdminIfNotExists = async () => {
+    try {
+        const adminExists = await Admin.findOne({ admin_name: 'admin' });
+        if (!adminExists) {
+            const hashedPassword = await bcrypt.hash('12345', 10);
+            const newAdmin = new Admin({
+                admin_name: 'admin',
+                admin_pass: hashedPassword
+            });
+            await newAdmin.save();
+            console.log("✅ Default Admin account created: admin / 12345");
+        } else {
+            console.log("ℹ️ Admin account already exists.");
+        }
+    } catch (error) {
+        console.error("❌ Seed Admin error:", error);
+    }
+};
 
-// ================= CarImgUpload =================
-app.use("/uploads", express.static("uploads"));
-app.use("/api/car", require("./routes/carRoutes"));
-
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-    console.log(`🚀 Server running on port ${PORT}`);
-});
-
-// Middleware kiểm tra trạng thái Shutdown
+// 4. Middleware kiểm tra Shutdown (Nên đặt trước các route của User)
 const checkShutdown = async (req, res, next) => {
+    // Không chặn các request vào trang admin để admin còn vào tắt shutdown được
+    if (req.path.startsWith('/api/admin') || req.path.startsWith('/api/setting')) {
+        return next();
+    }
+    
     try {
         const setting = await Setting.findOne({ key: 'general_settings' });
-        // Nếu bật shutdown và KHÔNG PHẢI là request vào trang Admin (tùy chọn)
         if (setting && setting.value.shutdown) {
             return res.status(503).json({ 
-                // Mã lỗi 503 Service Unavailable là cách chuẩn nhất để báo với trình duyệt 
-                // và các công cụ tìm kiếm (như Google) rằng website chỉ tạm dừng hoạt động 
-                // để bảo trì, tránh ảnh hưởng đến SEO của bạn.
-                message: "The website is currently under maintenance. Please check back later!",
+                message: "The website is currently under maintenance.",
                 isShutdown: true 
             });
         }
         next();
     } catch (err) {
-        next(); // Nếu lỗi database thì cho qua để website không sập hoàn toàn
+        next();
     }
 };
-// Mã lỗi 503 Service Unavailable là cách chuẩn nhất để báo với trình duyệt 
-// và các công cụ tìm kiếm (như Google) rằng website chỉ tạm dừng hoạt động 
-// để bảo trì, tránh ảnh hưởng đến SEO của bạn.
+
+// 5. Đăng ký các Routes
+// Lưu ý: checkShutdown sẽ chạy trước khi vào các route car/contact của User
+app.use('/api/setting', settingRoutes);
+app.use('/api/admin', adminRoutes);
+app.use('/api/contact', checkShutdown, contactRoutes);
+app.use('/api/car', checkShutdown, carRoutes);
+
+// 6. Khởi động Server theo thứ tự chuẩn
+const startServer = async () => {
+    try {
+        // Đợi kết nối DB thành công trước
+        await connectDB(); 
+
+        // Sau đó mới tạo Admin (đảm bảo không bị Timeout)
+        await createAdminIfNotExists(); 
+
+        const PORT = process.env.PORT || 5000;
+        app.listen(PORT, () => {
+            console.log(`🚀 Server running on port ${PORT}`);
+        });
+    } catch (error) {
+        console.error("❌ Failed to start server:", error);
+        process.exit(1);
+    }
+};
+
+startServer();

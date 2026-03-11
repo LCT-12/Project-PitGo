@@ -3,7 +3,7 @@ import axios from "axios";
 import Loading from "../components/Loading";
 import Error from "../components/Error";
 
-function Cars() {
+function Cars({ showAlert }) {
   const [cars, setCars] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -88,7 +88,7 @@ function Cars() {
     } catch (err) {
       console.log(err);
       if (err.response && err.response.status === 400) {
-        alert("Failed to save car: " + err.response.data.message);
+        showAlert('danger', "Failed to save car: " + err.response.data.message);
       }
     } finally {
       setLoading(false);
@@ -107,7 +107,7 @@ function Cars() {
       setCars(cars.filter((c) => c._id !== carToDelete));
       setShowDeleteModal(false);
     } catch {
-      alert("Unable to delete car.");
+      showAlert('danger', "Unable to delete car.");
     }
   };
 
@@ -162,7 +162,7 @@ function Cars() {
       </div>
 
       {/* Table */}
-      <div style={{ overflowX: "auto" }}>
+      <div className="table-responsive" style={{ overflowX: "auto" }}>
         <table className="admin-table">
           <thead>
             <tr>
@@ -190,7 +190,7 @@ function Cars() {
               cars.map((car, index) => (
                 <tr key={car._id}>
                   <td>{index + 1}</td>
-                  <td><img src={car.image} width="80" alt="" style={{borderRadius: '4px'}} /></td>
+                  <td><img src={car.image} width="80" alt="" style={{ borderRadius: '4px' }} /></td>
                   <td>{car.carName}</td>
                   <td>{car.brand}</td>
                   <td>${car.price}</td>

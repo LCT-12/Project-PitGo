@@ -27,4 +27,37 @@ router.post('/change-password', async (req, res) => {
     }
 });
 
+const jwt = require('jsonwebtoken');
+
+// API Đăng nhập Admin
+router.post('/login', async (req, res) => {
+    const { admin_name, admin_pass } = req.body;
+
+    try {
+        // 1. Tìm Admin trong DB
+        const admin = await Admin.findOne({ admin_name });
+        if (!admin) {
+            return res.status(401).json({ success: false, message: "Tài khoản không tồn tại!" });
+        }
+
+        // 2. Kiểm tra mật khẩu
+        const isMatch = await bcrypt.compare(admin_pass, admin.admin_pass);
+        if (!isMatch) {
+            return res.status(401).json({ success: false, message: "Mật khẩu không chính xác!" });
+        }
+
+        // 3. Tạo Token (Thẻ thông hành)
+        // Lưu ý: 'ADMIN_SECRET_KEY' nên để trong file .env
+        const token = jwt.sign(
+            { id: admin._id, name: admin.admin_name },
+            process.env.JWT_SECRET || 'SECRET_KEY_123',
+            { expiresIn: '1d' } // Thẻ có tác dụng trong 1 ngày
+        );
+
+        res.json({ success: true, token, message: "Đăng nhập thành công!" });
+    } catch (err) {
+        res.status(500).json({ success: false, message: "Lỗi hệ thống!" });
+    }
+});
+
 module.exports = router;

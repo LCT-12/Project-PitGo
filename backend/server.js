@@ -46,16 +46,20 @@ const createAdminIfNotExists = async () => {
 
 // 4. Middleware kiểm tra Shutdown (Nên đặt trước các route của User)
 const checkShutdown = async (req, res, next) => {
-    // Không chặn các request vào trang admin để admin còn vào tắt shutdown được
-    if (req.path.startsWith('/api/admin') || req.path.startsWith('/api/setting')) {
-        return next();
+    // 1. Kiểm tra xem request có đến từ phía Admin không (dựa vào URL)
+    const isAdminRequest = req.path.startsWith('/api/admin') || 
+                           req.path.startsWith('/api/setting') ||
+                           req.headers.referer?.includes('/admin'); // Kiểm tra nếu gọi từ trang admin
+
+    if (isAdminRequest) {
+        return next(); // Nếu là admin thì cho đi tiếp luôn, không check shutdown
     }
     
     try {
         const setting = await Setting.findOne({ key: 'general_settings' });
         if (setting && setting.value.shutdown) {
             return res.status(503).json({ 
-                message: "The website is currently under maintenance.",
+                message: "Website is under maintenance.",
                 isShutdown: true 
             });
         }
@@ -69,8 +73,8 @@ const checkShutdown = async (req, res, next) => {
 // Lưu ý: checkShutdown sẽ chạy trước khi vào các route car/contact của User
 app.use('/api/setting', settingRoutes);
 app.use('/api/admin', adminRoutes);
-app.use('/api/contact', checkShutdown, contactRoutes);
-app.use('/api/car', checkShutdown, carRoutes);
+app.use('/api/contact', contactRoutes);
+app.use('/api/car', carRoutes);
 
 // 6. Khởi động Server theo thứ tự chuẩn
 const startServer = async () => {

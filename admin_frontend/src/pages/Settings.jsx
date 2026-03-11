@@ -3,7 +3,7 @@ import axios from "axios";
 import Loading from "../components/Loading";
 import Error from "../components/Error";
 
-function Settings() {
+function Settings({ showAlert }) {
 
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -25,7 +25,6 @@ function Settings() {
     email: "",
     fb: "",
     insta: "",
-    tw: "",
   });
 
   // Đổi mật khẩu (Password Change)
@@ -99,11 +98,11 @@ function Settings() {
         // 2. Đóng Modal
         setShowGeneralModal(false);
         // 3. Thông báo thành công (tùy chọn)
-        alert("Settings updated successfully.");
+        showAlert('success', "Settings updated successfully.");
       }
     } catch (error) {
       console.error("Error while updating settings:", error);
-      alert("Unable to save changes. Please check the server!");
+      showAlert('danger', "Unable to save changes. Please check the server!");
     }
   };
 
@@ -122,11 +121,11 @@ function Settings() {
 
       if (response.data) {
         setGeneralData(updatedData); // Cập nhật state tại chỗ
-        alert(`Website has been ${val ? "closed" : "reopened"} successfully!`);
+        showAlert('success', `Website has been ${val ? "closed" : "reopened"} successfully!`);
       }
     } catch (error) {
       console.error("Error while changing shutdown status:", error);
-      alert("Unable to change website status!");
+      showAlert('danger', "Unable to change website status!");
     }
   };
 
@@ -140,23 +139,23 @@ function Settings() {
         if (response.data) {
             setContactData(tempContactData);
             setShowContactModal(false);
-            alert("Contact details updated successfully!");
+            showAlert('success', "Contact details updated successfully!");
         }
     } catch (error) {
-        alert("Failed to update contact details.");
+        showAlert('danger', "Failed to update contact details.");
     }
     };
 
     const handleUpdatePassword = async () => {
         // 1. Kiểm tra trống
         if(!passData.old_pass || !passData.new_pass || !passData.confirm_pass) {
-            alert("Please fill in all fields!");
+            showAlert('danger', "Please fill in all fields!");
             return;
         }
 
         // 2. Kiểm tra mật khẩu mới và xác nhận mật khẩu
         if(passData.new_pass !== passData.confirm_pass) {
-            alert("New password and confirmation do not match!");
+            showAlert('danger', "New password and confirmation do not match!");
             return;
         }
 
@@ -165,15 +164,15 @@ function Settings() {
             const response = await axios.post('http://localhost:5000/api/admin/change-password', passData);
             
             if(response.data.success) {
-                alert("Password updated successfully!");
+                showAlert('success', "Password updated successfully!");
                 setShowPassModal(false);
                 setPassData({ old_pass: '', new_pass: '', confirm_pass: '' }); // Reset form
             } else {
-                alert(response.data.message || "Failed to update password.");
+                showAlert('danger', response.data.message || "Failed to update password.");
             }
         } catch (error) {
             console.error("Change password error:", error);
-            alert(error.response?.data?.message || "An error occurred.");
+            showAlert('danger', error.response?.data?.message || "An error occurred.");
         }
     };
 
@@ -216,15 +215,26 @@ function Settings() {
     <div className="settings-card">
         <div className="card-header">
             <h5 className="section-title">Shutdown Website</h5>
-            <div className="switch-container">
+            <div className="toggle-switch-wrapper">
+                <span
+                      className={`status-text online ${generalData.shutdown === false ? "active" : ""}`}
+                    >
+                      Online
+                    </span>
+                <label className="switch">
                 <input
-                    className="switch-input"
                     type="checkbox"
                     id="shutdown-switch"
                     checked={generalData.shutdown}
                     onChange={(e) => toggleShutdown(e.target.checked)}
                 />
-                <label className="switch-label" htmlFor="shutdown-switch"></label>
+                <span className="slider round"></span>
+                </label>
+                <span
+                    className={`status-text offline ${generalData.shutdown === true ? "active" : ""}`}
+                >
+                Offline
+                </span>
             </div>
         </div>
         <div className="card-content">
@@ -283,7 +293,7 @@ function Settings() {
             <div className="custom-modal-dialog">
                 <div className="modal-header">
                     <h5>Edit General Settings</h5>
-                    <button className="btn-close-x" onClick={() => setShowGeneralModal(false)}>&times;</button>
+                    {/* <button className="btn-close-x" onClick={() => setShowGeneralModal(false)}>&times;</button> */}
                 </div>
                 <div className="modal-body">
                     <div className="form-group">
@@ -304,7 +314,7 @@ function Settings() {
                     </div>
                 </div>
                 <div className="modal-footer">
-                    <button className="btn-cancel" onClick={() => setShowGeneralModal(false)}>Cancel</button>
+                    <button className="cancel-btn" onClick={() => setShowGeneralModal(false)}>Cancel</button>
                     <button className="btn-save" onClick={updateGeneralSettings}>Save Changes</button>
                 </div>
             </div>
@@ -317,7 +327,7 @@ function Settings() {
             <div className="custom-modal-dialog modal-lg">
                 <div className="modal-header">
                     <h5>Edit Contact Settings</h5>
-                    <button className="btn-close-x" onClick={() => setShowContactModal(false)}>&times;</button>
+                    {/* <button className="btn-close-x" onClick={() => setShowContactModal(false)}>&times;</button> */}
                 </div>
                 <div className="modal-body">
                     <div className="form-grid">
@@ -352,7 +362,7 @@ function Settings() {
                     </div>
                 </div>
                 <div className="modal-footer">
-                    <button className="btn-cancel" onClick={() => setShowContactModal(false)}>Cancel</button>
+                    <button className="cancel-btn" onClick={() => setShowContactModal(false)}>Cancel</button>
                     <button className="btn-save" onClick={updateContactDetails}>Save Changes</button>
                 </div>
             </div>
@@ -365,7 +375,7 @@ function Settings() {
             <div className="custom-modal-dialog">
                 <div className="modal-header">
                     <h5>Change Admin Password</h5>
-                    <button className="btn-close-x" onClick={() => setShowPassModal(false)}>&times;</button>
+                    {/* <button className="btn-close-x" onClick={() => setShowPassModal(false)}>&times;</button> */}
                 </div>
                 <div className="modal-body">
                     <div className="form-group">
@@ -394,7 +404,7 @@ function Settings() {
                     </div>
                 </div>
                 <div className="modal-footer">
-                    <button className="btn-cancel" onClick={() => setShowPassModal(false)}>Cancel</button>
+                    <button className="cancel-btn" onClick={() => setShowPassModal(false)}>Cancel</button>
                     <button className="btn-save" onClick={handleUpdatePassword}>Update Password</button>
                 </div>
             </div>

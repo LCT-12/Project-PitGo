@@ -3,7 +3,7 @@ import { mockOrders } from "../mockData/mockOrders";
 import { mockUsers } from "../mockData/mockUsers";
 import { mockCars } from "../mockData/mockCars";
 
-function Orders() {
+function Orders({ showAlert }) {
   const [orders, setOrders] = useState(mockOrders);
   const [showAddModal, setShowAddModal] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
@@ -104,8 +104,8 @@ function Orders() {
           Create New Order
         </button>
       </div>
-
-      <table className="admin-table">
+      <div className="table-responsive">
+        <table className="admin-table">
         <thead>
           <tr>
             <th>Order ID</th>
@@ -119,12 +119,12 @@ function Orders() {
         </thead>
         <tbody>
           {orders.length === 0 ? (
-              <tr>
-                <td colSpan="10" style={{ textAlign: "center", padding: "20px", color: "#666" }}>
-                  No customers yet
-                </td>
-              </tr>
-            ) : (
+            <tr>
+              <td colSpan="10" style={{ textAlign: "center", padding: "20px", color: "#666" }}>
+                No customers yet
+              </td>
+            </tr>
+          ) : (
             orders.map((order) => {
               const customer = getCustomer(order.userId);
               const car = getCar(order.carId);
@@ -133,8 +133,7 @@ function Orders() {
                   <td>
                     <strong>#{order.id}</strong>
                   </td>
-                  <td>{customer?.userName || order.tempCustomerName}</td>{" "}
-                  {/* Hiển thị tên khách mới nếu có */}
+                  <td>{customer?.userName || order.tempCustomerName}</td>
                   <td>
                     {car?.carName}
                     <br />
@@ -160,11 +159,12 @@ function Orders() {
                     </button>
                   </td>
                 </tr>
-              )
+              );
             })
-            )}
+          )}
         </tbody>
       </table>
+      </div>
 
       {/* --- MODAL CHI TIẾT ĐƠN HÀNG --- */}
       {showDetails && selectedOrder && (
@@ -367,6 +367,7 @@ function Orders() {
                 <button type="submit" className="submit-btn">
                   Confirm & Create Order
                 </button>
+                showAlert('success', "Order created successfully!");
               </div>
             </form>
           </div>

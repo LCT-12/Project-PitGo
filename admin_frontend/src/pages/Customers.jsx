@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-function Users() {
+function Users({ showAlert }) {
   const [users, setUsers] = useState([]);
   const [showModal, setShowModal] = useState(false);
 
@@ -120,7 +120,7 @@ function Users() {
       </div>
 
       {/* Table */}
-      <div style={{ overflowX: "auto" }}>
+      <div className="table-responsive" style={{ overflowX: "auto" }}>
         <table className="admin-table">
           <thead>
             <tr>

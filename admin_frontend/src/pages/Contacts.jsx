@@ -6,7 +6,7 @@ import copy from "../assets/copy.svg";
 import Loading from "../components/Loading";
 import Error from "../components/Error";
 
-function Contacts() {
+function Contacts({ showAlert }) {
   const [contacts, setContacts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -99,7 +99,7 @@ function Contacts() {
         setShowDeleteModal(false);
         setMgToDelete(null);
       } catch (error) {
-        alert("Unable to delete message. Please try again!");
+        showAlert('danger', "Unable to delete message. Please try again!");
       }
     }
   };
@@ -107,7 +107,7 @@ function Contacts() {
   /* ================= COPY EMAIL ================= */
   const copyEmail = (email) => {
     navigator.clipboard.writeText(email);
-    alert("Email copied!");
+    showAlert('success', "Email copied!");
   };
 
   /* ================= UNDO DELETE ================= */
@@ -119,7 +119,7 @@ function Contacts() {
     // Cập nhật state bằng dữ liệu thật từ Server trả về
     setContacts(contacts.map((m) => (m._id === id ? response.data : m)));
   } catch (error) {
-    alert("Unable to restore message!");
+    showAlert('danger', "Unable to restore message!");
   }
 };
 
@@ -175,8 +175,9 @@ function Contacts() {
           Trash
         </button>
       </div>
-
-      <table className="admin-table">
+      
+      <div className="table-responsive">
+          <table className="admin-table">
         <thead>
           <tr>
             <th>
@@ -249,7 +250,8 @@ function Contacts() {
           )}
         </tbody>
       </table>
-
+      </div>
+    
       {/* Modal chi tiết */}
       {selectedMsg && (
         <div className="modal-overlay">

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+<<<<<<< HEAD
 
 const Settings = () => {
   // 1. Khai báo state để giữ dữ liệu từ MongoDB
@@ -9,6 +10,25 @@ const Settings = () => {
     shutdown: false,
   });
 
+=======
+import Loading from "../components/Loading";
+import Error from "../components/Error";
+
+function Settings({ showAlert }) {
+
+    const [error, setError] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+  // 1. Khai báo state để giữ dữ liệu từ MongoDB
+  // Cài đặt chung (General Settings)
+  const [generalData, setGeneralData] = useState({
+    site_title: "",
+    site_about: "",
+    shutdown: false,
+  });
+
+  // Thông tin liên hệ (Contact Details)
+>>>>>>> 546bb341f862ed6dee4fbf320cd427d7f3610b01
   const [contactData, setContactData] = useState({
     address: "",
     gmap: "",
@@ -17,6 +37,7 @@ const Settings = () => {
     email: "",
     fb: "",
     insta: "",
+<<<<<<< HEAD
     tw: "",
   });
 
@@ -25,6 +46,22 @@ const Settings = () => {
   const [showContactModal, setShowContactModal] = useState(false);
   const [tempContactData, setTempContactData] = useState({});
   const [loading, setLoading] = useState(true);
+=======
+  });
+
+  // Đổi mật khẩu (Password Change)
+  const [showPassModal, setShowPassModal] = useState(false);
+  const [passData, setPassData] = useState({
+    old_pass: "",
+    new_pass: "",
+    confirm_pass: "",
+  });
+
+  const [tempData, setTempData] = useState({});
+  const [showGeneralModal, setShowGeneralModal] = useState(false);
+  const [showContactModal, setShowContactModal] = useState(false);
+  const [tempContactData, setTempContactData] = useState({});
+>>>>>>> 546bb341f862ed6dee4fbf320cd427d7f3610b01
 
   // 2. Hàm gọi API từ Backend (Cổng 5000)
   const fetchSettings = async () => {
@@ -45,7 +82,11 @@ const Settings = () => {
 
       setLoading(false);
     } catch (error) {
+<<<<<<< HEAD
       console.error("Failed to retrieve data from the server.:", error);
+=======
+      console.error("Failed to retrieve data from the server:", error);
+>>>>>>> 546bb341f862ed6dee4fbf320cd427d7f3610b01
       setLoading(false);
     }
   };
@@ -66,8 +107,11 @@ const Settings = () => {
     setShowContactModal(true);
 };
 
+<<<<<<< HEAD
   if (loading) return <div className="p-4">Loading data...</div>;
 
+=======
+>>>>>>> 546bb341f862ed6dee4fbf320cd427d7f3610b01
   const updateGeneralSettings = async () => {
     try {
       // Gửi dữ liệu đi với key là "general_settings" để khớp với logic fetch hiện tại
@@ -86,11 +130,19 @@ const Settings = () => {
         // 2. Đóng Modal
         setShowGeneralModal(false);
         // 3. Thông báo thành công (tùy chọn)
+<<<<<<< HEAD
         alert("Settings updated successfully.");
       }
     } catch (error) {
       console.error("Error while updating settings:", error);
       alert("Unable to save changes. Please check the server!");
+=======
+        showAlert('success', "Settings updated successfully.");
+      }
+    } catch (error) {
+      console.error("Error while updating settings:", error);
+      showAlert('danger', "Unable to save changes. Please check the server!");
+>>>>>>> 546bb341f862ed6dee4fbf320cd427d7f3610b01
     }
   };
 
@@ -109,11 +161,19 @@ const Settings = () => {
 
       if (response.data) {
         setGeneralData(updatedData); // Cập nhật state tại chỗ
+<<<<<<< HEAD
         alert(`Website has been ${val ? "closed" : "reopened"} successfully!`);
       }
     } catch (error) {
       console.error("Error while changing shutdown status:", error);
       alert("Unable to change website status!");
+=======
+        showAlert('success', `Website has been ${val ? "closed" : "reopened"} successfully!`);
+      }
+    } catch (error) {
+      console.error("Error while changing shutdown status:", error);
+      showAlert('danger', "Unable to change website status!");
+>>>>>>> 546bb341f862ed6dee4fbf320cd427d7f3610b01
     }
   };
 
@@ -127,13 +187,51 @@ const Settings = () => {
         if (response.data) {
             setContactData(tempContactData);
             setShowContactModal(false);
+<<<<<<< HEAD
             alert("Contact details updated successfully!");
+=======
+            showAlert('success', "Contact details updated successfully!");
+        }
+    } catch (error) {
+        showAlert('danger', "Failed to update contact details.");
+    }
+    };
+
+    const handleUpdatePassword = async () => {
+        // 1. Kiểm tra trống
+        if(!passData.old_pass || !passData.new_pass || !passData.confirm_pass) {
+            showAlert('danger', "Please fill in all fields!");
+            return;
+        }
+
+        // 2. Kiểm tra mật khẩu mới và xác nhận mật khẩu
+        if(passData.new_pass !== passData.confirm_pass) {
+            showAlert('danger', "New password and confirmation do not match!");
+            return;
+        }
+
+        try {
+            // Gửi tới API đổi mật khẩu (Bạn sẽ cần viết API này ở Backend)
+            const response = await axios.post('http://localhost:5000/api/admin/change-password', passData);
+            
+            if(response.data.success) {
+                showAlert('success', "Password updated successfully!");
+                setShowPassModal(false);
+                setPassData({ old_pass: '', new_pass: '', confirm_pass: '' }); // Reset form
+            } else {
+                showAlert('danger', response.data.message || "Failed to update password.");
+            }
+        } catch (error) {
+            console.error("Change password error:", error);
+            showAlert('danger', error.response?.data?.message || "An error occurred.");
+>>>>>>> 546bb341f862ed6dee4fbf320cd427d7f3610b01
         }
     } catch (error) {
         alert("Failed to update contact details.");
     }
 };
 
+<<<<<<< HEAD
   return (
     <div style={{ padding: "25px" }}>
     {/* Header */}
@@ -164,19 +262,77 @@ const Settings = () => {
         </div>
     </div>
 
+=======
+    /* ================= STATES ================= */
+  if (error) return <Error message={error} />;
+  if (loading) return <Loading message="Loading data..." />;
+
+  /* ================= UI ================= */
+    return (
+    <div style={{ padding: "25px" }}>
+    {/* Header */}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          marginBottom: "20px",
+        }}
+      >
+        <h2>Settings</h2>
+      </div>
+
+    {/* General Settings Section */}
+    <div className="settings-card">
+        <div className="card-header">
+            <h5 className="section-title">General Settings</h5>
+            <button className="btn-edit" onClick={handleGeneralEditClick}>
+                <i className="bi bi-pencil-square"></i> EDIT
+            </button>
+        </div>
+        <div className="card-content">
+            <h6 className="label">Site Title</h6>
+            <p className="data-text">{generalData.site_title || "No title available"}</p>
+
+            <h6 className="label">About us</h6>
+            <p className="data-text">{generalData.site_about || "No description available"}</p>
+        </div>
+    </div>
+
+>>>>>>> 546bb341f862ed6dee4fbf320cd427d7f3610b01
     {/* Shutdown Website Section */}
     <div className="settings-card">
         <div className="card-header">
             <h5 className="section-title">Shutdown Website</h5>
+<<<<<<< HEAD
             <div className="switch-container">
                 <input
                     className="switch-input"
+=======
+            <div className="toggle-switch-wrapper">
+                <span
+                      className={`status-text online ${generalData.shutdown === false ? "active" : ""}`}
+                    >
+                      Online
+                    </span>
+                <label className="switch">
+                <input
+>>>>>>> 546bb341f862ed6dee4fbf320cd427d7f3610b01
                     type="checkbox"
                     id="shutdown-switch"
                     checked={generalData.shutdown}
                     onChange={(e) => toggleShutdown(e.target.checked)}
                 />
+<<<<<<< HEAD
                 <label className="switch-label" htmlFor="shutdown-switch"></label>
+=======
+                <span className="slider round"></span>
+                </label>
+                <span
+                    className={`status-text offline ${generalData.shutdown === true ? "active" : ""}`}
+                >
+                Offline
+                </span>
+>>>>>>> 546bb341f862ed6dee4fbf320cd427d7f3610b01
             </div>
         </div>
         <div className="card-content">
@@ -214,13 +370,35 @@ const Settings = () => {
         </div>
     </div>
 
+<<<<<<< HEAD
+=======
+    {/* Security Settings Card */}
+<div className="settings-card">
+    <div className="card-header">
+        <h5 className="section-title">Security Settings</h5>
+        <button className="btn-edit" onClick={() => setShowPassModal(true)}>
+            <i className="bi bi-shield-lock"></i> CHANGE PASSWORD
+        </button>
+    </div>
+    <div className="card-content">
+        <p className="text-muted">
+            It is recommended to update your password periodically to ensure the security of your account.
+        </p>
+    </div>
+</div>
+
+>>>>>>> 546bb341f862ed6dee4fbf320cd427d7f3610b01
     {/* General Modal */}
     {showGeneralModal && (
         <div className="custom-modal-overlay">
             <div className="custom-modal-dialog">
                 <div className="modal-header">
                     <h5>Edit General Settings</h5>
+<<<<<<< HEAD
                     <button className="btn-close-x" onClick={() => setShowGeneralModal(false)}>&times;</button>
+=======
+                    {/* <button className="btn-close-x" onClick={() => setShowGeneralModal(false)}>&times;</button> */}
+>>>>>>> 546bb341f862ed6dee4fbf320cd427d7f3610b01
                 </div>
                 <div className="modal-body">
                     <div className="form-group">
@@ -241,7 +419,11 @@ const Settings = () => {
                     </div>
                 </div>
                 <div className="modal-footer">
+<<<<<<< HEAD
                     <button className="btn-cancel" onClick={() => setShowGeneralModal(false)}>Cancel</button>
+=======
+                    <button className="cancel-btn" onClick={() => setShowGeneralModal(false)}>Cancel</button>
+>>>>>>> 546bb341f862ed6dee4fbf320cd427d7f3610b01
                     <button className="btn-save" onClick={updateGeneralSettings}>Save Changes</button>
                 </div>
             </div>
@@ -254,7 +436,11 @@ const Settings = () => {
             <div className="custom-modal-dialog modal-lg">
                 <div className="modal-header">
                     <h5>Edit Contact Settings</h5>
+<<<<<<< HEAD
                     <button className="btn-close-x" onClick={() => setShowContactModal(false)}>&times;</button>
+=======
+                    {/* <button className="btn-close-x" onClick={() => setShowContactModal(false)}>&times;</button> */}
+>>>>>>> 546bb341f862ed6dee4fbf320cd427d7f3610b01
                 </div>
                 <div className="modal-body">
                     <div className="form-grid">
@@ -289,12 +475,64 @@ const Settings = () => {
                     </div>
                 </div>
                 <div className="modal-footer">
+<<<<<<< HEAD
                     <button className="btn-cancel" onClick={() => setShowContactModal(false)}>Cancel</button>
                     <button className="btn-save" onClick={updateContactDetails}>Save Changes</button>
                 </div>
             </div>
         </div>
     )}
+=======
+                    <button className="cancel-btn" onClick={() => setShowContactModal(false)}>Cancel</button>
+                    <button className="btn-save" onClick={updateContactDetails}>Save Changes</button>
+                </div>
+            </div>
+        </div> 
+    )}
+
+    {/* Change Password Modal */}
+    {showPassModal && (
+        <div className="custom-modal-overlay">
+            <div className="custom-modal-dialog">
+                <div className="modal-header">
+                    <h5>Change Admin Password</h5>
+                    {/* <button className="btn-close-x" onClick={() => setShowPassModal(false)}>&times;</button> */}
+                </div>
+                <div className="modal-body">
+                    <div className="form-group">
+                        <label>Current Password</label>
+                        <input 
+                            type="password" 
+                            value={passData.old_pass}
+                            onChange={(e) => setPassData({...passData, old_pass: e.target.value})}
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label>New Password</label>
+                        <input 
+                            type="password" 
+                            value={passData.new_pass}
+                            onChange={(e) => setPassData({...passData, new_pass: e.target.value})}
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label>Confirm New Password</label>
+                        <input 
+                            type="password" 
+                            value={passData.confirm_pass}
+                            onChange={(e) => setPassData({...passData, confirm_pass: e.target.value})}
+                        />
+                    </div>
+                </div>
+                <div className="modal-footer">
+                    <button className="cancel-btn" onClick={() => setShowPassModal(false)}>Cancel</button>
+                    <button className="btn-save" onClick={handleUpdatePassword}>Update Password</button>
+                </div>
+            </div>
+        </div>
+    )}
+
+>>>>>>> 546bb341f862ed6dee4fbf320cd427d7f3610b01
 </div>
   );
 };

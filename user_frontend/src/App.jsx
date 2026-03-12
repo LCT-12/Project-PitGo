@@ -75,12 +75,17 @@ function App() {
       <Route path="/" element={<PublicLayout />}>
         <Route index element={<Home />} />
         
+<<<<<<< HEAD
         {/* 1. Nhấn đúp "Tất cả" sẽ vào link: /all-cars */}
         <Route path="all-cars" element={<AllCar />} />
 
         {/* 2. Nhấn đúp vào từng hãng (Ferrari, Porsche...) sẽ vào link: /[tên-hãng]
            Sử dụng dấu :brandName để AllCar có thể đọc được tên hãng từ URL */}
         <Route path=":brandName" element={<AllCar />} />
+=======
+        {/* Nơi bạn sẽ thêm các trang khác của User sau này */}
+        {/* Ví dụ: <Route path="/:brand/:carId" element={<CarDetail />} /> */}
+>>>>>>> 546bb341f862ed6dee4fbf320cd427d7f3610b01
       </Route>
     </Routes>
   );

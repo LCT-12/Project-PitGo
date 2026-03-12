@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { carsData } from '../mockData/carsData.js'; 
+import { carsData } from '../mockData/mockHome.js'; 
 
 const Home = () => {
   

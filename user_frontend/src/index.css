@@ -37,7 +37,7 @@ body {
 /* --- HEADER --- */
 .public-header {
   background: white;
-  width: 100%;
+  width: 100%;          /* Giữ header luôn ở trên khi cuộn */
 }
 
 .header-top {
@@ -124,7 +124,7 @@ body {
 
 /* --- THANH MENU XANH GIỮ NGUYÊN GỐC --- */
 .header-nav {
-  background-color: #339AC0;
+  background: linear-gradient(180deg, #0f172a, #111827);;
   width: 100%;
   padding: 15px 50px;
   box-sizing: border-box;
@@ -141,7 +141,7 @@ body {
 
 /* Kiểu dáng chữ Sản phẩm, Dịch vụ */
 .nav-title {
-  color: black;
+  color: white;
   font-weight: bold;
   font-size: 15px;
   cursor: pointer;
@@ -162,20 +162,21 @@ body {
   height: auto;
   margin-left: 8px;
   transition: transform 0.3s ease, filter 0.3s ease;
-  
-  /* Tạo một lớp bóng đen mỏng 0.5px bao quanh hình ảnh */
-  filter: drop-shadow(0px 0px 0.5px rgba(0, 0, 0, 0.8)); 
+
+  /* 1. Đổi mũi tên thành màu trắng ngay từ đầu */
+  /* brightness(0) invert(1) biến mọi màu thành trắng tinh */
+  filter: brightness(0) invert(1) drop-shadow(0px 0px 0.5px rgba(255, 255, 255, 0.8));
 }
 
-/* Hiệu ứng xoay khi mở menu */
+/*Hiệu ứng xoay khi mở menu*/
 .nav-arrow.open {
   transform: rotate(180deg);
 }
 
-/* Đổi sang màu trắng (và vẫn giữ độ đậm) khi rê chuột vào */
+/* Khi rê chuột vào */
 .nav-title:hover .nav-arrow {
-  /* Kết hợp 3 lệnh: Đổi màu trắng -> Xóa bóng đen cũ -> Đổ bóng trắng mới để làm đậm */
-  filter: brightness(0) invert(1) drop-shadow(0px 0px 0.5px rgba(255, 255, 255, 0.8));
+  /* Giữ nguyên hoặc có thể tăng độ sáng nhẹ nếu muốn */
+  filter: brightness(0) invert(1) drop-shadow(0px 0px 1px rgba(255, 255, 255, 1));
 }
 
 /* --- BẢNG MEGA MENU XỔ XUỐNG ĐÈ LÊN BANNER --- */
@@ -556,4 +557,191 @@ body {
 /* Thêm chút hiệu ứng phóng to nhẹ khi người dùng đưa chuột vào icon */
 .social-icons img:hover {
   transform: scale(1.15);
+}
+
+/* ============================================================
+   PUBLIC LAYOUT (TRANG AllCar) - REFINED VERSION
+   ============================================================ */
+
+.allcar-container {
+  max-width: 1400px; /* Tăng chiều rộng một chút để giống layout Axure */
+  margin: 0 auto;
+  padding: 30px 40px;
+  font-family: 'Be Vietnam Pro', sans-serif;
+  background-color: #F3F4F6; /* Màu nền nhạt của toàn trang */
+}
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 18px;
+  color: #7f8c8d;
+  margin-bottom: 25px;
+}
+
+.breadcrumb b {
+  color: #333;
+  font-weight: 600;
+}
+
+/* Tiêu đề & Subtitle */
+.allcar-title {
+  text-align: center;
+  font-size: 30px;
+  font-weight: 700;
+  color: #000;
+  margin-bottom: 8px;
+}
+
+.allcar-subtitle {
+  text-align: center;
+  color: #666;
+  font-size: 18px;
+  max-width: 1000px;
+  margin: 0 auto 40px auto;
+  line-height: 1.5;
+}
+
+/* Bố cục chính */
+.allcar-content {
+  display: flex;
+  gap: 20px; /* Khoảng cách nhỏ lại theo thiết kế */
+  align-items: flex-start;
+}
+
+/* Sidebar Bộ lọc - Chỉnh lại đổ bóng và bo góc */
+.filter-sidebar {
+  width: 280px;
+  background: #ffffff;
+  padding: 25px;
+  border-radius: 8px; /* Bo góc nhẹ hơn giống hình */
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  position: sticky;
+  top: 20px;
+}
+
+.filter-sidebar h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.car-icon {
+  display: inline-block;
+  width: 24px;                 
+  height: 24px;                 
+  margin-right: -3px;           
+  margin-left: -5px;
+}
+
+.filter-group h4 {
+  font-size: 13px;
+  color: #000;
+  font-weight: 700;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.filter-group ul {
+  list-style: none;
+  padding: 0;
+}
+
+.filter-group li {
+  margin-bottom: 10px;
+}
+
+.filter-group label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #444;
+}
+
+/* Tinh chỉnh Checkbox */
+.filter-group input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: #333; /* Màu đen khi tick */
+}
+
+/* Lưới xe - 3 cột chuẩn Axure */
+.car-display-grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+/* Card xe - Bổ sung viền và chỉnh lại Shadow */
+.car-item-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  border: 1px solid #e5e7eb;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 320px;
+}
+
+.car-item-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+}
+
+.car-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: #111;
+  margin-bottom: 10px;
+  height: auto;
+  text-transform: uppercase;
+}
+
+.car-image-wrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 0;
+}
+
+.car-image-wrapper img {
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+/* Giá tiền */
+.car-price {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1a1a1a; 
+  padding: 10px;
+  margin-top: 15px;
+}
+
+/* Responsive */
+@media (max-width: 1100px) {
+  .car-display-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .allcar-content {
+    flex-direction: column;
+  }
+  .filter-sidebar {
+    width: 100%;
+  }
 }

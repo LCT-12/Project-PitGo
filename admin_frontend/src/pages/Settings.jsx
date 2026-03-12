@@ -1,5 +1,16 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+<<<<<<< HEAD
+
+const Settings = () => {
+  // 1. Khai báo state để giữ dữ liệu từ MongoDB
+  const [generalData, setGeneralData] = useState({
+    site_title: "",
+    site_about: "",
+    shutdown: false,
+  });
+
+=======
 import Loading from "../components/Loading";
 import Error from "../components/Error";
 
@@ -17,6 +28,7 @@ function Settings({ showAlert }) {
   });
 
   // Thông tin liên hệ (Contact Details)
+>>>>>>> 546bb341f862ed6dee4fbf320cd427d7f3610b01
   const [contactData, setContactData] = useState({
     address: "",
     gmap: "",
@@ -25,6 +37,16 @@ function Settings({ showAlert }) {
     email: "",
     fb: "",
     insta: "",
+<<<<<<< HEAD
+    tw: "",
+  });
+
+  const [tempData, setTempData] = useState({}); // Giữ dữ liệu tạm khi đang nhập
+  const [showGeneralModal, setShowGeneralModal] = useState(false);
+  const [showContactModal, setShowContactModal] = useState(false);
+  const [tempContactData, setTempContactData] = useState({});
+  const [loading, setLoading] = useState(true);
+=======
   });
 
   // Đổi mật khẩu (Password Change)
@@ -39,6 +61,7 @@ function Settings({ showAlert }) {
   const [showGeneralModal, setShowGeneralModal] = useState(false);
   const [showContactModal, setShowContactModal] = useState(false);
   const [tempContactData, setTempContactData] = useState({});
+>>>>>>> 546bb341f862ed6dee4fbf320cd427d7f3610b01
 
   // 2. Hàm gọi API từ Backend (Cổng 5000)
   const fetchSettings = async () => {
@@ -59,7 +82,11 @@ function Settings({ showAlert }) {
 
       setLoading(false);
     } catch (error) {
+<<<<<<< HEAD
+      console.error("Failed to retrieve data from the server.:", error);
+=======
       console.error("Failed to retrieve data from the server:", error);
+>>>>>>> 546bb341f862ed6dee4fbf320cd427d7f3610b01
       setLoading(false);
     }
   };
@@ -80,6 +107,11 @@ function Settings({ showAlert }) {
     setShowContactModal(true);
 };
 
+<<<<<<< HEAD
+  if (loading) return <div className="p-4">Loading data...</div>;
+
+=======
+>>>>>>> 546bb341f862ed6dee4fbf320cd427d7f3610b01
   const updateGeneralSettings = async () => {
     try {
       // Gửi dữ liệu đi với key là "general_settings" để khớp với logic fetch hiện tại
@@ -98,11 +130,19 @@ function Settings({ showAlert }) {
         // 2. Đóng Modal
         setShowGeneralModal(false);
         // 3. Thông báo thành công (tùy chọn)
+<<<<<<< HEAD
+        alert("Settings updated successfully.");
+      }
+    } catch (error) {
+      console.error("Error while updating settings:", error);
+      alert("Unable to save changes. Please check the server!");
+=======
         showAlert('success', "Settings updated successfully.");
       }
     } catch (error) {
       console.error("Error while updating settings:", error);
       showAlert('danger', "Unable to save changes. Please check the server!");
+>>>>>>> 546bb341f862ed6dee4fbf320cd427d7f3610b01
     }
   };
 
@@ -121,11 +161,19 @@ function Settings({ showAlert }) {
 
       if (response.data) {
         setGeneralData(updatedData); // Cập nhật state tại chỗ
+<<<<<<< HEAD
+        alert(`Website has been ${val ? "closed" : "reopened"} successfully!`);
+      }
+    } catch (error) {
+      console.error("Error while changing shutdown status:", error);
+      alert("Unable to change website status!");
+=======
         showAlert('success', `Website has been ${val ? "closed" : "reopened"} successfully!`);
       }
     } catch (error) {
       console.error("Error while changing shutdown status:", error);
       showAlert('danger', "Unable to change website status!");
+>>>>>>> 546bb341f862ed6dee4fbf320cd427d7f3610b01
     }
   };
 
@@ -139,6 +187,9 @@ function Settings({ showAlert }) {
         if (response.data) {
             setContactData(tempContactData);
             setShowContactModal(false);
+<<<<<<< HEAD
+            alert("Contact details updated successfully!");
+=======
             showAlert('success', "Contact details updated successfully!");
         }
     } catch (error) {
@@ -173,9 +224,45 @@ function Settings({ showAlert }) {
         } catch (error) {
             console.error("Change password error:", error);
             showAlert('danger', error.response?.data?.message || "An error occurred.");
+>>>>>>> 546bb341f862ed6dee4fbf320cd427d7f3610b01
         }
-    };
+    } catch (error) {
+        alert("Failed to update contact details.");
+    }
+};
 
+<<<<<<< HEAD
+  return (
+    <div style={{ padding: "25px" }}>
+    {/* Header */}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          marginBottom: "20px",
+        }}
+      >
+        <h2>Settings</h2>
+      </div>
+
+    {/* General Settings Section */}
+    <div className="settings-card">
+        <div className="card-header">
+            <h5 className="section-title">General Settings</h5>
+            <button className="btn-edit" onClick={handleGeneralEditClick}>
+                <i className="bi bi-pencil-square"></i> EDIT
+            </button>
+        </div>
+        <div className="card-content">
+            <h6 className="label">Site Title</h6>
+            <p className="data-text">{generalData.site_title || "No title available"}</p>
+
+            <h6 className="label">About us</h6>
+            <p className="data-text">{generalData.site_about || "No description available"}</p>
+        </div>
+    </div>
+
+=======
     /* ================= STATES ================= */
   if (error) return <Error message={error} />;
   if (loading) return <Loading message="Loading data..." />;
@@ -211,10 +298,16 @@ function Settings({ showAlert }) {
         </div>
     </div>
 
+>>>>>>> 546bb341f862ed6dee4fbf320cd427d7f3610b01
     {/* Shutdown Website Section */}
     <div className="settings-card">
         <div className="card-header">
             <h5 className="section-title">Shutdown Website</h5>
+<<<<<<< HEAD
+            <div className="switch-container">
+                <input
+                    className="switch-input"
+=======
             <div className="toggle-switch-wrapper">
                 <span
                       className={`status-text online ${generalData.shutdown === false ? "active" : ""}`}
@@ -223,11 +316,15 @@ function Settings({ showAlert }) {
                     </span>
                 <label className="switch">
                 <input
+>>>>>>> 546bb341f862ed6dee4fbf320cd427d7f3610b01
                     type="checkbox"
                     id="shutdown-switch"
                     checked={generalData.shutdown}
                     onChange={(e) => toggleShutdown(e.target.checked)}
                 />
+<<<<<<< HEAD
+                <label className="switch-label" htmlFor="shutdown-switch"></label>
+=======
                 <span className="slider round"></span>
                 </label>
                 <span
@@ -235,6 +332,7 @@ function Settings({ showAlert }) {
                 >
                 Offline
                 </span>
+>>>>>>> 546bb341f862ed6dee4fbf320cd427d7f3610b01
             </div>
         </div>
         <div className="card-content">
@@ -272,6 +370,8 @@ function Settings({ showAlert }) {
         </div>
     </div>
 
+<<<<<<< HEAD
+=======
     {/* Security Settings Card */}
 <div className="settings-card">
     <div className="card-header">
@@ -287,13 +387,18 @@ function Settings({ showAlert }) {
     </div>
 </div>
 
+>>>>>>> 546bb341f862ed6dee4fbf320cd427d7f3610b01
     {/* General Modal */}
     {showGeneralModal && (
         <div className="custom-modal-overlay">
             <div className="custom-modal-dialog">
                 <div className="modal-header">
                     <h5>Edit General Settings</h5>
+<<<<<<< HEAD
+                    <button className="btn-close-x" onClick={() => setShowGeneralModal(false)}>&times;</button>
+=======
                     {/* <button className="btn-close-x" onClick={() => setShowGeneralModal(false)}>&times;</button> */}
+>>>>>>> 546bb341f862ed6dee4fbf320cd427d7f3610b01
                 </div>
                 <div className="modal-body">
                     <div className="form-group">
@@ -314,7 +419,11 @@ function Settings({ showAlert }) {
                     </div>
                 </div>
                 <div className="modal-footer">
+<<<<<<< HEAD
+                    <button className="btn-cancel" onClick={() => setShowGeneralModal(false)}>Cancel</button>
+=======
                     <button className="cancel-btn" onClick={() => setShowGeneralModal(false)}>Cancel</button>
+>>>>>>> 546bb341f862ed6dee4fbf320cd427d7f3610b01
                     <button className="btn-save" onClick={updateGeneralSettings}>Save Changes</button>
                 </div>
             </div>
@@ -327,7 +436,11 @@ function Settings({ showAlert }) {
             <div className="custom-modal-dialog modal-lg">
                 <div className="modal-header">
                     <h5>Edit Contact Settings</h5>
+<<<<<<< HEAD
+                    <button className="btn-close-x" onClick={() => setShowContactModal(false)}>&times;</button>
+=======
                     {/* <button className="btn-close-x" onClick={() => setShowContactModal(false)}>&times;</button> */}
+>>>>>>> 546bb341f862ed6dee4fbf320cd427d7f3610b01
                 </div>
                 <div className="modal-body">
                     <div className="form-grid">
@@ -362,6 +475,14 @@ function Settings({ showAlert }) {
                     </div>
                 </div>
                 <div className="modal-footer">
+<<<<<<< HEAD
+                    <button className="btn-cancel" onClick={() => setShowContactModal(false)}>Cancel</button>
+                    <button className="btn-save" onClick={updateContactDetails}>Save Changes</button>
+                </div>
+            </div>
+        </div>
+    )}
+=======
                     <button className="cancel-btn" onClick={() => setShowContactModal(false)}>Cancel</button>
                     <button className="btn-save" onClick={updateContactDetails}>Save Changes</button>
                 </div>
@@ -411,6 +532,7 @@ function Settings({ showAlert }) {
         </div>
     )}
 
+>>>>>>> 546bb341f862ed6dee4fbf320cd427d7f3610b01
 </div>
   );
 };

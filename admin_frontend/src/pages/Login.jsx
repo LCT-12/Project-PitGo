@@ -1,21 +1,24 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useState } from "react";
+import axios from "axios";
 
-const Login = ({ showAlert, onLoginSuccess }) => {
-    const [formData, setFormData] = useState({ admin_name: '', admin_pass: '' });
+function Login({ onLoginSuccess, showAlert }) {
+    const [formData, setFormData] = useState({ admin_name: "", admin_pass: "" });
 
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
-            const res = await axios.post('http://localhost:5000/api/admin/login', formData);
+            const res = await axios.post("http://localhost:5000/api/admin/login", { 
+                admin_name: formData.admin_name, 
+                admin_pass: formData.admin_pass 
+            });
+
             if (res.data.success) {
-                // Lưu trạng thái đăng nhập đơn giản
-                localStorage.setItem('isAdminLoggedIn', 'true');
-                showAlert('success', "Chào mừng Admin quay trở lại!");
-                onLoginSuccess(); // Gọi hàm này để App.jsx render lại giao diện Admin
+                localStorage.setItem("isAdminLoggedIn", "true");
+                onLoginSuccess();
+                showAlert("success", "Đăng nhập thành công!");
             }
         } catch (err) {
-            showAlert('danger', err.response?.data?.message || "Đăng nhập thất bại!");
+            showAlert("danger", "Tài khoản hoặc mật khẩu không chính xác!");
         }
     };
 
@@ -35,7 +38,7 @@ const Login = ({ showAlert, onLoginSuccess }) => {
                     placeholder="Password" 
                     onChange={(e) => setFormData({...formData, admin_pass: e.target.value})} 
                 />
-                <button className='submit-btn' type="submit">LOGIN</button>
+                <button className="submit-btn" type="submit">LOGIN</button>
             </form>
         </div>
     );

@@ -14,8 +14,13 @@ import Contacts from "./pages/Contacts";
 import Settings from "./pages/Settings";
 
 function App() {
-  // Trạng thái kiểm tra đăng nhập
   const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem("isAdminLoggedIn") === "true");
+  const [alert, setAlert] = useState(null);
+
+  // PHẢI ĐỊNH NGHĨA showAlert Ở ĐÂY (TRƯỚC KHI SỬ DỤNG)
+  const showAlert = (type, msg) => {
+    setAlert({ type, msg });
+  };
 
   useEffect(() => {
     const fetchGlobalSettings = async () => {
@@ -31,34 +36,33 @@ function App() {
     fetchGlobalSettings();
   }, []);
 
-  // Hàm xử lý đăng xuất
   const handleLogout = () => {
     localStorage.removeItem("isAdminLoggedIn");
     setIsLoggedIn(false);
   };
 
-  // Nếu CHƯA đăng nhập
+  // NẾU CHƯA ĐĂNG NHẬP
   if (!isLoggedIn) {
     return (
       <BrowserRouter>
+        {alert && (
+          <CustomAlert 
+            type={alert.type} 
+            msg={alert.msg} 
+            onClose={() => setAlert(null)} 
+          />
+        )}
         <Routes>
-          <Route path="*" element={<Login onLoginSuccess={() => setIsLoggedIn(true)} />} />
+          {/* Truyền showAlert vào đây */}
+          <Route path="*" element={<Login onLoginSuccess={() => setIsLoggedIn(true)} showAlert={showAlert} />} />
         </Routes>
       </BrowserRouter>
     );
   }
 
-  const [alert, setAlert] = useState(null);
-
-  // Hàm này tương đương với function alert(type, msg) của bạn
-  const showAlert = (type, msg) => {
-    setAlert({ type, msg });
-  };
-
-  // Nếu ĐÃ đăng nhập - GIAO DIỆN ADMIN CHUẨN
+  // NẾU ĐÃ ĐĂNG NHẬP
   return (
     <BrowserRouter>
-      {/* Hiển thị Alert toàn cục */}
       {alert && (
         <CustomAlert 
           type={alert.type} 
@@ -68,21 +72,17 @@ function App() {
       )}
       <div className="admin-layout"> 
         <Sidebar />
-
-        <div className="main"> {/* Đổi từ main-content thành main để khớp CSS */}
+        <div className="main">
           <Topbar onLogout={handleLogout} />
-
-          <div className="page-content"> {/* Đổi từ page-container thành page-content để khớp CSS */}
+          <div className="page-content">
             <Routes>
               <Route path="/" element={<Navigate to="/dashboard" />} />
-              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/dashboard" element={<Dashboard showAlert={showAlert} />} />
               <Route path="/cars" element={<Cars showAlert={showAlert} />} />
               <Route path="/customers" element={<Customers showAlert={showAlert} />} />
               <Route path="/orders" element={<Orders showAlert={showAlert} />} />
               <Route path="/contacts" element={<Contacts showAlert={showAlert} />} />
               <Route path="/settings" element={<Settings showAlert={showAlert} />} />
-              {/* Thêm Route dự phòng nếu gõ sai đường dẫn */}
-              <Route path="*" element={<Navigate to="/dashboard" />} />
             </Routes>
           </div>
         </div>

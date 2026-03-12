@@ -15,10 +15,16 @@ function Cars({ showAlert }) {
   const [price, setPrice] = useState("");
   const [image, setImage] = useState(null);
   const [year, setYear] = useState("");
+  const [top_speed, setTopSpeed] = useState("");
+  const [acceleration, setAcceleration] = useState("");
+  const [engine, setEngine] = useState("");
+  const [fuel_type, setFuelType] = useState("");
+  const [horsePower, setHorsePower] = useState("");
   const [origin, setOrigin] = useState("");
-  const [condition, setCondition] = useState("New");
+  const [isTrackOnly, setisTrackOnly] = useState(true);
   const [description, setDescription] = useState("");
-  const [status, setStatus] = useState("In Stock");
+  const [status, setStatus] = useState("Có sẵn");
+
   const [preview, setPreview] = useState(null);
 
   const [editingCar, setEditingCar] = useState(null);
@@ -43,7 +49,7 @@ function Cars({ showAlert }) {
   }, []);
 
   const handleStatusChange = (e) => {
-    setStatus(e.target.checked ? "In Stock" : "Out of Stock");
+    setStatus(e.target.checked ? "Có sẵn" : "Hết Hàng");
   };
 
   /* ================= IMAGE ================= */
@@ -66,8 +72,13 @@ function Cars({ showAlert }) {
       formData.append("brand", brand);
       formData.append("price", price);
       formData.append("year", year);
+      formData.append("horsePower", horsePower);
       formData.append("origin", origin);
-      formData.append("condition", condition);
+      formData.append("top_speed", top_speed);
+      formData.append("acceleration", acceleration);
+      formData.append("engine", engine);
+      formData.append("fuel_type", fuel_type);
+      formData.append("isTrackOnly", isTrackOnly);
       formData.append("description", description);
       formData.append("status", status);
       if (image) formData.append("image", image);
@@ -85,6 +96,7 @@ function Cars({ showAlert }) {
       setShowModal(false);
       setEditingCar(null);
       resetForm();
+      showAlert("success", "Car saved successfully!");
     } catch (err) {
       console.log(err);
       if (err.response && err.response.status === 400) {
@@ -106,8 +118,9 @@ function Cars({ showAlert }) {
       await axios.delete(`${API}/${carToDelete}`);
       setCars(cars.filter((c) => c._id !== carToDelete));
       setShowDeleteModal(false);
+      showAlert("success", "Xóa thành công!");
     } catch {
-      showAlert('danger', "Unable to delete car.");
+      showAlert('danger', "Xóa thất bại. Vui lòng thử lại!");
     }
   };
 
@@ -118,8 +131,13 @@ function Cars({ showAlert }) {
     setBrand(car.brand);
     setPrice(car.price);
     setYear(car.year);
+    setTopSpeed(car.top_speed);
+    setAcceleration(car.acceleration);
+    setEngine(car.engine);
+    setFuelType(car.fuel_type);
+    setHorsePower(car.horsePower);
     setOrigin(car.origin);
-    setCondition(car.condition);
+    setisTrackOnly(car.isTrackOnly);
     setDescription(car.description);
     setStatus(car.status);
     setPreview(car.image);
@@ -132,10 +150,15 @@ function Cars({ showAlert }) {
     setBrand("");
     setPrice("");
     setYear("");
+    setTopSpeed("");
+    setAcceleration("");
+    setEngine("");
+    setFuelType("");
+    setHorsePower("");
     setOrigin("");
     setDescription("");
-    setCondition("New");
-    setStatus("In Stock");
+    setisTrackOnly(true);
+    setStatus("Có sẵn");
     setPreview(null);
     setImage(null);
   };
@@ -157,7 +180,7 @@ function Cars({ showAlert }) {
       >
         <h2>Cars Management</h2>
         <button className="add-btn" onClick={() => setShowModal(true)}>
-          Add Car
+          Thêm Xe Mới
         </button>
       </div>
 
@@ -167,23 +190,21 @@ function Cars({ showAlert }) {
           <thead>
             <tr>
               <th>#</th>
-              <th>Image</th>
-              <th>Car Name</th>
-              <th>Brand</th>
-              <th>Price</th>
-              <th>Year</th>
-              <th>Origin</th>
-              <th>Description</th>
-              <th>Condition</th>
-              <th>Status</th>
-              <th>Action</th>
+              <th>Mẫu</th>
+              <th>Tên</th>
+              <th>Giá</th>
+              <th>Năm</th>
+              <th>Xuất xứ</th>
+              <th>Loại</th>
+              <th>Tình trạng</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
             {cars.length === 0 ? (
               <tr>
-                <td colSpan="11" style={{ textAlign: "center", padding: "20px", color: "#666" }}>
-                  No cars yet
+                <td colSpan="9" style={{ textAlign: "center", padding: "20px", color: "#666" }}>
+                  Chưa có sản phẩm nào
                 </td>
               </tr>
             ) : (
@@ -192,13 +213,17 @@ function Cars({ showAlert }) {
                   <td>{index + 1}</td>
                   <td><img src={car.image} width="80" alt="" style={{ borderRadius: '4px' }} /></td>
                   <td>{car.carName}</td>
-                  <td>{car.brand}</td>
-                  <td>${car.price}</td>
+                  <td>{car.price} Tỷ</td>
                   <td>{car.year}</td>
                   <td>{car.origin}</td>
-                  <td className="text-truncate">{car.description}</td>
-                  <td>{car.condition}</td>
-                  <td><span className={`badge ${car.status === "In Stock" ? "green" : "red"}`}>{car.status}</span></td>
+                  <td>
+                    {car.isTrackOnly ? (
+                      <span className="badge track">Xe Đua</span>
+                    ) : (
+                      <span className="badge street">Xe Đường Phố</span>
+                    )}
+                  </td>
+                  <td><span className={`badge ${car.status === "Có sẵn" ? "green" : "red"}`}>{car.status}</span></td>
                   <td>
                     <button className="btn-edit" onClick={() => handleEdit(car)}>Edit</button>
                     <button className="btn-delete" onClick={() => confirmDelete(car._id)}>Delete</button>
@@ -215,24 +240,46 @@ function Cars({ showAlert }) {
         <div className="modal-overlay">
           <div className="modal-box">
             <form onSubmit={handleSubmit} className="modal-form">
-              <h3>{editingCar ? "Update Car Info" : "Add New Car"}</h3>
+              <h3>{editingCar ? "Cập nhật xe" : "Thêm xe mới"}</h3>
 
-              {/* Row 1: Car Name */}
-              <div className="form-group">
-                <label>Car Name</label>
-                <input
-                  type="text"
-                  placeholder="e.g. Civic RS"
-                  value={carName}
-                  onChange={(e) => setCarName(e.target.value)}
-                  required
-                />
-              </div>
-
-              {/* Row 2: Brand, Price & Status */}
+              {/* Row 1: Tên xe, Giá, Top speed */}
               <div className="form-row">
                 <div className="form-group">
-                  <label>Brand</label>
+                  <label>Tên Xe</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. Civic RS"
+                    value={carName}
+                    onChange={(e) => setCarName(e.target.value)}
+                    required
+                  />
+                </div>
+                 <div className="form-group">
+                  <label>Giá (VNĐ)</label>
+                  <input
+                    type="number"
+                    placeholder="0.00"
+                    value={price}
+                    onChange={(e) => setPrice(e.target.value)}
+                    required
+                  />
+                </div>
+                 <div className="form-group">
+                  <label>Vận tốc tối đa (km/h)</label>
+                  <input
+                    type="text"
+                    placeholder="e.g 200 km/h"
+                    value={top_speed}
+                    onChange={(e) => setTopSpeed(e.target.value)}
+                    required
+                  />
+                </div>
+              </div>
+              
+              {/* Row 2: Brand, FuelType & Status */}
+              <div className="form-row">
+                <div className="form-group">
+                  <label>Hãng</label>
                   <select
                     className="custom-select"
                     value={brand}
@@ -240,7 +287,7 @@ function Cars({ showAlert }) {
                     required
                   >
                     <option value="" disabled>
-                      Select a brand
+                      Lựa chọn hãng xe
                     </option>
                     <option value="Ferrari">Ferrari</option>
                     <option value="Porsche">Porsche</option>
@@ -250,39 +297,45 @@ function Cars({ showAlert }) {
                   </select>
                 </div>
                 <div className="form-group">
-                  <label>Price ($)</label>
-                  <input
-                    type="number"
-                    placeholder="0.00"
-                    value={price}
-                    onChange={(e) => setPrice(e.target.value)}
+                  <label>Nhiên liệu</label>
+                  <select
+                    className="custom-select"
+                    value={fuel_type}
+                    onChange={(e) => setFuelType(e.target.value)}
                     required
-                  />
+                  >
+                    <option value="" disabled>
+                      Lựa chọn nhiên liệu
+                    </option>
+                    <option value="Xăng">Xăng</option>
+                    <option value="Điện">Điện</option>
+                    <option value="Hybrid">Hybrid</option>
+                  </select>
                 </div>
                 <div className="form-group">
-                  <label>Status</label>
+                  <label>Tình trạng</label>
                   <div className="toggle-switch-wrapper">
                     <span
-                      className={`status-text ${status === "Out of Stock" ? "active" : ""}`}
+                      className={`status-text ${status === "Hết Hàng" ? "active" : ""}`}
                     >
-                      Out of Stock
+                      Hết Hàng
                     </span>
                     <label className="switch">
                       <input
                         type="checkbox"
-                        checked={status === "In Stock"}
+                        checked={status === "Có sẵn"}
                         onChange={(e) =>
                           setStatus(
-                            e.target.checked ? "In Stock" : "Out of Stock",
+                            e.target.checked ? "Có sẵn" : "Hết Hàng",
                           )
                         }
                       />
                       <span className="slider round"></span>
                     </label>
                     <span
-                      className={`status-text ${status === "In Stock" ? "active" : ""}`}
+                      className={`status-text ${status === "Có sẵn" ? "active" : ""}`}
                     >
-                      In Stock
+                      Có sẵn
                     </span>
                   </div>
                 </div>
@@ -291,7 +344,7 @@ function Cars({ showAlert }) {
               {/* Row 3: Year, Origin & Condition */}
               <div className="form-row">
                 <div className="form-group">
-                  <label>Year</label>
+                  <label>Năm Sản Xuất</label>
                   <input
                     type="number"
                     placeholder="e.g 2024"
@@ -300,55 +353,86 @@ function Cars({ showAlert }) {
                   />
                 </div>
                 <div className="form-group">
-                  <label>Origin</label>
+                  <label>Xuất xứ</label>
                   <input
                     type="text"
-                    placeholder="e.g. Japan"
+                    placeholder="e.g. Italy"
                     value={origin}
                     onChange={(e) => setOrigin(e.target.value)}
                   />
                 </div>
                 <div className="form-group">
-                  <label>Condition</label>
+                  <label>Loại Xe</label>
                   <div className="segmented-control">
                     <div
-                      className={`selection-slider ${condition === "Used" ? "is-used" : ""}`}
+                      className={`selection-slider ${isTrackOnly === false ? "is-used" : ""}`}
                     ></div>
 
                     <button
                       type="button"
-                      className={condition === "New" ? "active" : ""}
-                      onClick={() => setCondition("New")}
+                      className={isTrackOnly === true ? "active" : ""}
+                      onClick={() => setisTrackOnly(true)}
                     >
-                      New
+                      Xe Đua
                     </button>
 
                     <button
                       type="button"
-                      className={condition === "Used" ? "active" : ""}
-                      onClick={() => setCondition("Used")}
+                      className={isTrackOnly === false ? "active" : ""}
+                      onClick={() => setisTrackOnly(false)}
                     >
-                      Used
+                      Xe Đường Phố
                     </button>
                   </div>
                 </div>
               </div>
 
-              {/* Row 4: Description */}
+              {/* Row 4: Horse Power, Engine, Acceleration */}
+              <div className="form-row">
+                <div className="form-group">
+                  <label>Mã lực</label>
+                  <input
+                    type="number"
+                    placeholder="e.g 600 HP"
+                    value={horsePower}
+                    onChange={(e) => setHorsePower(e.target.value)}
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Động cơ</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. V8"
+                    value={engine}
+                    onChange={(e) => setEngine(e.target.value)}
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Gia tốc</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. 3.5s"
+                    value={acceleration}
+                    onChange={(e) => setAcceleration(e.target.value)}
+                  />
+                </div>
+              </div>
+
+              {/* Row 5: Description */}
               <div className="form-group">
-                <label>Description</label>
+                <label>Mô tả</label>
                 <textarea
                   rows="3"
-                  placeholder="Briefly describe the car features..."
+                  placeholder="Mô tả chi tiết về xe..."
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   className="custom-textarea"
                 />
               </div>
 
-              {/* Row 5: Car Image & Preview */}
+              {/* Row 6: Car Image & Preview */}
               <div className="form-group">
-                <label>Car Image</label>
+                <label>Mẫu xe</label>
                 <input
                   type="file"
                   className="file-input"
@@ -361,7 +445,7 @@ function Cars({ showAlert }) {
                     <img src={preview} alt="Preview" className="img-fill" />
                   ) : (
                     <div className="no-image-placeholder">
-                      <span>No image selected</span>
+                      <span>Chưa có hình ảnh nào được chọn</span>
                     </div>
                   )}
                 </div>
@@ -372,7 +456,7 @@ function Cars({ showAlert }) {
                   Cancel
                 </button>
                 <button type="submit" className="submit-btn" disabled={loading}>
-                  {loading ? "Saving..." : (editingCar ? "Update Car" : "Add Car")}
+                  {loading ? "Saving..." : (editingCar ? "Cập nhật Xe" : "Thêm Xe")}
                 </button>
               </div>
             </form>
@@ -384,14 +468,14 @@ function Cars({ showAlert }) {
         <div className="modal-overlay">
           <div className="modal-box confirm-box">
             <div className="confirm-icon">⚠️</div>
-            <h3>Are you sure?</h3>
-            <p>Do you really want to delete this car? <br/> This action cannot be undone.</p>
+            <h3>Xác nhận xóa</h3>
+            <p>Bạn có chắc chắn muốn xóa xe này không? <br/> Hành động này không thể hoàn tác.</p>
             <div className="modal-actions confirm-actions">
               <button className="cancel-btn" onClick={() => setShowDeleteModal(false)}>
                 Cancel
               </button>
               <button className="delete-confirm-btn" onClick={handleDelete}>
-                Yes, Delete it
+                Xác nhận xóa
               </button>
             </div>
           </div>

@@ -1,7 +1,5 @@
 import React, { useState } from "react";
-import { mockOrders } from "../mockData/mockOrders";
-import { mockUsers } from "../mockData/mockUsers";
-import { mockCars } from "../mockData/mockCars";
+
 
 function Orders({ showAlert }) {
   const [orders, setOrders] = useState(mockOrders);

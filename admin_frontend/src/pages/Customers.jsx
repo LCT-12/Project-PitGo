@@ -58,6 +58,7 @@ function Users({ showAlert }) {
       setLoading(false);
       setShowModal(false);
       resetForm();
+      showAlert("success", `Customer ${editingUser ? "updated" : "added"} successfully!`);
     }, 500);
   };
 
@@ -98,9 +99,15 @@ function Users({ showAlert }) {
   };
 
   const handleDelete = (id) => {
+    try {
     setUsers(users.filter((user) => user.id !== userToDelete));
     setShowDeleteModal(false);
     setUserToDelete(null);
+    showAlert("success", "Customer deleted successfully!");
+    } catch (err) {
+      console.log(err);
+      showAlert("danger", "Unable to delete customer.");
+    }
   };
 
   return (

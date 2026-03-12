@@ -55,8 +55,9 @@ function Contacts({ showAlert }) {
         status: "Read"
       });
       setContacts(contacts.map((m) => (m._id === msg._id ? response.data : m)));
+      showAlert("success", "Message marked as read!");
     } catch (error) {
-      console.error("Failed to update read status");
+      showAlert("danger", "Failed to update read status");
     }
   }
 };
@@ -75,8 +76,9 @@ function Contacts({ showAlert }) {
       isImportant: !currentStatus
     });
     setContacts(contacts.map(m => m._id === id ? response.data : m));
+    showAlert("success", `Message marked as ${response.data.isImportant ? "important" : "not important"}`);
   } catch (error) {
-    console.error("Lỗi cập nhật!");
+    showAlert("danger", "Failed to update important status");
   }
 };
 
@@ -98,6 +100,8 @@ function Contacts({ showAlert }) {
         setContacts(contacts.map(m => m._id === mgToDelete ? { ...m, isDeleted: true } : m));
         setShowDeleteModal(false);
         setMgToDelete(null);
+
+        showAlert("success", "Message deleted successfully!");
       } catch (error) {
         showAlert('danger', "Unable to delete message. Please try again!");
       }
@@ -118,6 +122,7 @@ function Contacts({ showAlert }) {
     });
     // Cập nhật state bằng dữ liệu thật từ Server trả về
     setContacts(contacts.map((m) => (m._id === id ? response.data : m)));
+    showAlert('success', "Message restored!");
   } catch (error) {
     showAlert('danger', "Unable to restore message!");
   }

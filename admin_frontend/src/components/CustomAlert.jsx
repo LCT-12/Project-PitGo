@@ -12,13 +12,7 @@ const CustomAlert = ({ type, msg, onClose }) => {
   return (
     <div className="custom-alert-container">
       <div className={`alert ${bsClass} alert-dismissible fade show shadow-sm`} role="alert">
-        <strong className="me-3">{msg}</strong>
-        <button 
-          type="button" 
-          className="btn-close" 
-          onClick={onClose} 
-          aria-label="Close"
-        ></button>
+        <strong className="me-auto">{msg}</strong>
       </div>
     </div>
   );

@@ -54,7 +54,6 @@ body {
 }
 
 .page-content {
-  padding: 25px;
   width: 100%;
   flex: 1;
 }
@@ -62,17 +61,38 @@ body {
 /* ================= COMPONENT: ALERT ================= */
 .custom-alert-container {
     position: fixed;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 9999;
-    min-width: 350px;
-    animation: fadeInDown 0.4s ease-out;
+    top: 80px;            /* Khoảng cách từ trên xuống theo ý bạn */
+    right: 20px;          /* Khoảng cách từ lề phải */
+    z-index: 10001;
+    min-width: 300px;     /* Độ rộng tối thiểu của alert */
+    max-width: 400px;
+    animation: fadeInDown 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 @keyframes fadeInDown {
-    from { opacity: 0; transform: translate(-50%, -20px); }
-    to { opacity: 1; transform: translate(-50%, 0); }
+    from { 
+      opacity: 0; transform: translateY(-20px); 
+    }
+    to { 
+      opacity: 1; transform: translateY(0); 
+    }
+}
+
+/* Đảm bảo màu sắc hiển thị rõ ràng */
+.alert-success {
+    background-color: #d1e7dd !important;
+    color: #0f5132 !important;
+    border-color: #badbcc !important;
+    padding: 15px;
+    border-radius: 10px;
+}
+
+.alert-danger {
+    background-color: #f8d7da !important;
+    color: #842029 !important;
+    border-color: #f5c2c7 !important;
+    padding: 15px;
+    border-radius: 10px;
 }
 
 /* ================= COMPONENT: TOPBAR ================= */
@@ -159,7 +179,7 @@ body {
 
 .admin-table th,
 .admin-table td {
-  padding: 12px;
+  padding: 18px;
   border-bottom: 1px solid #eee;
   text-align: center;
 }
@@ -934,9 +954,22 @@ input:focus {
   background: #dcfce7;
   color: #166534;
 }
+
 .badge.red {
   background: #fee2e2;
   color: #991b1b;
+}
+
+.badge.track {
+  background: #ffedd5;
+  color: #923100;
+  border: 1px solid #fed7aa;
+}
+
+.badge.street {
+  background: #fef9c3; 
+  color: #854d0e;
+  border: 1px solid #fef08a;
 }
 
 /* Role Badge Styles */

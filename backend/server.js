@@ -22,7 +22,6 @@ const app = express();
 // 2. Middlewares cơ bản
 app.use(cors());
 app.use(express.json());
-app.use("/uploads", express.static("uploads")); // Phục vụ ảnh xe
 
 // 3. Hàm tạo Admin mặc định (Định nghĩa trực tiếp để tránh lỗi file seed)
 const createAdminIfNotExists = async () => {

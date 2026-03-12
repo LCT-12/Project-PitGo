@@ -17,11 +17,6 @@ const adminRoutes = require('./routes/adminRoutes');
 
 // 1. Cấu hình môi trường (Luôn để đầu tiên)
 dotenv.config();
-<<<<<<< HEAD
-connectDB();
-require("dotenv").config();
-=======
->>>>>>> 546bb341f862ed6dee4fbf320cd427d7f3610b01
 
 const app = express();
 
@@ -87,35 +82,6 @@ const startServer = async () => {
         // Đợi kết nối DB thành công trước
         await connectDB(); 
 
-<<<<<<< HEAD
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-    console.log(`🚀 Server running on port ${PORT}`);
-});
-
-// Middleware kiểm tra trạng thái Shutdown
-const checkShutdown = async (req, res, next) => {
-    try {
-        const setting = await Setting.findOne({ key: 'general_settings' });
-        // Nếu bật shutdown và KHÔNG PHẢI là request vào trang Admin (tùy chọn)
-        if (setting && setting.value.shutdown) {
-            return res.status(503).json({ 
-                // Mã lỗi 503 Service Unavailable là cách chuẩn nhất để báo với trình duyệt 
-                // và các công cụ tìm kiếm (như Google) rằng website chỉ tạm dừng hoạt động 
-                // để bảo trì, tránh ảnh hưởng đến SEO của bạn.
-                message: "The website is currently under maintenance. Please check back later!",
-                isShutdown: true 
-            });
-        }
-        next();
-    } catch (err) {
-        next(); // Nếu lỗi database thì cho qua để website không sập hoàn toàn
-    }
-};
-// Mã lỗi 503 Service Unavailable là cách chuẩn nhất để báo với trình duyệt 
-// và các công cụ tìm kiếm (như Google) rằng website chỉ tạm dừng hoạt động 
-// để bảo trì, tránh ảnh hưởng đến SEO của bạn.
-=======
         // Sau đó mới tạo Admin (đảm bảo không bị Timeout)
         await createAdminIfNotExists(); 
 
@@ -130,4 +96,3 @@ const checkShutdown = async (req, res, next) => {
 };
 
 startServer();
->>>>>>> 546bb341f862ed6dee4fbf320cd427d7f3610b01

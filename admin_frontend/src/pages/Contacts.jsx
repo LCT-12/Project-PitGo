@@ -143,7 +143,7 @@ function Contacts({ showAlert }) {
 
   /* ================= UI ================= */
   return (
-    <div style={{ padding: "25px" }}>
+    <div style={{ padding: "15px" }}>
       <div
         style={{
           display: "flex",

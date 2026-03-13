@@ -114,7 +114,7 @@ function Users({ showAlert }) {
   };
 
   return (
-    <div style={{ padding: "25px" }}>
+    <div style={{ padding: "15px" }}>
       {/* Header */}
       <div
         style={{

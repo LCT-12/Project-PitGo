@@ -18,10 +18,7 @@
   "author": "Công Tiến",
   "license": "ISC",
   "dependencies": {
-<<<<<<< HEAD
-=======
     "bcrypt": "^6.0.0",
->>>>>>> 546bb341f862ed6dee4fbf320cd427d7f3610b01
     "cloudinary": "^2.9.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",

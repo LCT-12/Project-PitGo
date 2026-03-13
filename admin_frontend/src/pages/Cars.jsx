@@ -31,6 +31,33 @@ function Cars({ showAlert }) {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [carToDelete, setCarToDelete] = useState(null);
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [filterType, setFilterType] = useState("all");
+  const itemsPerPage = 5;
+
+  /* ================= LOGIC LỌC & PHÂN TRANG ================= */
+
+  // 1. Lọc dữ liệu trước
+  const filteredCars = cars.filter((car) => {
+    const isTrack = String(car.isTrackOnly).toLowerCase() === "true";
+    if (filterType === "track") return isTrack === true;
+    if (filterType === "street") return isTrack === false;
+    return true; // "all"
+  });
+
+  // 2. Tính tổng số trang dựa trên danh sách ĐÃ LỌC
+  const totalPages = Math.ceil(filteredCars.length / itemsPerPage);
+
+  // 3. Tính toán vị trí cắt mảng (Phải dựa trên mảng filteredCars)
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+
+  // 4. Lấy dữ liệu hiển thị (Cắt từ filteredCars chứ không phải cars)
+  const currentCars = filteredCars.slice(indexOfFirstItem, indexOfLastItem);
+
+  // Hàm chuyển trang
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
   const API = "http://localhost:5000/api/car";
 
   /* ================= FETCH DATA ================= */
@@ -96,11 +123,11 @@ function Cars({ showAlert }) {
       setShowModal(false);
       setEditingCar(null);
       resetForm();
-      showAlert("success", "Thêm xe thành công!");
+      showAlert("success", "Cập nhật thành công!");
     } catch (err) {
       console.log(err);
       if (err.response && err.response.status === 400) {
-        showAlert("danger", "Lỗi thêm xe: " + err.response.data.message);
+        showAlert("danger", "Lỗi cập nhật: " + err.response.data.message);
       }
     } finally {
       setLoading(false);
@@ -168,22 +195,60 @@ function Cars({ showAlert }) {
   if (loading) return <Loading message="LOADING..." />;
 
   /* ================= UI ================= */
-  return (
-    <div style={{ padding: "25px" }}>
-      {/* Header */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          marginBottom: "20px",
-        }}
-      >
-        <h2>Cars Management</h2>
-        <button className="add-btn" onClick={() => setShowModal(true)}>
-          Thêm Xe Mới
-        </button>
-      </div>
 
+  return (
+    <div style={{ padding: "15px" }}>
+      {/* Header */}
+      {/* Header Container */}
+<div style={{ 
+    display: "flex", 
+    justifyContent: "space-between", // Đẩy 2 khối về 2 đầu
+    alignItems: "center",            // Căn giữa theo chiều dọc
+    marginBottom: "25px",
+    flexWrap: "wrap",                // Hỗ trợ responsive nếu màn hình nhỏ
+    gap: "10px"
+}}>
+    {/* Khối bên trái: Tiêu đề */}
+    <h2 style={{ margin: 0 }}>Cars Management</h2>
+
+    {/* Khối bên phải: Bộ lọc và Nút Thêm xe */}
+    <div style={{ 
+        display: "flex", 
+        alignItems: "center", 
+        gap: "15px" // Khoảng cách giữa các badge và nút Thêm
+    }}>
+        {/* Nhóm bộ lọc (kiểu Badge như trong ảnh của bạn) */}
+        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+            <strong><span>Bộ lọc:</span></strong>
+            
+            <button 
+                onClick={() => setFilterType("all")}
+                className={`badge all ${filterType === "all" ? "active" : ""}`}
+            >
+                Tất cả
+            </button>
+            
+            <button 
+                onClick={() => setFilterType("track")}
+                className={`badge track ${filterType === "track" ? "active" : ""}`}
+            >
+                Xe Đua
+            </button>
+            
+            <button 
+                onClick={() => setFilterType("street")}
+                className={`badge street ${filterType === "street" ? "active" : ""}`}
+            >
+                Xe Đường Phố
+            </button>
+        </div>
+
+        {/* Nút Thêm xe */}
+        <button className="add-btn" onClick={() => setShowModal(true)}>
+            Thêm Xe Mới
+        </button>
+    </div>
+</div>
       {/* Table */}
       <div className="table-responsive" style={{ overflowX: "auto" }}>
         <table className="admin-table">
@@ -215,23 +280,25 @@ function Cars({ showAlert }) {
                 </td>
               </tr>
             ) : (
-              cars.map((car, index) => (
+              currentCars.map((car, index) => (
                 <tr key={car._id}>
-                  <td>{index + 1}</td>
+                  <td>{indexOfFirstItem + index + 1}</td>
                   <td>
-                    <img
-                      src={car.image}
-                      width="80"
-                      alt=""
-                      style={{ borderRadius: "4px" }}
-                    />
+                    <div className="car-img-container">
+                      <img
+                        src={car.image}
+                        alt={`Ảnh ${car.carName}`}
+                        className="car-thumbnail"
+                      />
+                    </div>
                   </td>
                   <td>{car.carName}</td>
                   <td>{car.price} Tỷ</td>
                   <td>{car.year}</td>
                   <td>{car.origin}</td>
                   <td>
-                    {car.isTrackOnly ? (
+                    {/* Chuyển về chuỗi, viết thường và so sánh để tránh lỗi kiểu dữ liệu */}
+                    {String(car.isTrackOnly).toLowerCase() === "true" ? (
                       <span className="badge track">Xe Đua</span>
                     ) : (
                       <span className="badge street">Xe Đường Phố</span>
@@ -263,6 +330,34 @@ function Cars({ showAlert }) {
             )}
           </tbody>
         </table>
+        {/* Thêm bộ nút chuyển trang ngay sau thẻ </table> */}
+        <div className="pagination-container">
+          <button
+            className="page-btn"
+            disabled={currentPage === 1}
+            onClick={() => paginate(currentPage - 1)}
+          >
+            Previous
+          </button>
+
+          {/* Chỉ tạo số nút bấm tương ứng với kết quả sau khi lọc */}
+          {[...Array(totalPages)].map((_, i) => (
+            <button
+              key={i + 1}
+              onClick={() => paginate(i + 1)}
+              className={`page-btn ${currentPage === i + 1 ? "active" : ""}`}
+            >
+              {i + 1}
+            </button>
+          ))}
+          <button
+            className="page-btn"
+            disabled={currentPage === totalPages || totalPages === 0}
+            onClick={() => paginate(currentPage + 1)}
+          >
+            Next
+          </button>
+        </div>
       </div>
 
       {/* Modal */}

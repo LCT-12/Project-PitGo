@@ -155,7 +155,7 @@ function Settings({ showAlert }) {
     if (loading) return <Loading message="LOADING..." />;
 
     return (
-        <div style={{ padding: "25px" }}>
+        <div style={{ padding: "15px" }}>
             {/* Header */}
             <div
                 style={{

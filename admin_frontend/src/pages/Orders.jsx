@@ -88,7 +88,7 @@ function Orders({ showAlert }) {
   const getCar = (id) => mockCars.find((c) => c.id === id);
 
   return (
-    <div style={{ padding: "25px" }}>
+    <div style={{ padding: "15px" }}>
       <div
         style={{
           display: "flex",

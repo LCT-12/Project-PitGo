@@ -12,6 +12,7 @@
     "fuel_type": "Hybrid",
     "isTrackOnly": true,
     "status": "Có sẵn",
+    "image": "https://res.cloudinary.com/dshvmhgwo/image/upload/v1773388772/499P-2023_eo6oxk.png",
     "description": "Siêu phẩm vô địch Le Mans 24h."
   },
   {
@@ -27,6 +28,7 @@
     "fuel_type": "Xăng",
     "isTrackOnly": true,
     "status": "Có sẵn",
+    "image": "https://res.cloudinary.com/dshvmhgwo/image/upload/v1773383237/296_GT3-2023_vmp8ne.png",
     "description": "Mẫu xe đua GT3 thế hệ mới."
   },
   {
@@ -42,6 +44,7 @@
     "fuel_type": "Hybrid",
     "isTrackOnly": true,
     "status": "Có sẵn",
+    "image": "https://res.cloudinary.com/dshvmhgwo/image/upload/v1773389958/SF-24-2024_ccgmir.png",
     "description": "Xe đua F1 mùa giải 2024."
   },
   {
@@ -57,6 +60,7 @@
     "fuel_type": "Xăng",
     "isTrackOnly": true,
     "status": "Có sẵn",
+    "image": "https://res.cloudinary.com/dshvmhgwo/image/upload/v1773389959/488_GTE_Evo-2020_evsaa2.png",
     "description": "Xe đua sức bền chuyên nghiệp."
   },
   {
@@ -72,6 +76,7 @@
     "fuel_type": "Xăng",
     "isTrackOnly": true,
     "status": "Có sẵn",
+    "image": "https://res.cloudinary.com/dshvmhgwo/image/upload/v1773389959/312_T2-1976_q5dulw.png",
     "description": "Huyền thoại F1 của Niki Lauda."
   },
   {
@@ -87,6 +92,7 @@
     "fuel_type": "Hybrid",
     "isTrackOnly": true,
     "status": "Có sẵn",
+    "image": "https://res.cloudinary.com/dshvmhgwo/image/upload/v1773383237/963_LMDh_-2023_wan9sb.png",
     "description": "Xe đua nguyên mẫu hệ LMDh."
   },
   {
@@ -102,6 +108,7 @@
     "fuel_type": "Xăng",
     "isTrackOnly": true,
     "status": "Có sẵn",
+    "image": "https://res.cloudinary.com/dshvmhgwo/image/upload/v1773383237/911_GT3_R_Rennsport-2024_afnel6.png",
     "description": "Phiên bản giới hạn cho đường đua."
   },
   {
@@ -117,6 +124,7 @@
     "fuel_type": "Xăng",
     "isTrackOnly": false,
     "status": "Có sẵn",
+    "image": "https://res.cloudinary.com/dshvmhgwo/image/upload/v1773383236/911_Dakar-2023_mwdzqj.png",
     "description": "911 có khả năng chạy Off-road."
   },
   {
@@ -132,6 +140,7 @@
     "fuel_type": "Xăng",
     "isTrackOnly": false,
     "status": "Có sẵn",
+    "image": "https://res.cloudinary.com/dshvmhgwo/image/upload/v1773383236/718_Spyder_RS-2024_pfkz2z.png",
     "description": "Bản mui trần hiệu năng cực cao."
   },
   {
@@ -147,10 +156,11 @@
     "fuel_type": "Xăng",
     "isTrackOnly": false,
     "status": "Có sẵn",
+    "image": "https://res.cloudinary.com/dshvmhgwo/image/upload/v1773383236/718_Cayman_GT4_RS-2022_bijtr1.png",
     "description": "Mẫu xe thể thao thuần khiết nhất."
   },
   {
-    "carName": "Mercedes-AMG GT3 Evo",
+    "carName": "Mercedes AMG GT3 Evo",
     "brand": "Mercedes",
     "price": 13,
     "year": 2020,
@@ -162,10 +172,11 @@
     "fuel_type": "Xăng",
     "isTrackOnly": true,
     "status": "Có sẵn",
+    "image": "https://res.cloudinary.com/dshvmhgwo/image/upload/v1773383236/AMG_GT3-2020_t1p102.png",
     "description": "Mẫu xe đua GT3 mạnh mẽ của Đức."
   },
   {
-    "carName": "Mercedes-AMG F1 W16 EP",
+    "carName": "Mercedes AMG F1 W16 EP",
     "brand": "Mercedes",
     "price": 40,
     "year": 2025,
@@ -177,10 +188,11 @@
     "fuel_type": "Hybrid",
     "isTrackOnly": true,
     "status": "Có sẵn",
+    "image": "https://res.cloudinary.com/dshvmhgwo/image/upload/v1773389959/AMG_F1_W16_EP-2025_ibhplp.png",
     "description": "Xe đua F1 tương lai của Mercedes."
   },
   {
-    "carName": "Mercedes-AMG ONE",
+    "carName": "Mercedes AMG ONE",
     "brand": "Mercedes",
     "price": 15,
     "year": 2022,
@@ -192,10 +204,11 @@
     "fuel_type": "Hybrid",
     "isTrackOnly": false,
     "status": "Có sẵn",
+    "image": "https://res.cloudinary.com/dshvmhgwo/image/upload/v1773380434/AMG_ONE-2023_mmqucw.png",
     "description": "Động cơ F1 trên xe thương mại."
   },
   {
-    "carName": "Mercedes-AMG A 45 S",
+    "carName": "Mercedes AMG A 45 S",
     "brand": "Mercedes",
     "price": 2,
     "year": 2023,
@@ -207,10 +220,11 @@
     "fuel_type": "Xăng",
     "isTrackOnly": false,
     "status": "Có sẵn",
+    "image": "https://res.cloudinary.com/dshvmhgwo/image/upload/v1773383237/AMG_A_45_S-2023_pqjvrr.png",
     "description": "Hatchback mạnh nhất thế giới."
   },
   {
-    "carName": "Mercedes-AMG GT4",
+    "carName": "Mercedes AMG GT4",
     "brand": "Mercedes",
     "price": 7,
     "year": 2023,
@@ -222,6 +236,7 @@
     "fuel_type": "Xăng",
     "isTrackOnly": true,
     "status": "Có sẵn",
+    "image": "https://res.cloudinary.com/dshvmhgwo/image/upload/v1773383236/AMG_GT4-2020_wwa9wp.png",
     "description": "Xe đua GT4 tiêu chuẩn quốc tế."
   },
   {
@@ -237,6 +252,7 @@
     "fuel_type": "Xăng",
     "isTrackOnly": true,
     "status": "Có sẵn",
+    "image": "https://res.cloudinary.com/dshvmhgwo/image/upload/v1773383237/Senna-2020_ut7nxm.png",
     "description": "Bản track-only của McLaren Senna."
   },
   {
@@ -252,6 +268,7 @@
     "fuel_type": "Hybrid",
     "isTrackOnly": false,
     "status": "Có sẵn",
+    "image": "https://res.cloudinary.com/dshvmhgwo/image/upload/v1773380433/W1-2025_texwpn.png",
     "description": "Kế nhiệm huyền thoại F1 và P1."
   },
   {
@@ -267,6 +284,7 @@
     "fuel_type": "Hybrid",
     "isTrackOnly": true,
     "status": "Có sẵn",
+    "image": "https://res.cloudinary.com/dshvmhgwo/image/upload/v1773389957/MCL38-2024_jabtdt.png",
     "description": "Xe đua F1 hiện tại của McLaren."
   },
   {
@@ -282,6 +300,7 @@
     "fuel_type": "Xăng",
     "isTrackOnly": true,
     "status": "Có sẵn",
+    "image": "https://res.cloudinary.com/dshvmhgwo/image/upload/v1773380433/Solus-2023_uw2dd3.png",
     "description": "Siêu xe bước ra từ game."
   },
   {
@@ -297,6 +316,7 @@
     "fuel_type": "Xăng",
     "isTrackOnly": false,
     "status": "Có sẵn",
+    "image": "https://res.cloudinary.com/dshvmhgwo/image/upload/v1773380433/Elva-2021_sgvhl8.png",
     "description": "Siêu xe không kính chắn gió."
   },
   {
@@ -312,6 +332,7 @@
     "fuel_type": "Hybrid",
     "isTrackOnly": true,
     "status": "Có sẵn",
+    "image": "https://res.cloudinary.com/dshvmhgwo/image/upload/v1773380433/SC63-2024_twcjoc.png",
     "description": "Xe đua Le Mans của Lamborghini."
   },
   {
@@ -327,6 +348,7 @@
     "fuel_type": "Xăng",
     "isTrackOnly": false,
     "status": "Có sẵn",
+    "image": "https://res.cloudinary.com/dshvmhgwo/image/upload/v1773380433/Veneno-2013_wrqn9e.png",
     "description": "Kiệt tác thiết kế cực hiếm."
   },
   {
@@ -342,6 +364,7 @@
     "fuel_type": "Xăng",
     "isTrackOnly": true,
     "status": "Có sẵn",
+    "image": "https://res.cloudinary.com/dshvmhgwo/image/upload/v1773380433/Diablo-1999_frlvfo.png",
     "description": "Phiên bản đua giới hạn (30 chiếc)."
   },
   {
@@ -357,6 +380,7 @@
     "fuel_type": "Hybrid",
     "isTrackOnly": false,
     "status": "Có sẵn",
+    "image": "https://res.cloudinary.com/dshvmhgwo/image/upload/v1773380434/Sian-2021_t0gn4i.png",
     "description": "Công nghệ siêu tụ điện độc đáo."
   },
   {
@@ -372,6 +396,7 @@
     "fuel_type": "Xăng",
     "isTrackOnly": false,
     "status": "Có sẵn",
+    "image": "https://res.cloudinary.com/dshvmhgwo/image/upload/v1773380434/Aventador_SVJ_e0rrda.png",
     "description": "Mẫu xe V12 thuần túy mạnh mẽ."
   }
 ]

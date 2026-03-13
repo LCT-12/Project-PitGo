@@ -33,14 +33,14 @@ function Cars({ showAlert }) {
 
   const API = "http://localhost:5000/api/car";
 
-/* ================= FETCH DATA ================= */
+  /* ================= FETCH DATA ================= */
   useEffect(() => {
     const fetchCars = async () => {
       try {
         const res = await axios.get(API);
         setCars(res.data);
       } catch (err) {
-        setError("Unable to load cars. Please try again!");
+        setError("Lỗi tải dữ liệu xe!");
       } finally {
         setLoading(false);
       }
@@ -96,18 +96,18 @@ function Cars({ showAlert }) {
       setShowModal(false);
       setEditingCar(null);
       resetForm();
-      showAlert("success", "Car saved successfully!");
+      showAlert("success", "Thêm xe thành công!");
     } catch (err) {
       console.log(err);
       if (err.response && err.response.status === 400) {
-        showAlert('danger', "Failed to save car: " + err.response.data.message);
+        showAlert("danger", "Lỗi thêm xe: " + err.response.data.message);
       }
     } finally {
       setLoading(false);
     }
   };
 
-/* ================= DELETE ================= */
+  /* ================= DELETE ================= */
   const confirmDelete = (id) => {
     setCarToDelete(id);
     setShowDeleteModal(true);
@@ -120,11 +120,11 @@ function Cars({ showAlert }) {
       setShowDeleteModal(false);
       showAlert("success", "Xóa thành công!");
     } catch {
-      showAlert('danger', "Xóa thất bại. Vui lòng thử lại!");
+      showAlert("danger", "Xóa thất bại. Vui lòng thử lại!");
     }
   };
 
- /* ================= EDIT ================= */
+  /* ================= EDIT ================= */
   const handleEdit = (car) => {
     setEditingCar(car);
     setCarName(car.carName);
@@ -165,7 +165,7 @@ function Cars({ showAlert }) {
 
   /* ================= STATES ================= */
   if (error) return <Error message={error} />;
-  if (loading) return <Loading message="Loading cars..." />;
+  if (loading) return <Loading message="LOADING..." />;
 
   /* ================= UI ================= */
   return (
@@ -203,7 +203,14 @@ function Cars({ showAlert }) {
           <tbody>
             {cars.length === 0 ? (
               <tr>
-                <td colSpan="9" style={{ textAlign: "center", padding: "20px", color: "#666" }}>
+                <td
+                  colSpan="9"
+                  style={{
+                    textAlign: "center",
+                    padding: "20px",
+                    color: "#666",
+                  }}
+                >
                   Chưa có sản phẩm nào
                 </td>
               </tr>
@@ -211,7 +218,14 @@ function Cars({ showAlert }) {
               cars.map((car, index) => (
                 <tr key={car._id}>
                   <td>{index + 1}</td>
-                  <td><img src={car.image} width="80" alt="" style={{ borderRadius: '4px' }} /></td>
+                  <td>
+                    <img
+                      src={car.image}
+                      width="80"
+                      alt=""
+                      style={{ borderRadius: "4px" }}
+                    />
+                  </td>
                   <td>{car.carName}</td>
                   <td>{car.price} Tỷ</td>
                   <td>{car.year}</td>
@@ -223,10 +237,26 @@ function Cars({ showAlert }) {
                       <span className="badge street">Xe Đường Phố</span>
                     )}
                   </td>
-                  <td><span className={`badge ${car.status === "Có sẵn" ? "green" : "red"}`}>{car.status}</span></td>
                   <td>
-                    <button className="btn-edit" onClick={() => handleEdit(car)}>Edit</button>
-                    <button className="btn-delete" onClick={() => confirmDelete(car._id)}>Delete</button>
+                    <span
+                      className={`badge ${car.status === "Có sẵn" ? "green" : "red"}`}
+                    >
+                      {car.status}
+                    </span>
+                  </td>
+                  <td>
+                    <button
+                      className="btn-edit"
+                      onClick={() => handleEdit(car)}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className="btn-delete"
+                      onClick={() => confirmDelete(car._id)}
+                    >
+                      Xóa
+                    </button>
                   </td>
                 </tr>
               ))
@@ -254,7 +284,7 @@ function Cars({ showAlert }) {
                     required
                   />
                 </div>
-                 <div className="form-group">
+                <div className="form-group">
                   <label>Giá (VNĐ)</label>
                   <input
                     type="number"
@@ -264,7 +294,7 @@ function Cars({ showAlert }) {
                     required
                   />
                 </div>
-                 <div className="form-group">
+                <div className="form-group">
                   <label>Vận tốc tối đa (km/h)</label>
                   <input
                     type="text"
@@ -275,7 +305,7 @@ function Cars({ showAlert }) {
                   />
                 </div>
               </div>
-              
+
               {/* Row 2: Brand, FuelType & Status */}
               <div className="form-row">
                 <div className="form-group">
@@ -325,9 +355,7 @@ function Cars({ showAlert }) {
                         type="checkbox"
                         checked={status === "Có sẵn"}
                         onChange={(e) =>
-                          setStatus(
-                            e.target.checked ? "Có sẵn" : "Hết Hàng",
-                          )
+                          setStatus(e.target.checked ? "Có sẵn" : "Hết Hàng")
                         }
                       />
                       <span className="slider round"></span>
@@ -452,11 +480,23 @@ function Cars({ showAlert }) {
               </div>
 
               <div className="modal-actions">
-                <button type="button" onClick={() => { setShowModal(false); setEditingCar(null); resetForm(); }} className="cancel-btn">
-                  Cancel
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowModal(false);
+                    setEditingCar(null);
+                    resetForm();
+                  }}
+                  className="cancel-btn"
+                >
+                  Hủy
                 </button>
                 <button type="submit" className="submit-btn" disabled={loading}>
-                  {loading ? "Saving..." : (editingCar ? "Cập nhật Xe" : "Thêm Xe")}
+                  {loading
+                    ? "Saving..."
+                    : editingCar
+                      ? "Cập nhật Xe"
+                      : "Thêm Xe"}
                 </button>
               </div>
             </form>
@@ -469,13 +509,19 @@ function Cars({ showAlert }) {
           <div className="modal-box confirm-box">
             <div className="confirm-icon">⚠️</div>
             <h3>Xác nhận xóa</h3>
-            <p>Bạn có chắc chắn muốn xóa xe này không? <br/> Hành động này không thể hoàn tác.</p>
+            <p>
+              Bạn có chắc chắn muốn xóa xe này không? <br /> Hành động này không
+              thể hoàn tác.
+            </p>
             <div className="modal-actions confirm-actions">
-              <button className="cancel-btn" onClick={() => setShowDeleteModal(false)}>
-                Cancel
+              <button
+                className="cancel-btn"
+                onClick={() => setShowDeleteModal(false)}
+              >
+                Hủy
               </button>
               <button className="delete-confirm-btn" onClick={handleDelete}>
-                Xác nhận xóa
+                Xác nhận, xóa
               </button>
             </div>
           </div>

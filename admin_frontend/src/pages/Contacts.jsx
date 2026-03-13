@@ -27,7 +27,7 @@ function Contacts({ showAlert }) {
         setContacts(response.data);
         setError(null);
       } catch (err) {
-        setError("Unable to retrieve messages. Please check the server!");
+        setError("Lỗi tải dữ liệu. Vui lòng thử lại!");
       } finally {
         setLoading(false);
       }
@@ -48,19 +48,21 @@ function Contacts({ showAlert }) {
 
   // Các hàm chức năng
   const handleView = async (msg) => {
-  setSelectedMsg(msg);
-  if (msg.status === "Unread") {
-    try {
-      const response = await axios.patch(`${API}/${msg._id}`, {
-        status: "Read"
-      });
-      setContacts(contacts.map((m) => (m._id === msg._id ? response.data : m)));
-      showAlert("success", "Message marked as read!");
-    } catch (error) {
-      showAlert("danger", "Failed to update read status");
+    setSelectedMsg(msg);
+    if (msg.status === "Chưa đọc") {
+      try {
+        const response = await axios.patch(`${API}/${msg._id}`, {
+          status: "Đã đọc",
+        });
+        setContacts(
+          contacts.map((m) => (m._id === msg._id ? response.data : m)),
+        );
+        showAlert("success", "Cập nhật trạng thái thành công!");
+      } catch (error) {
+        showAlert("danger", "Không thể cập nhật trạng thái!");
+      }
     }
-  }
-};
+  };
 
   const toggleStatus = (id, newStatus) => {
     setContacts(
@@ -71,16 +73,19 @@ function Contacts({ showAlert }) {
   };
 
   const toggleImportant = async (id, currentStatus) => {
-  try {
-    const response = await axios.patch(`${API}/${id}`, {
-      isImportant: !currentStatus
-    });
-    setContacts(contacts.map(m => m._id === id ? response.data : m));
-    showAlert("success", `Message marked as ${response.data.isImportant ? "important" : "not important"}`);
-  } catch (error) {
-    showAlert("danger", "Failed to update important status");
-  }
-};
+    try {
+      const response = await axios.patch(`${API}/${id}`, {
+        isImportant: !currentStatus,
+      });
+      setContacts(contacts.map((m) => (m._id === id ? response.data : m)));
+      showAlert(
+        "success",
+        `Đánh dấu ${response.data.isImportant ? "quan trọng" : "không quan trọng"}`,
+      );
+    } catch (error) {
+      showAlert("danger", "Không thể cập nhật trạng thái!");
+    }
+  };
 
   /* ================= DELETE ================= */
   const confirmDelete = (id) => {
@@ -93,17 +98,21 @@ function Contacts({ showAlert }) {
       try {
         // Gọi API PATCH để cập nhật isDeleted: true lên MongoDB
         await axios.patch(`${API}/${mgToDelete}`, {
-          isDeleted: true
+          isDeleted: true,
         });
-        
+
         // Cập nhật lại giao diện ngay lập tức
-        setContacts(contacts.map(m => m._id === mgToDelete ? { ...m, isDeleted: true } : m));
+        setContacts(
+          contacts.map((m) =>
+            m._id === mgToDelete ? { ...m, isDeleted: true } : m,
+          ),
+        );
         setShowDeleteModal(false);
         setMgToDelete(null);
 
-        showAlert("success", "Message deleted successfully!");
+        showAlert("success", "Xóa tin nhắn thành công!");
       } catch (error) {
-        showAlert('danger', "Unable to delete message. Please try again!");
+        showAlert("danger", "Không thể xóa tin nhắn. Vui lòng thử lại!");
       }
     }
   };
@@ -111,26 +120,26 @@ function Contacts({ showAlert }) {
   /* ================= COPY EMAIL ================= */
   const copyEmail = (email) => {
     navigator.clipboard.writeText(email);
-    showAlert('success', "Email copied!");
+    showAlert("success", "Đã sao chép email!");
   };
 
   /* ================= UNDO DELETE ================= */
   const handleUndo = async (id) => {
-  try {
-    const response = await axios.patch(`${API}/${id}`, {
-      isDeleted: false
-    });
-    // Cập nhật state bằng dữ liệu thật từ Server trả về
-    setContacts(contacts.map((m) => (m._id === id ? response.data : m)));
-    showAlert('success', "Message restored!");
-  } catch (error) {
-    showAlert('danger', "Unable to restore message!");
-  }
-};
+    try {
+      const response = await axios.patch(`${API}/${id}`, {
+        isDeleted: false,
+      });
+      // Cập nhật state bằng dữ liệu thật từ Server trả về
+      setContacts(contacts.map((m) => (m._id === id ? response.data : m)));
+      showAlert("success", "Tin nhắn đã được khôi phục!");
+    } catch (error) {
+      showAlert("danger", "Không thể khôi phục tin nhắn!");
+    }
+  };
 
   /* ================= STATES ================= */
   if (error) return <Error message={error} />;
-  if (loading) return <Loading message="Loading messages..." />;
+  if (loading) return <Loading message="LOADING..." />;
 
   /* ================= UI ================= */
   return (
@@ -169,102 +178,115 @@ function Contacts({ showAlert }) {
           className={`tab-btn ${activeTab === "messages" ? "active" : ""}`}
           onClick={() => setActiveTab("messages")}
         >
-          Inbox (
-          {contacts.filter((m) => !m.isDeleted && m.status === "Unread").length}
+          Hộp thư (
+          {
+            contacts.filter((m) => !m.isDeleted && m.status === "Chưa đọc")
+              .length
+          }
           )
         </button>
         <button
           className={`tab-btn ${activeTab === "trash" ? "active" : ""}`}
           onClick={() => setActiveTab("trash")}
         >
-          Trash
+          Thùng rác
         </button>
       </div>
-      
+
       <div className="table-responsive">
-          <table className="admin-table">
-        <thead>
-          <tr>
-            <th>
-              <img src={starFilled} alt="important" width={18} />
-            </th>
-            <th>Name</th>
-            <th>Subject</th>
-            <th>Date</th>
-            <th>Status</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredData.length > 0 ? (
-            filteredData.map((msg) => (
-              <tr
-                key={msg._id}
-                className={msg.status === "Unread" ? "unread-row" : ""}
-              >
-                <td
-                  onClick={() => toggleImportant(msg._id)}
-                  style={{ cursor: "pointer" }}
+        <table className="admin-table">
+          <thead>
+            <tr>
+              <th>
+                <img src={starFilled} alt="important" width={18} />
+              </th>
+              <th>Tên</th>
+              <th>Chủ đề</th>
+              <th>Ngày</th>
+              <th>Trạng thái</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredData.length > 0 ? (
+              filteredData.map((msg) => (
+                <tr
+                  key={msg._id}
+                  className={msg.status === "Chưa đọc" ? "unread-row" : ""}
                 >
-                  <img
-                    src={msg.isImportant ? starFilled : starOutline}
-                    alt="important"
-                    className="important-icon"
-                  />
-                </td>
-                <td>{msg.name}</td>
-                <td>{msg.subject}</td>
-                <td>{msg.date}</td>
-                <td>
-                  <span
-                    className={`badge-contact-status ${msg.status.toLowerCase()}`}
+                  <td
+                    onClick={() => toggleImportant(msg._id)}
+                    style={{ cursor: "pointer" }}
                   >
-                    {msg.status}
-                  </span>
-                </td>
-                <td>
-                  <button className="btn-view" onClick={() => handleView(msg)}>
-                    View
-                  </button>
-                  {activeTab === "messages" ? (
-                    <button
-                      className="btn-delete"
-                      onClick={() => confirmDelete(msg._id)}
+                    <img
+                      src={msg.isImportant ? starFilled : starOutline}
+                      alt="important"
+                      className="important-icon"
+                    />
+                  </td>
+                  <td>{msg.name}</td>
+                  <td>{msg.subject}</td>
+                  <td>{msg.date}</td>
+                  <td>
+                    <span
+                      className={`badge-contact-status ${msg.status.toLowerCase()}`}
                     >
-                      Delete
-                    </button>
-                  ) : (
+                      {msg.status}
+                    </span>
+                  </td>
+                  <td>
                     <button
-                      className="btn-undo"
-                      onClick={() => handleUndo(msg._id)}
+                      className="btn-view"
+                      onClick={() => handleView(msg)}
                     >
-                      Undo
+                      Xem
                     </button>
-                  )}
+                    {activeTab === "messages" ? (
+                      <button
+                        className="btn-delete"
+                        onClick={() => confirmDelete(msg._id)}
+                      >
+                        Xóa
+                      </button>
+                    ) : (
+                      <button
+                        className="btn-undo"
+                        onClick={() => handleUndo(msg._id)}
+                      >
+                        Khôi phục
+                      </button>
+                    )}
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td
+                  colSpan="6"
+                  style={{
+                    textAlign: "center",
+                    padding: "20px",
+                    color: "#666",
+                  }}
+                >
+                  {searchTerm.trim() !== ""
+                    ? `Không tìm thấy tin nhắn khớp với "${searchTerm}"`
+                    : "Chưa có tin nhắn nào"}
                 </td>
               </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan="6" style={{ textAlign: "center", padding: "20px", color: "#666" }}>
-                {searchTerm.trim() !== "" 
-                  ? `No messages found matching "${searchTerm}"` 
-                  : "No message yet"}
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
+            )}
+          </tbody>
+        </table>
       </div>
-    
+
       {/* Modal chi tiết */}
       {selectedMsg && (
         <div className="modal-overlay">
           <div className="modal-box contact-detail-box">
             <div className="modal-header">
-              <h3>Message Details</h3>
+              <h3>Chi tiết tin nhắn</h3>
               <br />
-              <h4>Subject: {selectedMsg.subject}</h4>
+              <h4>Chủ đề: {selectedMsg.subject}</h4>
             </div>
 
             <div className="order-grid">
@@ -283,12 +305,12 @@ function Contacts({ showAlert }) {
                   </button>
                 </p>
                 <p>
-                  <strong>Date:</strong> {selectedMsg.date}
+                  <strong>Ngày:</strong> {selectedMsg.date}
                 </p>
               </div>
               <div className="info-section">
                 <p>
-                  <strong>Status:</strong>
+                  <strong>Trạng thái:</strong>
                   <select
                     className="custom-select-status"
                     value={selectedMsg.status}
@@ -297,8 +319,8 @@ function Contacts({ showAlert }) {
                     }
                     style={{ marginLeft: "10px" }}
                   >
-                    <option value="Read">Read</option>
-                    <option value="Replied">Replied</option>
+                    <option value="Đã đọc">Đã đọc</option>
+                    <option value="Đã trả lời">Đã trả lời</option>
                   </select>
                 </p>
                 <label className="important-toggle">
@@ -325,13 +347,13 @@ function Contacts({ showAlert }) {
                 style={{ textDecoration: "none", textAlign: "center" }}
                 onClick={() => toggleStatus(selectedMsg._id, "Replied")}
               >
-                Reply via Email (Gmail)
+                Trả lời Email (Gmail)
               </a>
               <button
                 className="cancel-btn"
                 onClick={() => setSelectedMsg(null)}
               >
-                Close
+                Đóng
               </button>
             </div>
           </div>
@@ -342,17 +364,17 @@ function Contacts({ showAlert }) {
         <div className="modal-overlay">
           <div className="modal-box confirm-box">
             <div className="confirm-icon">⚠️</div>
-            <h3>Are you sure?</h3>
-            <p>Do you really want to delete this message?</p>
+            <h3>Xác nhận xóa?</h3>
+            <p>Bạn có chắc chắn muốn xóa tin nhắn này không?</p>
             <div className="modal-actions confirm-actions">
               <button
                 className="cancel-btn"
                 onClick={() => setShowDeleteModal(false)}
               >
-                Cancel
+                Hủy
               </button>
               <button className="delete-confirm-btn" onClick={handleDelete}>
-                Yes, Delete it
+                Xác nhận, xóa
               </button>
             </div>
           </div>

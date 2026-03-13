@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 
-
 function Orders({ showAlert }) {
   const [orders, setOrders] = useState(mockOrders);
   const [showAddModal, setShowAddModal] = useState(false);
@@ -99,69 +98,76 @@ function Orders({ showAlert }) {
       >
         <h2>Orders Management</h2>
         <button className="add-btn" onClick={() => setShowAddModal(true)}>
-          Create New Order
+          Tạo Đơn Hàng Mới
         </button>
       </div>
       <div className="table-responsive">
         <table className="admin-table">
-        <thead>
-          <tr>
-            <th>Order ID</th>
-            <th>Customer</th>
-            <th>Car Model</th>
-            <th>Price</th>
-            <th>Date</th>
-            <th>Status</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {orders.length === 0 ? (
+          <thead>
             <tr>
-              <td colSpan="10" style={{ textAlign: "center", padding: "20px", color: "#666" }}>
-                No customers yet
-              </td>
+              <th>ID</th>
+              <th>Khách hàng</th>
+              <th>Mẫu xe</th>
+              <th>Giá</th>
+              <th>Ngày</th>
+              <th>Trạng thái</th>
+              <th></th>
             </tr>
-          ) : (
-            orders.map((order) => {
-              const customer = getCustomer(order.userId);
-              const car = getCar(order.carId);
-              return (
-                <tr key={order.id}>
-                  <td>
-                    <strong>#{order.id}</strong>
-                  </td>
-                  <td>{customer?.userName || order.tempCustomerName}</td>
-                  <td>
-                    {car?.carName}
-                    <br />
-                    <small>{car?.brand}</small>
-                  </td>
-                  <td style={{ color: "#118C4F", fontWeight: "700" }}>
-                    ${order.totalPrice.toLocaleString()}
-                  </td>
-                  <td>{order.orderDate}</td>
-                  <td>
-                    <span
-                      className={`badge-status ${order.status.toLowerCase()}`}
-                    >
-                      {order.status}
-                    </span>
-                  </td>
-                  <td>
-                    <button
-                      className="btn-view"
-                      onClick={() => openDetails(order)}
-                    >
-                      Details
-                    </button>
-                  </td>
-                </tr>
-              );
-            })
-          )}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {orders.length === 0 ? (
+              <tr>
+                <td
+                  colSpan="10"
+                  style={{
+                    textAlign: "center",
+                    padding: "20px",
+                    color: "#666",
+                  }}
+                >
+                  Chưa có Đơn hàng mới
+                </td>
+              </tr>
+            ) : (
+              orders.map((order) => {
+                const customer = getCustomer(order.userId);
+                const car = getCar(order.carId);
+                return (
+                  <tr key={order.id}>
+                    <td>
+                      <strong>#{order.id}</strong>
+                    </td>
+                    <td>{customer?.userName || order.tempCustomerName}</td>
+                    <td>
+                      {car?.carName}
+                      <br />
+                      <small>{car?.brand}</small>
+                    </td>
+                    <td style={{ color: "#118C4F", fontWeight: "700" }}>
+                      ${order.totalPrice.toLocaleString()}
+                    </td>
+                    <td>{order.orderDate}</td>
+                    <td>
+                      <span
+                        className={`badge-status ${order.status.toLowerCase()}`}
+                      >
+                        {order.status}
+                      </span>
+                    </td>
+                    <td>
+                      <button
+                        className="btn-view"
+                        onClick={() => openDetails(order)}
+                      >
+                        Chi tiết
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })
+            )}
+          </tbody>
+        </table>
       </div>
 
       {/* --- MODAL CHI TIẾT ĐƠN HÀNG --- */}
@@ -169,43 +175,43 @@ function Orders({ showAlert }) {
         <div className="modal-overlay">
           <div className="modal-box order-details-box">
             <div className="modal-header">
-              <h3>Order Details: #{selectedOrder.id}</h3>
+              <h3>Chi tiết Đơn Hàng: #{selectedOrder.id}</h3>
             </div>
             <div className="order-grid">
               <div className="info-section">
-                <h4>Customer Information</h4>
+                <h4>Thông tin Khách hàng</h4>
                 <p>
-                  <strong>Name:</strong>{" "}
+                  <strong>Tên:</strong>{" "}
                   {getCustomer(selectedOrder.userId)?.userName ||
                     selectedOrder.tempCustomerName}
                 </p>
                 <p>
-                  <strong>Phone:</strong>{" "}
+                  <strong>SĐT:</strong>{" "}
                   {getCustomer(selectedOrder.userId)?.phone}
                 </p>
                 <p>
-                  <strong>Address:</strong>{" "}
+                  <strong>Địa chỉ:</strong>{" "}
                   {getCustomer(selectedOrder.userId)?.address}
                 </p>
               </div>
               <div className="info-section">
-                <h4>Car & Payment</h4>
+                <h4>Thông tin Xe và Phương thức Thanh toán</h4>
                 <p>
-                  <strong>Model:</strong> {getCar(selectedOrder.carId)?.carName}
+                  <strong>Mẫu:</strong> {getCar(selectedOrder.carId)?.carName}
                 </p>
                 <p>
-                  <strong>Brand:</strong> {getCar(selectedOrder.carId)?.brand}
+                  <strong>Hãng:</strong> {getCar(selectedOrder.carId)?.brand}
                 </p>
                 <p>
-                  <strong>Total:</strong> $
-                  {selectedOrder.totalPrice.toLocaleString()}
+                  <strong>Tổng cộng:</strong>
+                  {selectedOrder.totalPrice.toLocaleString()} VNĐ
                 </p>
               </div>
             </div>
             <div className="status-update-section">
               <h4 style={{ paddingTop: "25px" }}>Update Order Status</h4>
               <div className="status-buttons">
-                {["Pending", "Shipping", "Delivered", "Cancelled"].map(
+                {["Chưa xử lý", "Đang giao", "Đã giao", "Đã hủy"].map(
                   (status) => (
                     <button
                       key={status}
@@ -223,7 +229,7 @@ function Orders({ showAlert }) {
                 className="cancel-btn"
                 onClick={() => setShowDetails(false)}
               >
-                Close
+                Đóng
               </button>
             </div>
           </div>
@@ -235,12 +241,12 @@ function Orders({ showAlert }) {
         <div className="modal-overlay">
           <div className="modal-box order-add-box">
             <form onSubmit={handleAddOrder} className="modal-form">
-              <h3>Create New Order</h3>
+              <h3>Tạo Đơn Hàng Mới</h3>
 
               <div className="form-group">
                 <div className="radio-group">
                   {/* Nhãn tiêu đề */}
-                  <span className="radio-label">Customer Type</span>
+                  <span className="radio-label">Loại Khách hàng</span>
 
                   {/* Nhóm các lựa chọn */}
                   <div className="radio-options">
@@ -251,7 +257,7 @@ function Orders({ showAlert }) {
                         checked={customerType === "existing"}
                         onChange={() => setCustomerType("existing")}
                       />
-                      Existing Customer
+                      Khách hàng Hiện hữu
                     </label>
 
                     <label className="radio-item">
@@ -261,16 +267,15 @@ function Orders({ showAlert }) {
                         checked={customerType === "new"}
                         onChange={() => setCustomerType("new")}
                       />
-                      New Customer
+                      Khách hàng Mới
                     </label>
                   </div>
                 </div>
               </div>
 
               <div className="order-grid" style={{ marginTop: "15px" }}>
-
                 <div className="info-section">
-                  <h4>Customer Info</h4>
+                  <h4>Thông tin Khách hàng</h4>
                   {customerType === "existing" ? (
                     <>
                       <select
@@ -279,7 +284,7 @@ function Orders({ showAlert }) {
                         onChange={(e) => setSelectedCustomerId(e.target.value)}
                         required
                       >
-                        <option value="">-- Select Customer --</option>
+                        <option value="">-- Lựa chọn --</option>
                         {mockUsers.map((u) => (
                           <option key={u.id} value={u.id}>
                             {u.userName}
@@ -289,10 +294,10 @@ function Orders({ showAlert }) {
                       {currentCustomer && (
                         <div className="auto-fill-info">
                           <p>
-                            <strong>Phone:</strong> {currentCustomer.phone}
+                            <strong>SĐT:</strong> {currentCustomer.phone}
                           </p>
                           <p>
-                            <strong>Address:</strong> {currentCustomer.address}
+                            <strong>Địa chỉ:</strong> {currentCustomer.address}
                           </p>
                         </div>
                       )}
@@ -301,18 +306,18 @@ function Orders({ showAlert }) {
                     <div className="new-customer-inputs">
                       <input
                         type="text"
-                        placeholder="Full Name"
+                        placeholder="Họ & tên"
                         onChange={(e) => setNewCustomerName(e.target.value)}
                         required
                       />
                       <input
                         type="text"
-                        placeholder="Phone Number"
+                        placeholder="SĐT"
                         onChange={(e) => setNewCustomerPhone(e.target.value)}
                         required
                       />
                       <textarea
-                        placeholder="Address"
+                        placeholder="Địa chỉ"
                         onChange={(e) => setNewCustomerAddress(e.target.value)}
                       ></textarea>
                     </div>
@@ -320,14 +325,14 @@ function Orders({ showAlert }) {
                 </div>
 
                 <div className="info-section">
-                  <h4>Car Selection</h4>
+                  <h4>Thông tin Mẫu xe</h4>
                   <select
                     className="custom-select-order"
                     value={selectedCarId}
                     onChange={(e) => setSelectedCarId(e.target.value)}
                     required
                   >
-                    <option value="">-- Select Car --</option>
+                    <option value="">-- Lựa chọn --</option>
                     {mockCars.map((c) => (
                       <option key={c.id} value={c.id}>
                         {c.carName}
@@ -337,21 +342,20 @@ function Orders({ showAlert }) {
                   {currentCar && (
                     <div className="auto-fill-info">
                       <p>
-                        <strong>Brand:</strong> {currentCar.brand}
+                        <strong>Hãng:</strong> {currentCar.brand}
                       </p>
                       <p>
-                        <strong>Price:</strong>{" "}
+                        <strong>Giá:</strong>{" "}
                         <span className="price-text">
-                          ${currentCar.price.toLocaleString()}
+                          {currentCar.price.toLocaleString()} VNĐ
                         </span>
                       </p>
                       <p>
-                        <strong>Status:</strong> {currentCar.status}
+                        <strong>Trạng thái:</strong> {currentCar.status}
                       </p>
                     </div>
                   )}
                 </div>
-
               </div>
 
               <div className="modal-actions">
@@ -360,12 +364,12 @@ function Orders({ showAlert }) {
                   className="cancel-btn"
                   onClick={() => setShowAddModal(false)}
                 >
-                  Cancel
+                  Hủy
                 </button>
                 <button type="submit" className="submit-btn">
-                  Confirm & Create Order
+                  Xác nhận & Tạo Đơn hàng
                 </button>
-                showAlert('success', "Order created successfully!");
+                showAlert('success', "Đơn hàng được tạo thành công!");
               </div>
             </form>
           </div>

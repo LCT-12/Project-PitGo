@@ -16,7 +16,7 @@ function Users({ showAlert }) {
   const [country, setCountry] = useState("");
   const [address, setAddress] = useState("");
   const [role, setRole] = useState("Standard");
-  
+
   // Trạng thái & UI
   const [status, setStatus] = useState("Active"); // Active/Locked
   const [loading, setLoading] = useState(false);
@@ -58,7 +58,10 @@ function Users({ showAlert }) {
       setLoading(false);
       setShowModal(false);
       resetForm();
-      showAlert("success", `Customer ${editingUser ? "updated" : "added"} successfully!`);
+      showAlert(
+        "success",
+        `Khách hàng ${editingUser ? "cập nhật" : "thêm"} thành công!`,
+      );
     }, 500);
   };
 
@@ -100,13 +103,13 @@ function Users({ showAlert }) {
 
   const handleDelete = (id) => {
     try {
-    setUsers(users.filter((user) => user.id !== userToDelete));
-    setShowDeleteModal(false);
-    setUserToDelete(null);
-    showAlert("success", "Customer deleted successfully!");
+      setUsers(users.filter((user) => user.id !== userToDelete));
+      setShowDeleteModal(false);
+      setUserToDelete(null);
+      showAlert("success", "Khách hàng đã được xóa thành công!");
     } catch (err) {
       console.log(err);
-      showAlert("danger", "Unable to delete customer.");
+      showAlert("danger", "Không thể xóa khách hàng.");
     }
   };
 
@@ -122,7 +125,7 @@ function Users({ showAlert }) {
       >
         <h2>Customers Management</h2>
         <button className="add-btn" onClick={() => setShowModal(true)}>
-          Add Customer
+          Thêm Khách Hàng
         </button>
       </div>
 
@@ -132,63 +135,74 @@ function Users({ showAlert }) {
           <thead>
             <tr>
               <th>#</th>
-              <th>Full Name</th>
-              <th>Role</th>
+              <th>Họ & Tên</th>
+              <th>Hạng</th>
               <th>Email</th>
-              <th>Phone</th>
-              <th>ID Card</th>
-              <th>Birthday</th>
-              <th>Address</th>
-              <th>Status</th>
-              <th>Action</th>
+              <th>SĐT</th>
+              <th>CMND/CCCD</th>
+              <th>Ngày Sinh</th>
+              <th>Địa chỉ</th>
+              <th>Trạng thái</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
             {users.length === 0 ? (
               <tr>
-                <td colSpan="10" style={{ textAlign: "center", padding: "20px", color: "#666" }}>
-                  No customers yet
+                <td
+                  colSpan="10"
+                  style={{
+                    textAlign: "center",
+                    padding: "20px",
+                    color: "#666",
+                  }}
+                >
+                  Chưa có khách hàng nào
                 </td>
               </tr>
-            ) : (users.map((user, index) => (
-              <tr key={user.id}>
-                <td>{index + 1}</td>
-                <td>
-                  <strong>{user.name}</strong>
-                </td>
-                <td>
-                  <span className={`role-badge ${user.role?.toLowerCase()}`}>
-                    {user.role}
-                  </span>
-                </td>
-                <td>{user.email}</td>
-                <td>{user.phone}</td>
-                <td>{user.nationalId}</td>
-                <td>{user.dob}</td>
-                <td className="text-truncate" style={{ maxWidth: "150px" }}>
-                  {user.address}
-                </td>
-                <td>
-                  <span
-                    className={`badge ${user.status === "Active" ? "green" : "red"}`}
-                  >
-                    {user.status}
-                  </span>
-                </td>
-                <td>
-                  <button className="btn-edit" onClick={() => handleEdit(user)}>
-                    Edit
-                  </button>
-                  <button
-                    className="btn-delete"
-                    onClick={() => confirmDelete(user.id)}
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            ))
-         )}
+            ) : (
+              users.map((user, index) => (
+                <tr key={user.id}>
+                  <td>{index + 1}</td>
+                  <td>
+                    <strong>{user.name}</strong>
+                  </td>
+                  <td>
+                    <span className={`role-badge ${user.role?.toLowerCase()}`}>
+                      {user.role}
+                    </span>
+                  </td>
+                  <td>{user.email}</td>
+                  <td>{user.phone}</td>
+                  <td>{user.nationalId}</td>
+                  <td>{user.dob}</td>
+                  <td className="text-truncate" style={{ maxWidth: "150px" }}>
+                    {user.address}
+                  </td>
+                  <td>
+                    <span
+                      className={`badge ${user.status === "Active" ? "green" : "red"}`}
+                    >
+                      {user.status}
+                    </span>
+                  </td>
+                  <td>
+                    <button
+                      className="btn-edit"
+                      onClick={() => handleEdit(user)}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className="btn-delete"
+                      onClick={() => confirmDelete(user.id)}
+                    >
+                      Xóa
+                    </button>
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>
@@ -205,7 +219,7 @@ function Users({ showAlert }) {
               {/* Row 1: Full Name & Email & Password */}
               <div className="form-row">
                 <div className="form-group">
-                  <label>Full Name</label>
+                  <label>Họ & Tên</label>
                   <input
                     type="text"
                     value={userName}
@@ -214,7 +228,7 @@ function Users({ showAlert }) {
                   />
                 </div>
                 <div className="form-group">
-                  <label>Email Address</label>
+                  <label>Email</label>
                   <input
                     type="email"
                     value={email}
@@ -236,7 +250,7 @@ function Users({ showAlert }) {
               {/* Row 2: DOB & Phone & National ID */}
               <div className="form-row">
                 <div className="form-group">
-                  <label>Date of Birth</label>
+                  <label>Ngày Sinh</label>
                   <input
                     type="date"
                     value={dob}
@@ -244,7 +258,7 @@ function Users({ showAlert }) {
                   />
                 </div>
                 <div className="form-group">
-                  <label>Phone Number</label>
+                  <label>SĐT</label>
                   <input
                     type="text"
                     value={phone}
@@ -252,10 +266,9 @@ function Users({ showAlert }) {
                   />
                 </div>
                 <div className="form-group">
-                  <label>National ID / ID Card</label>
+                  <label>CMND/CCCD</label>
                   <input
                     type="text"
-                    placeholder="12-digit number"
                     value={nationalId}
                     onChange={(e) => setNationalId(e.target.value)}
                   />
@@ -265,7 +278,7 @@ function Users({ showAlert }) {
               {/* Row 3: Country & Role & Status */}
               <div className="form-row">
                 <div className="form-group">
-                  <label>Country</label>
+                  <label>Quốc gia</label>
                   <input
                     type="text"
                     value={country}
@@ -273,21 +286,21 @@ function Users({ showAlert }) {
                   />
                 </div>
                 <div className="form-group">
-                  <label>Customer Role</label>
+                  <label>Hạng</label>
                   <select
                     className="custom-select"
                     value={role}
                     onChange={(e) => setRole(e.target.value)}
                     required
                   >
-                      <option value="Standard">Standard</option>
-                      <option value="VIP">V.I.P</option>
-                      <option value="S-VIP">S-VIP</option>
-                      <option value="Potential">Potential</option>
+                    <option value="Standard">Standard</option>
+                    <option value="VIP">V.I.P</option>
+                    <option value="S-VIP">S-VIP</option>
+                    <option value="Potential">Potential</option>
                   </select>
                 </div>
                 <div className="form-group">
-                  <label>Account Status</label>
+                  <label>Trạng thái</label>
                   <div className="toggle-switch-wrapper">
                     <span
                       className={`status-text ${status === "Locked" ? "active" : ""}`}
@@ -299,9 +312,7 @@ function Users({ showAlert }) {
                         type="checkbox"
                         checked={status === "Active"}
                         onChange={(e) =>
-                          setStatus(
-                            e.target.checked ? "Active" : "Locked",
-                          )
+                          setStatus(e.target.checked ? "Active" : "Locked")
                         }
                       />
                       <span className="slider round"></span>
@@ -317,7 +328,7 @@ function Users({ showAlert }) {
 
               {/* Row 5: Address */}
               <div className="form-group">
-                <label>Address</label>
+                <label>Địa chỉ</label>
                 <textarea
                   rows="2"
                   value={address}
@@ -335,10 +346,10 @@ function Users({ showAlert }) {
                   }}
                   className="cancel-btn"
                 >
-                  Cancel
+                  Hủy
                 </button>
                 <button type="submit" className="submit-btn">
-                  {editingUser ? "Update" : "Add Customer"}
+                  {editingUser ? "Cập nhật" : "Thêm Khách hàng"}
                 </button>
               </div>
             </form>
@@ -350,19 +361,20 @@ function Users({ showAlert }) {
         <div className="modal-overlay">
           <div className="modal-box confirm-box">
             <div className="confirm-icon">⚠️</div>
-            <h3>Are you sure?</h3>
+            <h3>Xác nhận xóa?</h3>
             <p>
-              Do you really want to delete this User? <br /> This action cannot be undone.
+              Bạn có chắc chắn muốn xóa khách hàng này không? <br /> Hành động
+              này không thể hoàn tác.
             </p>
             <div className="modal-actions confirm-actions">
               <button
                 className="cancel-btn"
                 onClick={() => setShowDeleteModal(false)}
               >
-                Cancel
+                Hủy
               </button>
               <button className="delete-confirm-btn" onClick={handleDelete}>
-                Yes, Delete it
+                Xác nhận, xóa
               </button>
             </div>
           </div>

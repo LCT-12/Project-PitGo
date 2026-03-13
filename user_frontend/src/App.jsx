@@ -10,6 +10,7 @@ import Maintenance from "./components/Maintenance";
 // Pages
 import Home from "./pages/Home"; 
 import AllCar from "./pages/allCar";
+import CarDetail from "./pages/CarDetail";
 
 // --- LAYOUT CHO KHU VỰC TRANG CHỦ (PUBLIC) ---
 const PublicLayout = () => {
@@ -71,21 +72,18 @@ function App() {
   }
   return (
     <Routes>
-      {/* --- ROUTES TRANG KHÁCH HÀNG --- */}
       <Route path="/" element={<PublicLayout />}>
         <Route index element={<Home />} />
         
-<<<<<<< HEAD
-        {/* 1. Nhấn đúp "Tất cả" sẽ vào link: /all-cars */}
+        {/* Trang danh sách tất cả xe */}
         <Route path="all-cars" element={<AllCar />} />
 
-        {/* 2. Nhấn đúp vào từng hãng (Ferrari, Porsche...) sẽ vào link: /[tên-hãng]
-           Sử dụng dấu :brandName để AllCar có thể đọc được tên hãng từ URL */}
+        {/* Trang danh sách xe theo hãng (Ví dụ: /Ferrari) */}
         <Route path=":brandName" element={<AllCar />} />
-=======
-        {/* Nơi bạn sẽ thêm các trang khác của User sau này */}
-        {/* Ví dụ: <Route path="/:brand/:carId" element={<CarDetail />} /> */}
->>>>>>> 546bb341f862ed6dee4fbf320cd427d7f3610b01
+
+        {/* Trang chi tiết xe */}
+        {/* Lưu ý: Bỏ dấu / ở đầu để nó hiểu là nối tiếp từ Route cha */}
+        <Route path=":brand/:model" element={<CarDetail />} />
       </Route>
     </Routes>
   );

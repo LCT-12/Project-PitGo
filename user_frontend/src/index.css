@@ -560,7 +560,7 @@ body {
 }
 
 /* ============================================================
-   PUBLIC LAYOUT (TRANG AllCar) - REFINED VERSION
+   PUBLIC LAYOUT (TRANG AllCar) 
    ============================================================ */
 
 .allcar-container {
@@ -574,13 +574,33 @@ body {
 /* Breadcrumb */
 .breadcrumb {
   font-size: 18px;
-  color: #7f8c8d;
+  color: #666;
   margin-bottom: 25px;
 }
 
-.breadcrumb b {
+.breadcrumb-text1 {
+  text-decoration: none;
+  color: #333; 
+  transition: 0.3s;
+}
+
+.breadcrumb-text1:hover {
+  color: red;
+}
+
+/* Kiểu cho chữ bình thường không nhấn được */
+.breadcrumb-text2 {
   color: #333;
-  font-weight: 600;
+  cursor: default; /* Hiện con trỏ chuột bình thường */
+}
+
+.breadcrumb-separator {
+  margin: 0 5px;
+  color: #333;
+}
+
+.breadcrumb-text3 {
+  color: #333;
 }
 
 /* Tiêu đề & Subtitle */
@@ -698,6 +718,12 @@ body {
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
 }
 
+.car-item-link {
+  text-decoration: none;
+  color: inherit; /* Giữ nguyên màu chữ của card xe */
+  display: block;
+}
+
 .car-name {
   font-size: 16px;
   font-weight: 600;
@@ -744,4 +770,170 @@ body {
   .filter-sidebar {
     width: 100%;
   }
+}
+
+/* ============================================================
+   PUBLIC LAYOUT (TRANG CarDetail) 
+   ============================================================ */
+   /* --- GIAO DIỆN CAR DETAIL (CĂN GIỮA) --- */
+.car-detail-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.car-detail-main-content {
+  display: flex;
+  gap: 50px;
+  margin-top: 20px;
+  align-items: flex-start; /* Giúp các cột không bị kéo dài bằng nhau */
+}
+
+/* Cột trái */
+.image-column {
+  flex: 1.2;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-image-frame {
+  border: 2px solid #FF8C00;
+  padding: 10px;
+  border-radius: 8px;
+  background: #fff;
+  display: flex;
+  justify-content: center;
+}
+
+.main-image-frame img {
+  width: 100%;
+  height: auto;
+}
+
+/* Đã xóa .thumbnail-frame và .thumbnail vì không sử dụng */
+
+/* Căn giữa cụm nút Liên hệ & Lái thử dưới ảnh */
+.action-button-group {
+  display: flex;
+  gap: 15px;
+  margin-top: 25px;
+  justify-content: center; /* Căn giữa 2 nút */
+}
+
+.btn-contact, .btn-test-drive, .btn-add-cart {
+  padding: 12px 25px;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 5px;
+  border: none;
+  font-size: 15px;
+}
+
+.btn-contact {
+  background: #fff;
+  border: 1px solid #000;
+}
+
+.btn-test-drive {
+  background: #007BFF;
+  color: #fff;
+}
+
+/* Cột phải */
+.info-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.car-title-display {
+  font-family: 'Times New Roman', serif;
+  color: #002D5E;
+  font-size: 32px;
+  margin: 0;
+}
+
+.car-price-display {
+  color: #D10000;
+  font-size: 26px;
+  font-weight: bold;
+  margin: 10px 0 25px 0;
+}
+
+.specs-list {
+  margin-bottom: 30px;
+}
+
+.spec-line {
+  display: flex;
+  align-items: center;
+  gap: 15px; /* Khoảng cách giữa ảnh và chữ */
+  margin-bottom: 15px;
+  font-size: 18px;
+  color: #333;
+}
+
+.spec-icon-img {
+  width: 30px;  /* Điều chỉnh kích thước to nhỏ tùy ý bạn */
+  height: 30px;
+  object-fit: contain; /* Giữ nguyên tỉ lệ ảnh không bị méo */
+}
+
+/* Đảm bảo chữ và ảnh thẳng hàng giữa */
+.spec-line span {
+  display: inline-block;
+  line-height: 1;
+}
+
+/* Cụm khuyến mãi và nút thêm giỏ hàng */
+.promotion-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Căn giữa nội dung trong section này (nút bấm) */
+}
+
+.promotion-box {
+  width: 100%; /* Giữ khung KM rộng hết cột */
+  border: 2px solid #FF8C00;
+  padding: 20px;
+  border-radius: 8px;
+  background-color: #fff;
+  box-sizing: border-box;
+}
+
+.promo-title {
+  color: #D10000;
+  margin: 0;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.promo-note {
+  color: #D10000;
+  font-size: 13px;
+  font-style: italic;
+  margin: 5px 0 15px 0;
+}
+
+.promo-items {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+/* Nút thêm giỏ hàng căn giữa dưới khung KM */
+.btn-add-cart {
+  background: #FF8C00;
+  color: #fff;
+  margin-top: 25px; /* Tạo khoảng cách với khung trên */
+  padding: 12px 50px; /* Tăng độ dài nút cho giống hình */
+  font-size: 16px;
+  transition: background 0.3s;
+}
+
+.btn-add-cart:hover {
+  background: #e67e00;
 }

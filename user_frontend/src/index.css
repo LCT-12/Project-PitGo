@@ -572,36 +572,33 @@ body {
 }
 
 /* Breadcrumb */
-.breadcrumb {
+.allcar-container .breadcrumb {
   font-size: 18px;
-  color: #666;
+  color: #333;
   margin-bottom: 25px;
 }
 
-.breadcrumb-text1 {
+.allcar-container .breadcrumb-text1, 
+.allcar-container .breadcrumb-text2 {
   text-decoration: none;
   color: #333; 
   transition: 0.3s;
 }
 
-.breadcrumb-text1:hover {
+
+.allcar-container .breadcrumb-text1:hover, 
+.allcar-container .breadcrumb-text2:hover {
   color: red;
 }
 
-/* Kiểu cho chữ bình thường không nhấn được */
-.breadcrumb-text2 {
-  color: #333;
-  cursor: default; /* Hiện con trỏ chuột bình thường */
-}
 
-.breadcrumb-separator {
+.allcar-container.breadcrumb-separator {
   margin: 0 5px;
   color: #333;
+  font-weight: bold;
 }
 
-.breadcrumb-text3 {
-  color: #333;
-}
+
 
 /* Tiêu đề & Subtitle */
 .allcar-title {
@@ -783,6 +780,35 @@ body {
   font-family: Arial, sans-serif;
 }
 
+/* Breadcrumb */
+.car-detail-wrapper .breadcrumb {
+  font-size: 18px;
+  color: #333;
+  margin-bottom: 25px;
+}
+
+.car-detail-wrapper .breadcrumb-text1, 
+.car-detail-wrapper .breadcrumb-text2, 
+.car-detail-wrapper .breadcrumb-text3, 
+.car-detail-wrapper .breadcrumb-text4 {
+  text-decoration: none;
+  color: #333; 
+  transition: 0.3s;
+}
+
+.car-detail-wrapper .breadcrumb-text1:hover, 
+.car-detail-wrapper .breadcrumb-text2:hover, 
+.car-detail-wrapper .breadcrumb-text3:hover {
+  color: red;
+}
+
+
+.car-detail-wrapper .breadcrumb-separator {
+  margin: 0 5px;
+  color: #333;
+}
+
+
 .car-detail-main-content {
   display: flex;
   gap: 50px;
@@ -854,6 +880,41 @@ body {
   margin: 0;
 }
 
+/* Ô trạng thái (Status Badge) */
+.status-badge {
+  display: inline-block;
+  width: fit-content;
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: bold;
+  text-transform: uppercase;
+  white-space: nowrap; /* Đảm bảo chữ "Còn hàng" không bị xuống dòng */
+}
+
+.title-row {
+  display: flex;
+  justify-content: flex-start; /* Đẩy tiêu đề sang trái, badge sang phải */
+  align-items: center; /* Căn giữa theo chiều dọc để Badge và Tên xe thẳng hàng nhau */
+  /* Khoảng cách giữa tên xe và ô trạng thái (chỉnh số này theo ý bạn) */
+  gap: 15px; 
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+/* Màu sắc động cho Badge */
+.in-stock {
+  background-color: #e6fffa;
+  color: #38a169;
+  border: 1px solid #38a169;
+}
+
+.out-of-stock {
+  background-color: #fff5f5;
+  color: #e53e3e;
+  border: 1px solid #e53e3e;
+}
+
 .car-price-display {
   color: #D10000;
   font-size: 26px;
@@ -875,15 +936,21 @@ body {
 }
 
 .spec-icon-img {
-  width: 30px;  /* Điều chỉnh kích thước to nhỏ tùy ý bạn */
+  width: 30px;  /* Điều chỉnh kích thước to nhỏ*/
   height: 30px;
   object-fit: contain; /* Giữ nguyên tỉ lệ ảnh không bị méo */
+  flex-shrink: 0; /* Giữ icon không bị bóp méo khi chữ quá dài */
+  margin-top: 3px; /* Căn chỉnh icon cho khớp với dòng chữ đầu tiên */
 }
 
-/* Đảm bảo chữ và ảnh thẳng hàng giữa */
 .spec-line span {
-  display: inline-block;
-  line-height: 1;
+  display: block;        /* Cho phép span hoạt động như một khối để xuống dòng */
+  line-height: 1.6;      
+  word-wrap: break-word; /* Ép xuống dòng nếu có từ quá dài */
+  overflow-wrap: break-word; 
+  white-space: normal;   /* Đảm bảo text không bị ép trên 1 hàng */
+  flex: 1;               
+  min-width: 0;         
 }
 
 /* Cụm khuyến mãi và nút thêm giỏ hàng */

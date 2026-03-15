@@ -5,7 +5,7 @@ const contactSchema = new mongoose.Schema({
     email: { type: String, required: true },
     subject: { type: String },
     message: { type: String, required: true },
-    status: { type: String, enum: ['Unread', 'Read', 'Replied'], default: 'Unread' },
+    status: { type: String, enum: ['Chưa đọc', 'Đã đọc', 'Đã phản hồi'], default: 'Chưa đọc' },
     isImportant: { type: Boolean, default: false },
     isDeleted: { type: Boolean, default: false } // Phục vụ tính năng Soft Delete
 }, { timestamps: true });

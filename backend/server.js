@@ -1,19 +1,18 @@
-const express = require('express');
-const cors = require('cors');
-const dotenv = require('dotenv');
-const bcrypt = require('bcrypt');
+const express = require("express");
+const cors = require("cors");
+const dotenv = require("dotenv");
+const bcrypt = require("bcrypt");
 
 // Import cấu hình và Models
-const connectDB = require('./config/db');
-const Setting = require('./models/setting');
-const Admin = require('./models/admin');
+const connectDB = require("./config/db");
+const Setting = require("./models/setting");
+const Admin = require("./models/admin");
 
 // Import Routes
-const settingRoutes = require('./routes/settingRoutes');
-const Setting = require('./models/setting');
-const contactRoutes = require('./routes/contactRoutes');
-const carRoutes = require('./routes/carRoutes');
-const adminRoutes = require('./routes/adminRoutes');
+const settingRoutes = require("./routes/settingRoutes");
+const contactRoutes = require("./routes/contactRoutes");
+const carRoutes = require("./routes/carRoutes");
+const adminRoutes = require("./routes/adminRoutes");
 
 // 1. Cấu hình môi trường (Luôn để đầu tiên)
 dotenv.config();
@@ -27,11 +26,11 @@ app.use(express.json());
 // 3. Hàm tạo Admin mặc định (Định nghĩa trực tiếp để tránh lỗi file seed)
 const createAdminIfNotExists = async () => {
     try {
-        const adminExists = await Admin.findOne({ admin_name: 'admin' });
+        const adminExists = await Admin.findOne({ admin_name: "admin" });
         if (!adminExists) {
-            const hashedPassword = await bcrypt.hash('12345', 10);
+            const hashedPassword = await bcrypt.hash("12345", 10);
             const newAdmin = new Admin({
-                admin_name: 'admin',
+                admin_name: "admin",
                 admin_pass: hashedPassword
             });
             await newAdmin.save();
@@ -47,16 +46,16 @@ const createAdminIfNotExists = async () => {
 // 4. Middleware kiểm tra Shutdown (Nên đặt trước các route của User)
 const checkShutdown = async (req, res, next) => {
     // 1. Kiểm tra xem request có đến từ phía Admin không (dựa vào URL)
-    const isAdminRequest = req.path.startsWith('/api/admin') || 
-                           req.path.startsWith('/api/setting') ||
-                           req.headers.referer?.includes('/admin'); // Kiểm tra nếu gọi từ trang admin
+    const isAdminRequest = req.path.startsWith("/api/admin") || 
+                           req.path.startsWith("/api/setting") ||
+                           req.headers.referer?.includes("/admin"); // Kiểm tra nếu gọi từ trang admin
 
     if (isAdminRequest) {
         return next(); // Nếu là admin thì cho đi tiếp luôn, không check shutdown
     }
     
     try {
-        const setting = await Setting.findOne({ key: 'general_settings' });
+        const setting = await Setting.findOne({ key: "general_settings" });
         if (setting && setting.value.shutdown) {
             return res.status(503).json({ 
                 message: "Website is under maintenance.",
@@ -71,10 +70,10 @@ const checkShutdown = async (req, res, next) => {
 
 // 5. Đăng ký các Routes
 // Lưu ý: checkShutdown sẽ chạy trước khi vào các route car/contact của User
-app.use('/api/setting', settingRoutes);
-app.use('/api/admin', adminRoutes);
-app.use('/api/contact', contactRoutes);
-app.use('/api/car', carRoutes);
+app.use("/api/setting", settingRoutes);
+app.use("/api/admin", adminRoutes);
+app.use("/api/contact", contactRoutes);
+app.use("/api/car", carRoutes);
 
 // 6. Khởi động Server theo thứ tự chuẩn
 const startServer = async () => {

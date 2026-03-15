@@ -82,7 +82,7 @@ function App() {
 
           <div className="page-content"> {/* Đổi từ page-container thành page-content để khớp CSS */}
             <Routes>
-              <Route path="/" element={<Navigate to="/login" />} />
+              <Route path="/" element={<Navigate to="/dashboard" />} />
               <Route path="/login" element={<Login onLoginSuccess={() => setIsLoggedIn(true)} showAlert={showAlert} />} />
               <Route path="/dashboard" element={<Dashboard showAlert={showAlert} />} />
               <Route path="/cars" element={<Cars showAlert={showAlert} />} />

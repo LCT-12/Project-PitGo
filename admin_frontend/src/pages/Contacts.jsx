@@ -345,7 +345,7 @@ function Contacts({ showAlert }) {
                 href={`mailto:${selectedMsg.email}?subject=Re: ${selectedMsg.subject}`}
                 className="submit-btn"
                 style={{ textDecoration: "none", textAlign: "center" }}
-                onClick={() => toggleStatus(selectedMsg._id, "Replied")}
+                onClick={() => toggleStatus(selectedMsg._id, "Đã trả lời")}
               >
                 Trả lời Email (Gmail)
               </a>

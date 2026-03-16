@@ -151,7 +151,7 @@ function Settings({ showAlert }) {
         }
     };
 
-    if (error) return <Error message={error} />;
+    if (error) return <Error message={error} />; // Nếu có lỗi trang, xoá component này
     if (loading) return <Loading message="LOADING..." />;
 
     return (

@@ -1,9 +1,34 @@
-import React from 'react';
+import React, { useState, useEffect } from "react";
 import { Link } from 'react-router-dom';
-import { carsData } from '../mockData/mockHome.js'; 
+// import { carsData } from '../mockData/mockHome.js'; 
+
+import axios from "axios";
 
 const Home = () => {
-  
+
+const [cars, setCars] = useState([]);
+
+const [loading, setLoading] = useState(true);
+
+useEffect(() => {
+  const fetchCars = async () => {
+      try {
+          setLoading(true); // Bắt đầu tải
+          const response = await axios.get("http://localhost:5000/api/car");
+          setCars(response.data);
+      } catch (error) {
+          console.error("Lỗi lấy dữ liệu:", error);
+      } finally {
+          setLoading(false); // Kết thúc tải (dù thành công hay lỗi)
+      }
+  };
+  fetchCars();
+}, []);
+
+  if (loading) return <div>Đang tải dữ liệu từ server...</div>;
+  if (cars.length === 0) return <div>Không có dữ liệu xe nào được tìm thấy.</div>;
+
+
 
   return (
     <div className="home-container">
@@ -21,19 +46,19 @@ const Home = () => {
         </div>
         
         <div className="cars-grid">
-          {carsData.map((car) => (
+          {cars.slice(0, 8).map((car) => (
               <Link 
-                to={car.link} 
+                to={`/car/${car._id}`} 
                 className="car-card" 
-                key={car.id}
+                key={car._id}
               >
               <div className="car-image-box">
-                <img src={car.img} alt={car.name} className="img-fill" />
+                <img src={car.image} alt={car.carName} className="img-fill" />
               </div>
 
               <div className="car-info">
-                <p className="car-price">{car.price}</p>
-                <h3 className="car-name">{car.name}</h3>
+                <p>{car.price.toLocaleString()}.000.000.000 VNĐ</p>
+                <h3 className="car-name">{car.carName}</h3>
                 {/* <p className="car-desc">{car.desc}</p> */}
               </div>
             </Link>

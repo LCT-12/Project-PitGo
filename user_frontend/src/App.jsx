@@ -83,7 +83,7 @@ function App() {
 
         {/* Trang chi tiết xe */}
         {/* Lưu ý: Bỏ dấu / ở đầu để nó hiểu là nối tiếp từ Route cha */}
-        <Route path=":brand/:model" element={<CarDetail />} />
+        <Route path="/car/:id" element={<CarDetail />} />
       </Route>
     </Routes>
   );

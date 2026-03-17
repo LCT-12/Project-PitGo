@@ -113,7 +113,7 @@ const AllCar = () => {
               checked={selectedBrand === brand}
               onChange={() => handleBrandChange(brand)}
             />
-            <span className="checkmark"></span> {/* Thẻ này dùng để vẽ checkbox mới */}
+            <span className="checkmark"></span>
             <span className="brand-name">{brand}</span>
           </label>
         </li>

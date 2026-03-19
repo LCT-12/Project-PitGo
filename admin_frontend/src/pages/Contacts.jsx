@@ -17,6 +17,35 @@ function Contacts({ showAlert }) {
   const [mgToDelete, setMgToDelete] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
+/* ================= FILTER DATA SEARCH ================= */
+  const filteredData = contacts.filter((item) => {
+    const matchesTab = activeTab === "messages" ? !item.isDeleted : item.isDeleted;
+    const matchesSearch =
+      item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.subject.toLowerCase().includes(searchTerm.toLowerCase());
+    return matchesTab && matchesSearch;
+  });
+
+  /* ================= LOGIC PHÂN TRANG ================= */
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
+
+  // Tự động quay về trang 1 nếu người dùng chuyển tab hoặc gõ tìm kiếm
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [activeTab, searchTerm]);
+
+  // Tính toán vị trí cắt mảng
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  
+  // Dữ liệu thực tế sẽ được hiển thị trên bảng
+  const currentContacts = filteredData.slice(indexOfFirstItem, indexOfLastItem);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
   const API = "http://localhost:5000/api/contact";
 
   /* ================= FETCH DATA ================= */
@@ -34,17 +63,6 @@ function Contacts({ showAlert }) {
     };
     fetchContacts();
   }, []);
-
-  /* ================= FILTER DATA SEARCH ================= */
-  const filteredData = contacts.filter((item) => {
-    const matchesTab =
-      activeTab === "messages" ? !item.isDeleted : item.isDeleted;
-    const matchesSearch =
-      item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.subject.toLowerCase().includes(searchTerm.toLowerCase());
-    return matchesTab && matchesSearch;
-  });
 
   // Các hàm chức năng
   const handleView = async (msg) => {
@@ -64,24 +82,50 @@ function Contacts({ showAlert }) {
     }
   };
 
-  const toggleStatus = (id, newStatus) => {
-    setContacts(
-      contacts.map((m) => (m._id === id ? { ...m, status: newStatus } : m)),
-    );
-    if (selectedMsg?._id === id)
-      setSelectedMsg({ ...selectedMsg, status: newStatus });
+const toggleStatus = async (id, newStatus) => {
+    try {
+      // 1. Gọi API lưu trạng thái mới xuống Database
+      const response = await axios.patch(`${API}/${id}`, {
+        status: newStatus,
+      });
+
+      // 2. Cập nhật lại giao diện bảng bên ngoài
+      setContacts(
+        contacts.map((m) => (m._id === id ? response.data : m)),
+      );
+
+      // 3. Cập nhật lại trạng thái trong Modal (nếu đang mở)
+      if (selectedMsg?._id === id) {
+        setSelectedMsg({ ...selectedMsg, status: response.data.status });
+      }
+
+      showAlert("success", `Đã cập nhật trạng thái thành: ${newStatus}`);
+    } catch (error) {
+      showAlert("danger", "Không thể cập nhật trạng thái!");
+    }
   };
 
-  const toggleImportant = async (id, currentStatus) => {
+const toggleImportant = async (id, currentStatus) => {
     try {
+      // Đảo ngược trạng thái hiện tại để gửi lên server
       const response = await axios.patch(`${API}/${id}`, {
         isImportant: !currentStatus,
       });
+      
+      // Cập nhật lại mảng contacts ngoài danh sách
       setContacts(contacts.map((m) => (m._id === id ? response.data : m)));
-      showAlert(
-        "success",
-        `Đánh dấu ${response.data.isImportant ? "quan trọng" : "không quan trọng"}`,
-      );
+      
+      // THÊM DÒNG NÀY: Cập nhật luôn cho Modal nếu nó đang mở
+      if (selectedMsg?._id === id) {
+        setSelectedMsg({ ...selectedMsg, isImportant: response.data.isImportant });
+      }
+
+      // Thông báo theo đúng ý bạn
+      if (response.data.isImportant) {
+        showAlert("success", "Đánh dấu quan trọng thành công!");
+      } else {
+        showAlert("success", "Đã bỏ dấu quan trọng!");
+      }
     } catch (error) {
       showAlert("danger", "Không thể cập nhật trạng thái!");
     }
@@ -155,7 +199,7 @@ function Contacts({ showAlert }) {
         <div className="search-container">
           <input
             type="text"
-            placeholder="Search name, email, subject..."
+            placeholder="Tìm kiếm theo tên, email, chủ đề..."
             className="search-input"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -208,14 +252,15 @@ function Contacts({ showAlert }) {
             </tr>
           </thead>
           <tbody>
-            {filteredData.length > 0 ? (
-              filteredData.map((msg) => (
+            {currentContacts.length > 0 ? (
+              currentContacts.map((msg) => (
                 <tr
                   key={msg._id}
                   className={msg.status === "Chưa đọc" ? "unread-row" : ""}
+                  style={{ fontWeight: msg.isImportant ? "bold" : "normal" }}
                 >
-                  <td
-                    onClick={() => toggleImportant(msg._id)}
+                  <td 
+                    onClick={() => toggleImportant(msg._id, msg.isImportant)} 
                     style={{ cursor: "pointer" }}
                   >
                     <img
@@ -277,6 +322,38 @@ function Contacts({ showAlert }) {
             )}
           </tbody>
         </table>
+
+        {/* CHỈ HIỆN PHÂN TRANG KHI CÓ NHIỀU HƠN 0 TRANG */}
+      {totalPages > 0 && (
+        <div className="pagination-container" style={{ display: 'flex', justifyContent: 'center', marginTop: '20px', gap: '8px' }}>
+          <button
+            className="page-btn"
+            disabled={currentPage === 1}
+            onClick={() => paginate(currentPage - 1)}
+          >
+            Previous
+          </button>
+
+          {/* Chỉ tạo số nút bấm tương ứng với kết quả sau khi lọc */}
+          {[...Array(totalPages)].map((_, i) => (
+            <button
+              key={i + 1}
+              onClick={() => paginate(i + 1)}
+              className={`page-btn ${currentPage === i + 1 ? "active" : ""}`}
+            >
+              {i + 1}
+            </button>
+          ))}
+          
+          <button
+            className="page-btn"
+            disabled={currentPage === totalPages || totalPages === 0}
+            onClick={() => paginate(currentPage + 1)}
+          >
+            Next
+          </button>
+        </div>
+      )}
       </div>
 
       {/* Modal chi tiết */}
@@ -319,6 +396,7 @@ function Contacts({ showAlert }) {
                     }
                     style={{ marginLeft: "10px" }}
                   >
+                    <option value="Chưa đọc">Chưa đọc</option>
                     <option value="Đã đọc">Đã đọc</option>
                     <option value="Đã trả lời">Đã trả lời</option>
                   </select>
@@ -328,7 +406,8 @@ function Contacts({ showAlert }) {
                     className="checkbox-important"
                     type="checkbox"
                     checked={selectedMsg.isImportant}
-                    onChange={() => toggleImportant(selectedMsg._id)}
+                    // Cập nhật truyền thêm selectedMsg.isImportant
+                    onChange={() => toggleImportant(selectedMsg._id, selectedMsg.isImportant)}
                   />
                   <span className="slider-contact"></span>
                   <span className="label-text">Important</span>
@@ -342,10 +421,14 @@ function Contacts({ showAlert }) {
 
             <div className="modal-actions">
               <a
-                href={`mailto:${selectedMsg.email}?subject=Re: ${selectedMsg.subject}`}
+                href="https://mail.google.com"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="submit-btn"
                 style={{ textDecoration: "none", textAlign: "center" }}
-                onClick={() => toggleStatus(selectedMsg._id, "Đã trả lời")}
+                onClick={() => {
+                  toggleStatus(selectedMsg._id, "Đã trả lời");
+                }}
               >
                 Trả lời Email (Gmail)
               </a>

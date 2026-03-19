@@ -1,10 +1,13 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, Outlet } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+
+// Components & Layout
 import Sidebar from "./components/Sidebar";
 import Topbar from "./components/Topbar";
 import CustomAlert from "./components/CustomAlert";
 
+// Pages
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Cars from "./pages/Cars";
@@ -12,6 +15,21 @@ import Customers from "./pages/Customers";
 import Orders from "./pages/Orders";
 import Contacts from "./pages/Contacts";
 import Settings from "./pages/Settings";
+
+// --- LAYOUT DÀNH RIÊNG CHO ADMIN (Chứa Sidebar & Topbar) ---
+const AdminLayout = ({ onLogout }) => {
+  return (
+    <div className="admin-layout"> 
+      <Sidebar />
+      <div className="main">
+        <Topbar onLogout={onLogout} />
+        <div className="page-content">
+          <Outlet /> {/* Các trang Dashboard, Cars... sẽ hiển thị ở đây */}
+        </div>
+      </div>
+    </div>
+  );
+};
 
 function App() {
   // Trạng thái kiểm tra đăng nhập
@@ -33,7 +51,7 @@ function App() {
           document.title = response.data.general_settings.site_title || "Project-SX";
         }
       } catch (error) {
-        console.error("Không thể lấy cấu hình hệ thống:", error);
+        console.error("Lỗi cấu hình:", error);
       }
     };
 
@@ -45,57 +63,44 @@ function App() {
     setIsLoggedIn(false);
   };
 
-  // NẾU CHƯA ĐĂNG NHẬP
-  if (!isLoggedIn) {
-    return (
-      <BrowserRouter>
-        {alert && (
-          <CustomAlert 
-            type={alert.type} 
-            msg={alert.msg} 
-            onClose={() => setAlert(null)} 
-          />
-        )}
-        <Routes>
-          {/* Truyền showAlert vào đây */}
-          <Route path="*" element={<Login onLoginSuccess={() => setIsLoggedIn(true)} showAlert={showAlert} />} />
-        </Routes>
-      </BrowserRouter>
-    );
-  }
+ return (
+  <>
+    {/* Alert hiển thị chung cho toàn bộ App */}
+    {alert && (
+      <CustomAlert 
+        type={alert.type} 
+        msg={alert.msg} 
+        onClose={() => setAlert(null)} 
+      />
+    )}
 
-  // Nếu ĐÃ đăng nhập - GIAO DIỆN ADMIN CHUẨN
-  return (
-    <BrowserRouter>
-      {alert && (
-        <CustomAlert 
-          type={alert.type} 
-          msg={alert.msg} 
-          onClose={() => setAlert(null)}
+    <Routes>
+      {/* TRƯỜNG HỢP 1: CHƯA ĐĂNG NHẬP */}
+      {!isLoggedIn ? (
+        <Route 
+          path="*" 
+          element={<Login onLoginSuccess={() => setIsLoggedIn(true)} showAlert={showAlert} />} 
         />
+      ) : (
+        /* TRƯỜNG HỢP 2: ĐÃ ĐĂNG NHẬP */
+        <Route element={<AdminLayout onLogout={handleLogout} />}>
+          {/* Tự động chuyển hướng / về /dashboard */}
+          <Route path="/" element={<Navigate to="/dashboard" />} />
+          
+          <Route path="/dashboard" element={<Dashboard showAlert={showAlert} />} />
+          <Route path="/cars" element={<Cars showAlert={showAlert} />} />
+          <Route path="/customers" element={<Customers showAlert={showAlert} />} />
+          <Route path="/orders" element={<Orders showAlert={showAlert} />} />
+          <Route path="/contacts" element={<Contacts showAlert={showAlert} />} />
+          <Route path="/settings" element={<Settings showAlert={showAlert} />} />
+          
+          {/* Catch-all cho các link lỗi khi đã login */}
+          <Route path="*" element={<Navigate to="/dashboard" />} />
+        </Route>
       )}
-      <div className="admin-layout"> 
-        <Sidebar />
-
-        <div className="main"> {/* Đổi từ main-content thành main để khớp CSS */}
-          <Topbar onLogout={handleLogout} />
-
-          <div className="page-content"> {/* Đổi từ page-container thành page-content để khớp CSS */}
-            <Routes>
-              <Route path="/" element={<Navigate to="/dashboard" />} />
-              <Route path="/login" element={<Login onLoginSuccess={() => setIsLoggedIn(true)} showAlert={showAlert} />} />
-              <Route path="/dashboard" element={<Dashboard showAlert={showAlert} />} />
-              <Route path="/cars" element={<Cars showAlert={showAlert} />} />
-              <Route path="/customers" element={<Customers showAlert={showAlert} />} />
-              <Route path="/orders" element={<Orders showAlert={showAlert} />} />
-              <Route path="/contacts" element={<Contacts showAlert={showAlert} />} />
-              <Route path="/settings" element={<Settings showAlert={showAlert} />} />
-            </Routes>
-          </div>
-        </div>
-      </div>
-    </BrowserRouter>
-  );
+    </Routes>
+  </>
+);
 }
 
 export default App;

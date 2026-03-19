@@ -1,13 +1,15 @@
 const mongoose = require('mongoose');
 
 const contactSchema = new mongoose.Schema({
+    customId: { type: String, unique: true }, // VD: 19032025 - 001
+    date: { type: String }, // VD: 14:30 19/03/2025
     name: { type: String, required: true },
     email: { type: String, required: true },
     subject: { type: String },
     message: { type: String, required: true },
-    status: { type: String, enum: ['Chưa đọc', 'Đã đọc', 'Đã phản hồi'], default: 'Chưa đọc' },
+    status: { type: String, enum: ['Chưa đọc', 'Đã đọc', 'Đã trả lời'], default: 'Chưa đọc' },
     isImportant: { type: Boolean, default: false },
-    isDeleted: { type: Boolean, default: false } // Phục vụ tính năng Soft Delete
+    isDeleted: { type: Boolean, default: false }
 }, { timestamps: true });
 
 module.exports = mongoose.model('Contact', contactSchema);

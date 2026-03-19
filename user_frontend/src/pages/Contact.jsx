@@ -6,7 +6,7 @@ const Contact = () => {
   return (
     <div className="contact-container">
       <div className="breadcrumb">
-        <Link to="/" className="breadcrumb-text1">Trang chủ</Link>
+        <Link to="/home" className="breadcrumb-text1">Trang chủ</Link>
         <span className="breadcrumb-separator"> &gt; </span>
         <b className="breadcrumb-text2">Liên hệ</b>       
       </div>

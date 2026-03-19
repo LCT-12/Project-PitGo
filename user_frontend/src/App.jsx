@@ -8,10 +8,11 @@ import Footer from "./components/Footer";
 import Maintenance from "./components/Maintenance";
 
 // Pages
-import Home from "./pages/Home"; 
+import Home from "./pages/Home";
 import AllCar from "./pages/allCar";
 import CarDetail from "./pages/CarDetail";
 import Contact from "./pages/Contact";
+import Login from "./pages/Login";
 
 // --- LAYOUT CHO KHU VỰC TRANG CHỦ (PUBLIC) ---
 const PublicLayout = () => {
@@ -33,34 +34,36 @@ function App() {
 
   const checkStatus = async () => {
     try {
-        const response = await axios.get('http://localhost:5000/api/setting/');
-        if (response.data.general_settings) {
-            const shutdownStatus = response.data.general_settings.shutdown;
-            setIsShutdown(shutdownStatus);
-            
-            // Cập nhật tiêu đề trang luôn cho đồng bộ
-            document.title = response.data.general_settings.site_title || "Project-SX";
-        }
+      const response = await axios.get("http://localhost:5000/api/setting/");
+      if (response.data.general_settings) {
+        const shutdownStatus = response.data.general_settings.shutdown;
+        setIsShutdown(shutdownStatus);
+
+        // Cập nhật tiêu đề trang luôn cho đồng bộ
+        document.title =
+          response.data.general_settings.site_title || "Project-SX";
+      }
     } catch (error) {
-        console.error("Error checking system status:", error);
+      console.error("Error checking system status:", error);
     }
   };
-  
+
   useEffect(() => {
     const checkStatus = async () => {
-        try {
-            // Gọi tới API của Backend (đảm bảo URL này đúng với server của bạn)
-            const response = await axios.get('http://localhost:5000/api/setting/');
-            if (response.data.general_settings) {
-                setIsShutdown(response.data.general_settings.shutdown);
-                // Tiện thể cập nhật Title cho trang User luôn
-                document.title = response.data.general_settings.site_title || "My Project";
-            }
-        } catch (error) {
-            console.error("Error fetching status:", error);
-        } finally {
-            setLoading(false);
+      try {
+        // Gọi tới API của Backend (đảm bảo URL này đúng với server của bạn)
+        const response = await axios.get("http://localhost:5000/api/setting/");
+        if (response.data.general_settings) {
+          setIsShutdown(response.data.general_settings.shutdown);
+          // Tiện thể cập nhật Title cho trang User luôn
+          document.title =
+            response.data.general_settings.site_title || "My Project";
         }
+      } catch (error) {
+        console.error("Error fetching status:", error);
+      } finally {
+        setLoading(false);
+      }
     };
     checkStatus();
   }, [location]);
@@ -69,28 +72,29 @@ function App() {
 
   // Nếu Shutdown được bật, chặn đứng và chỉ hiện trang Maintenance
   if (isShutdown) {
-      return <Maintenance />;
+    return <Maintenance />;
   }
   return (
     <Routes>
+      {/* Route Login đứng riêng (không cần Header/Footer) */}
+      <Route path="/" element={<Login />} />
 
-        <Route path="/" element={<Login />} />
-      
+      {/* BAO BỌC TẤT CẢ TRANG PUBLIC VÀO TRONG LAYOUT CHUNG */}
+      <Route element={<PublicLayout />}>
         <Route path="/home" element={<Home />} />
-        
+
         {/* Trang danh sách tất cả xe */}
-        <Route path="all-cars" element={<AllCar />} />
+        <Route path="/all-cars" element={<AllCar />} />
 
         {/* Trang Liên hệ */}
-        <Route path="contact" element={<Contact />} />
+        <Route path="/contact" element={<Contact />} />
 
-        {/* Trang danh sách xe theo hãng (Ví dụ: /Ferrari) */}
-        <Route path=":brandName" element={<AllCar />} />
+        {/* Trang danh sách xe theo hãng */}
+        <Route path="/:brandName" element={<AllCar />} />
 
         {/* Trang chi tiết xe */}
-        {/* Lưu ý: Bỏ dấu / ở đầu để nó hiểu là nối tiếp từ Route cha */}
         <Route path="/car/:id" element={<CarDetail />} />
-      
+      </Route>
     </Routes>
   );
 }

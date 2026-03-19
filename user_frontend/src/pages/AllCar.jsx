@@ -87,7 +87,7 @@ const AllCar = () => {
   return (
     <div className="allcar-container">
       <div className="breadcrumb">
-        <Link to="/" className="breadcrumb-text1">Trang chủ</Link>
+        <Link to="/home" className="breadcrumb-text1">Trang chủ</Link>
         <span className="breadcrumb-separator"> &gt; </span>
         <b className="breadcrumb-text4">Danh sách sản phẩm</b>       
         <span className="breadcrumb-separator"> &gt; </span>

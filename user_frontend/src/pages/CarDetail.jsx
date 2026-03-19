@@ -44,7 +44,7 @@ const CarDetail = () => {
   return (
     <div className="car-detail-wrapper">
       <div className="breadcrumb">
-        <Link to="/" className="breadcrumb-text1">
+        <Link to="/home" className="breadcrumb-text1">
           Trang chủ
         </Link>
 

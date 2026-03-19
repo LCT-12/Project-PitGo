@@ -1,8 +1,53 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import '../index.css'; 
+import React, { useState } from "react"; // Thêm useState
+import { Link } from "react-router-dom";
+import axios from "axios"; // Thêm axios
+import "../index.css"; 
 
-const Contact = () => {
+function Contact({ showAlert }) {
+  // 1. Khởi tạo state để lưu dữ liệu form
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    subject: "", // Mặc định hoặc để trống
+    message: ""
+  });
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // 2. Hàm xử lý thay đổi input
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  // 3. Hàm gửi tin nhắn
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    // Kiểm tra nhanh
+    if (!formData.name || !formData.email || !formData.message) {
+      showAlert("danger", "Vui lòng điền đầy đủ các trường bắt buộc!");
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      // Gọi đến API Backend đã tạo ở các bước trước
+      const response = await axios.post("http://localhost:5000/api/contact", formData);
+      
+      if (response.status === 201) {
+        showAlert("success", "Gửi tin nhắn thành công! Chúng tôi sẽ liên hệ lại sớm.");
+        // Reset form sau khi gửi thành công
+        setFormData({ name: "", email: "", subject: "", message: "" });
+      }
+    } catch (error) {
+      console.error("Lỗi khi gửi tin nhắn:", error);
+      showAlert("danger", "Có lỗi xảy ra, vui lòng thử lại sau.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div className="contact-container">
       <div className="breadcrumb">
@@ -13,24 +58,61 @@ const Contact = () => {
 
       <h1 className="contact-title">LIÊN HỆ VỚI CHÚNG TÔI</h1>
 
-      {/* Ô THỨ 1: LIÊN HỆ (FORM) */}
-      <div className="area-form">
-        <p className="intro-text">
-          Nếu bạn có thắc mắc gì, có thể gửi yêu cầu cho chúng tôi, và chúng tôi sẽ liên lạc lại với bạn sớm nhất có thể.
-        </p>
-        <div className="form-wrapper">
-          <div className="form-row">
-            <input type="text" placeholder="Tên của bạn" />
-            <input type="email" placeholder="Email của bạn" />
+      <form onSubmit={handleSubmit}> {/* Bọc form để xử lý Submit */}
+        <div className="area-form">
+          <p className="intro-text">
+            Nếu bạn có thắc mắc gì, có thể gửi yêu cầu cho chúng tôi, và chúng tôi sẽ liên lạc lại với bạn sớm nhất có thể.
+          </p>
+          <div className="form-wrapper">
+            <div className="form-row">
+              <input 
+                type="text" 
+                name="name"
+                placeholder="Tên của bạn" 
+                value={formData.name}
+                onChange={handleChange}
+                required
+              />
+              <input 
+                type="email" 
+                name="email"
+                placeholder="Email của bạn" 
+                value={formData.email}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            {/* Thêm input cho Subject nếu muốn User tự nhập, hoặc ẩn đi */}
+            <input 
+              type="text" 
+              name="subject"
+              placeholder="Chủ đề (tùy chọn)" 
+              className="subject-input"
+              value={formData.subject}
+              onChange={handleChange}
+              style={{ width: "100%", marginTop: "15px", padding: "10px", borderRadius: "5px", border: "1px solid #ddd" }}
+            />
+            <textarea 
+              name="message"
+              placeholder="Nội dung" 
+              rows="5"
+              value={formData.message}
+              onChange={handleChange}
+              required
+            ></textarea>
           </div>
-          <textarea placeholder="Nội dung" rows="5"></textarea>
         </div>
-      </div>
 
-      {/* NÚT GỬI NẰM NGOÀI Ô */}
-      <div className="button-container">
-        <button type="submit" className="submit-btn">Gửi tin nhắn</button>
-      </div>
+        <div className="button-container">
+          <button 
+            type="submit" 
+            className="submit-btn" 
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? "Đang gửi..." : "Gửi tin nhắn"}
+          </button>
+        </div>
+      </form>
 
       {/* Ô THỨ 2: THÔNG TIN CHI TIẾT (MAP & INFO) */}
       <div className="contact-container-grid">

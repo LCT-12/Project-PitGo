@@ -90,7 +90,7 @@ function Header() {
 
         <div className="header-actions">
           {/* Nút Đăng nhập */}
-          <button className="action-btn" onClick={() => navigate("/")}>
+          <button className="action-btn" onClick={() => navigate("/login")}>
             <img
               src="/images/user.svg"
               alt="User Icon"

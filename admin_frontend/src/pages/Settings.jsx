@@ -43,7 +43,7 @@ function Settings({ showAlert }) {
 
             if (response.data.general_settings) {
                 setGeneralData(response.data.general_settings);
-                document.title = response.data.general_settings.site_title || "Project-SX";
+                document.title = response.data.general_settings.site_title || "Project-SX - Admin";
             }
 
             if (response.data.contact_details) {

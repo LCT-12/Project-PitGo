@@ -1,3 +1,7 @@
+Lorem ipsum dolor sit amet consectetur adipisicing elit. 
+Eum cumque ratione quam quibusdam blanditiis fuga, maxime, animi quas, accusamus totam sit natus! Dicta nostrum illum saepe minus autem architecto harum?
+
+
 /* Logo / Menu toggle */
 .menu-toggle {
   display: flex;

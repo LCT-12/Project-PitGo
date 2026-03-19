@@ -10,6 +10,8 @@ function Header() {
   const [isProductMenuOpen, setIsProductMenuOpen] = useState(false);
   // State quản lý Tab hãng xe đang được chọn (Mặc định là "Tất cả")
   const [selectedBrand, setSelectedBrand] = useState("Tất cả");
+  // State quản lý việc đóng mở menu Dịch vụ
+  const [isServiceMenuOpen, setIsServiceMenuOpen] = useState(false);
 
   // State lưu trữ danh sách xe
   const [cars, setCars] = useState([]);
@@ -116,8 +118,11 @@ function Header() {
           <li
             className="nav-item-container"
             // ĐƯA SỰ KIỆN LÊN THẺ LI NÀY
-            onMouseEnter={() => setIsProductMenuOpen(true)}
-            onMouseLeave={() => setIsProductMenuOpen(false)}
+            // onMouseEnter={() => setIsProductMenuOpen(true)}
+            // onMouseLeave={() => setIsProductMenuOpen(false)}
+            onClick={() => {
+                setIsProductMenuOpen(!isProductMenuOpen);
+                setIsServiceMenuOpen(false);}}
           >
             <div className="nav-title">
               Sản phẩm
@@ -178,11 +183,48 @@ function Header() {
           </li>
 
           {/* Mục Dịch vụ */}
-          <li className="nav-item-container">
+          <li 
+            className="nav-item-container"
+            // onMouseEnter={() => setIsServiceMenuOpen(true)}
+            // onMouseLeave={() => setIsServiceMenuOpen(false)}
+            onClick={() => {
+              setIsServiceMenuOpen(!isServiceMenuOpen);
+              setIsProductMenuOpen(false);}}
+          >
             <div className="nav-title">
               Dịch vụ
-              <img src="/images/arr2.png" alt="Arrow" className="nav-arrow" />
+              <img 
+                src="/images/arr2.png" 
+                alt="Arrow" 
+                className={`nav-arrow ${isServiceMenuOpen ? "open" : ""}`} 
+              />
             </div>
+
+            {/* MENU XỔ XUỐNG DỊCH VỤ (Dùng chung class mega-menu để thừa hưởng hiệu ứng) */}
+            {isServiceMenuOpen && (
+              <div className="mega-menu service-menu" onClick={(e) => e.stopPropagation()}>
+                <ul className="service-dropdown-list">
+                   <li>
+                    <Link 
+                      to="/contact" 
+                      className="service-item"
+                      onClick={() => setIsServiceMenuOpen(false)}
+                    >
+                      Liên hệ
+                    </Link>
+                  </li>
+                  <li>
+                    <Link 
+                      to="/maintenance" 
+                      className="service-item"
+                      onClick={() => setIsServiceMenuOpen(false)} // Đóng menu khi click
+                    >
+                      Bảo dưỡng
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+            )}
           </li>
         </ul>
       </nav>

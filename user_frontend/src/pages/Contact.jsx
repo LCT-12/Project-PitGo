@@ -1,14 +1,22 @@
-import React, { useState } from "react"; // Thêm useState
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios"; // Thêm axios
+import axios from "axios";
 import "../index.css"; 
 
+import Loading from "../components/Loading";
+import Error from "../components/Error";
+
+
 function Contact({ showAlert }) {
+
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
   // 1. Khởi tạo state để lưu dữ liệu form
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    subject: "", // Mặc định hoặc để trống
+    subject: "",
     message: ""
   });
 

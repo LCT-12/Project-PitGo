@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react"; // Thêm useEffect
-import "../index.css";
-// import { carsData } from "../mockData/mockPL.js"; 
-import { Link, useParams, useSearchParams } from "react-router-dom"; // Thêm useParams
-
+import React, { useState, useEffect } from "react";
+import { Link, useParams, useSearchParams } from "react-router-dom";
 import axios from "axios";
+import "../index.css";
+import Loading from "../components/Loading";
+import Error from "../components/Error";
+
 
 const AllCar = () => {
   const { brandName } = useParams(); // Lấy tên hãng từ URL (nếu có)
@@ -15,6 +16,7 @@ const AllCar = () => {
   const brandQuery = searchParams.get("brand")
 
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   
   useEffect(() => {
     const fetchCars = async () => {
@@ -22,7 +24,6 @@ const AllCar = () => {
         const response = await axios.get("http://localhost:5000/api/car");
         setCars(response.data);
         
-        // Nếu có brand trên URL, lọc ngay lập tức
         if (brandQuery) {
           const filtered = response.data.filter(
             (car) => car.brand.toLowerCase() === brandQuery.toLowerCase()
@@ -63,7 +64,7 @@ const AllCar = () => {
           setSelectedBrand(formattedBrand);
         }
       } catch (error) {
-        console.error("Lỗi lấy dữ liệu:", error);
+        setError("Lỗi lấy dữ liệu - Sản phẩm. Vui lòng thử lại sau!");
       } finally {
         setLoading(false);
       }
@@ -79,10 +80,10 @@ const AllCar = () => {
   const filteredCars = selectedBrand === "Tất cả"
     ? cars
     : cars.filter(car => car.brand.toLowerCase() === selectedBrand.toLowerCase());
-  /* ================= STATES ================= */  
-  if (loading) return <div>Đang tải dữ liệu từ server...</div>;
-  if (cars.length === 0) return <div>Không có dữ liệu xe nào được tìm thấy.</div>;
-    
+  
+    /* ================= STATES ================= */  
+  if (loading) return <Loading message="LOADING..." />;
+  if (error) return <Error message={error} />;
 
   return (
     <div className="allcar-container">

@@ -75,7 +75,10 @@ const CarDetail = () => {
             </div>
           </div>
           <div className="action-button-group centered">
-            <button className="btn-contact">LIÊN HỆ TƯ VẤN</button>
+            {/* <button className="btn-contact">LIÊN HỆ TƯ VẤN</button> */}
+            <Link to="/contact" className="btn-contact">
+              LIÊN HỆ TƯ VẤN
+            </Link>
             <button className="btn-test-drive">ĐĂNG KÝ LÁI THỬ</button>
           </div>
         </div>

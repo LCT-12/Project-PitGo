@@ -1,34 +1,35 @@
 import React, { useState, useEffect } from "react";
 import { Link } from 'react-router-dom';
-// import { carsData } from '../mockData/mockHome.js'; 
+import Loading from "../components/Loading";
+import Error from "../components/Error";
 
 import axios from "axios";
 
-const Home = () => {
+function Home(){
 
 const [cars, setCars] = useState([]);
 
 const [loading, setLoading] = useState(true);
+const [error, setError] = useState(null);
 
 useEffect(() => {
   const fetchCars = async () => {
-      try {
-          setLoading(true); // Bắt đầu tải
-          const response = await axios.get("http://localhost:5000/api/car");
-          setCars(response.data);
-      } catch (error) {
-          console.error("Lỗi lấy dữ liệu:", error);
-      } finally {
-          setLoading(false); // Kết thúc tải (dù thành công hay lỗi)
-      }
+    try {
+      setLoading(true);
+      const response = await axios.get("http://localhost:5000/api/car");
+      setCars(response.data);
+    } catch (error) {
+      setError("Lỗi tải dữ liệu - Trang chủ. Vui lòng thử lại sau!");
+    } finally {
+      setLoading(false);
+    }
   };
-  fetchCars();
-}, []);
+      fetchCars();
+    }, []);
 
-  if (loading) return <div>Đang tải dữ liệu từ server...</div>;
-  if (cars.length === 0) return <div>Không có dữ liệu xe nào được tìm thấy.</div>;
-
-
+  /* ================= STATES ================= */  
+  if (loading) return <Loading message="LOADING..." />;
+  if (error) return <Error message={error} />;
 
   return (
     <div className="home-container">
@@ -59,7 +60,6 @@ useEffect(() => {
               <div className="car-info">
                 <p>{car.price.toLocaleString()}.000.000.000 VNĐ</p>
                 <h3 className="car-name">{car.carName}</h3>
-                {/* <p className="car-desc">{car.desc}</p> */}
               </div>
             </Link>
           ))}

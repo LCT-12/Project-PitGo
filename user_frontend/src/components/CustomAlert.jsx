@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 const CustomAlert = ({ type, msg, onClose }) => {
   useEffect(() => {
     // Tự động đóng sau 2 giây giống hàm setTimeout(remAlert, 2000) của bạn
-    const timer = setTimeout(onClose, 2000);
+    const timer = setTimeout(onClose, 3000);
     return () => clearTimeout(timer);
   }, [onClose]);
 

@@ -11,6 +11,7 @@ import Maintenance from "./components/Maintenance";
 import Home from "./pages/Home"; 
 import AllCar from "./pages/allCar";
 import CarDetail from "./pages/CarDetail";
+import Login from "./pages/Login";
 
 // --- LAYOUT CHO KHU VỰC TRANG CHỦ (PUBLIC) ---
 const PublicLayout = () => {
@@ -72,8 +73,10 @@ function App() {
   }
   return (
     <Routes>
-      <Route path="/" element={<PublicLayout />}>
-        <Route index element={<Home />} />
+
+        <Route path="/" element={<Login />} />
+      
+        <Route path="/home" element={<Home />} />
         
         {/* Trang danh sách tất cả xe */}
         <Route path="all-cars" element={<AllCar />} />
@@ -84,7 +87,7 @@ function App() {
         {/* Trang chi tiết xe */}
         {/* Lưu ý: Bỏ dấu / ở đầu để nó hiểu là nối tiếp từ Route cha */}
         <Route path="/car/:id" element={<CarDetail />} />
-      </Route>
+      
     </Routes>
   );
 }

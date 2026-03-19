@@ -276,7 +276,7 @@ body {
 /* --- Tinh chỉnh hình ảnh xe --- */
 .car-card img {
   width: 100%;
-  height: 120px;
+  height: 200px;
   object-fit: contain;
   margin-bottom: 15px;
   
@@ -291,7 +291,7 @@ body {
 }
 
 .car-card h4 {
-  margin: 0 0 5px 0;
+  margin: -50px 0 1px 0;
   font-size: 16px;
   text-transform: uppercase;
   font-weight: bold;
@@ -303,19 +303,51 @@ body {
   white-space: nowrap; /* Ép văn bản luôn nằm trên 1 dòng */
   overflow: hidden; /* Ẩn phần văn bản bị tràn */
   text-overflow: ellipsis; /* Hiện dấu 3 chấm (...) ở cuối */
-  
-  /* Căn chỉnh thẩm mỹ */
   text-align: center;
   padding: 0 10px; 
 }
 
 .car-card p {
-  margin: 0;
-  font-size: 13px;
+  margin: -25px 0 0 0;
+  font-size: 16px;
   color: #d32f2f;
   font-weight: bold;
   display: flex;
   justify-content: center;
+}
+
+/* --- MENU DỊCH VỤ --- */
+/* Custom lại kích thước menu Dịch vụ để nó không bị bè ra như menu Sản phẩm */
+.mega-menu.service-menu {
+  width: 100%;
+  padding: 20px 0;
+  left: 0; /* Canh trái theo chữ Dịch vụ */
+}
+
+/* Bỏ dấu chấm tròn của thẻ ul */
+.service-dropdown-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+/* Style cho từng mục Liên hệ / Bộ sưu tập */
+.service-item {
+  display: block;
+  margin-left: 30px;
+  padding: 5px 10px; /* Căn lề đều đặn (5px trên/dưới, 10px trái/phải) */
+  color: #333;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+  text-align: left; /* Ép chữ luôn canh trái cho thẳng hàng */
+}
+
+/* Hiệu ứng rê chuột vào từng mục của Dịch vụ */
+.service-item:hover {
+  background-color: #f8f8f8;
+  color: #D10000; /* Đổi sang màu đỏ PitGo */
+
 }
 
 /* --- TRANG CHỦ (HOME) --- */
@@ -434,15 +466,6 @@ body {
   margin-bottom: 10px;
   text-transform: none; 
 }
-
-/* .cars-grid .car-desc {
-  color: #666;
-  font-size: 13px;
-  margin: 0;
-  white-space: normal; 
-  word-break: break-word; 
-  overflow-wrap: break-word;
-} */
  
 /* Viền đen phần Vì sao chọn chúng tôi */
 .about-section {
@@ -503,7 +526,7 @@ body {
   margin-bottom: 10px;
 }
 
-/* --- FOOTER MỚI --- */
+/* --- FOOTER --- */
 .public-footer {
   background-color: #2B2E33; /* Màu xám đen chính xác từ Axure */
   color: white;
@@ -593,7 +616,7 @@ body {
    ============================================================ */
 
 .allcar-container {
-  max-width: 1400px; /* Tăng chiều rộng một chút để giống layout Axure */
+  max-width: 1400px; /* Chiều rộng */
   margin: 0 auto;
   padding: 30px 40px;
   font-family: 'Be Vietnam Pro', sans-serif;
@@ -635,7 +658,7 @@ body {
   font-size: 30px;
   font-weight: 700;
   color: #000;
-  margin-bottom: 8px;
+  margin-bottom: 40px;
 }
 
 .allcar-subtitle {
@@ -666,12 +689,12 @@ body {
 }
 
 .filter-sidebar h3 {
-  font-size: 16px;
-  font-weight: 700;
-  color: #333;
-  margin-bottom: 20px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+  font-size: 16px;              
+  font-weight: 600;           
+  text-transform: uppercase;    
+  margin: 0;                    
+  color: #000;                  
+  font-family: 'Be Vietnam Pro', sans-serif;
 }
 
 .car-icon {
@@ -820,29 +843,29 @@ body {
 }
 
 /* Breadcrumb */
-.breadcrumb {
+.car-detail-wrapper .breadcrumb {
   font-size: 18px;
   color: #333;
   margin-bottom: 25px;
 }
 
-.breadcrumb-text1, 
-.breadcrumb-text2, 
-.breadcrumb-text3, 
-.breadcrumb-text4 {
+.car-detail-wrapper .breadcrumb-text1, 
+.car-detail-wrapper .breadcrumb-text2, 
+.car-detail-wrapper .breadcrumb-text3, 
+.car-detail-wrapper .breadcrumb-text4 {
   text-decoration: none;
   color: #333; 
   transition: 0.3s;
 }
 
-.breadcrumb-text1:hover, 
-.breadcrumb-text2:hover, 
-.breadcrumb-text3:hover {
+.car-detail-wrapper .breadcrumb-text1:hover, 
+.car-detail-wrapper .breadcrumb-text2:hover, 
+.car-detail-wrapper .breadcrumb-text3:hover {
   color: red;
 }
 
 
-.breadcrumb-separator {
+.car-detail-wrapper .breadcrumb-separator {
   margin: 0 5px;
   color: #333;
 }
@@ -877,8 +900,6 @@ body {
   height: auto;
   scale: 1.18;
 }
-
-/* Đã xóa .thumbnail-frame và .thumbnail vì không sử dụng */
 
 /* Căn giữa cụm nút Liên hệ & Lái thử dưới ảnh */
 .action-button-group {
@@ -1169,4 +1190,201 @@ body {
   display: flex;
   align-items: center;
   gap: 10px;
+}
+
+/* ============================================================
+   PUBLIC LAYOUT (TRANG Contact) 
+   ============================================================ */
+.contact-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: 'Be Vietnam Pro', sans-serif;
+}
+
+/* Breadcrumb */
+.contact-container .breadcrumb {
+  font-size: 18px;
+  color: #333;
+  margin-bottom: 25px;
+}
+
+.contact-container .breadcrumb-text1, 
+.contact-container .breadcrumb-text2 {
+  text-decoration: none;
+  color: #333; 
+  transition: 0.3s;
+}
+
+
+.contact-container .breadcrumb-text1:hover{
+  color: red;
+}
+
+
+.contact-container.breadcrumb-separator {
+  margin: 0 5px;
+  color: #333;
+  font-weight: bold;
+}
+
+.contact-title {
+  text-align: center;
+  font-size: 32px;
+  margin-bottom: 40px;
+}
+
+/* GRID SYSTEM CHO HÌNH 2 */
+.contact-container-grid {
+  display: grid;
+  /* Chia làm 2 cột bằng nhau và 2 hàng */
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas: 
+    "map form"
+    "info info"; /* Info chiếm cả 2 cột ở hàng dưới */
+  
+  border: 1px solid #797979;
+  border-radius: 20px;
+  overflow: hidden;
+  background-color: #F2F2F2; /* Nền xám cho toàn bộ phần content */
+}
+
+/* Cột Map bên trái (Nền trắng) */
+.area-map {
+  grid-area: map;
+  background-color: #ffffff; 
+  border-right: 1px solid #797979;
+  min-height: 400px;
+  border-bottom: 1px solid #000; 
+}
+
+/* Cột Form bên phải */
+.area-form {
+  grid-area: form;
+  padding: 40px;
+}
+
+.intro-text {
+  font-size: 15px;
+  margin-bottom: 25px;
+  line-height: 1.5;
+}
+
+.form-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.form-wrapper input, .form-wrapper textarea {
+  padding: 12px;
+  border: 1px solid #797979;
+  border-radius: 5px;
+  background: #fff;
+}
+
+.form-wrapper button {
+  background: #000;
+  color: #fff;
+  padding: 12px 25px;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  width: fit-content;   
+  align-self: center;   
+  
+  margin-top: 10px;
+  transition: opacity 0.2s;
+}
+
+/* Hàng Info phía dưới */
+.area-info {
+  grid-area: info;
+  padding: 0 40px 40px 40px; /* Padding trái/phải/dưới */
+  display: flex;
+  flex-direction: column;
+}
+
+.info-text{
+  padding-top: 30px;
+  margin-bottom: 30px;
+}
+
+.info-text p {
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.slogan{
+  color: #D10000;
+  font-weight: bold;
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+/* Container chứa 3 khối thông tin */
+.info-icons-bottom {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr; /* Chia 3 cột tuyệt đối */
+  width: 100%;
+  margin-top: 0;
+  padding-top: 25px;
+  border-top: 1px solid #ccc;
+  gap: 0; /* Không cần gap vì ta dùng justify-self */
+}
+
+/* Khối 1: Address - Ép sát lề trái của khoang 1 */
+.info-icons-bottom .icon-group:nth-child(1) {
+  justify-self: start;
+}
+
+/* Khối 2: Email - Ép vào chính giữa của khoang 2 */
+.info-icons-bottom .icon-group:nth-child(2) {
+  justify-self: center;
+}
+
+/* Khối 3: Phone - Ép sát lề phải của khoang 3 */
+.info-icons-bottom .icon-group:nth-child(3) {
+  justify-self: center;
+}
+
+/* Style chung để Icon và Chữ luôn nằm ngang với nhau */
+.icon-group {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  white-space: nowrap; /* không được xuống dòng */
+}
+
+.info-icons-bottom .icon-group:nth-child(1) p {
+  white-space: nowrap; /* Ép địa chỉ nằm trên một dòng */
+  line-height: 1.8;    /* Tăng khoảng cách giữa CS1, CS2, CS3 cho dễ đọc */
+}
+
+.icon-group img {
+  width: 20px;
+  height: auto;
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+
+.icon-group p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+
+/* Mobile: Xếp chồng khi màn hình nhỏ */
+@media (max-width: 992px) {
+  .info-icons-bottom {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .info-icons-bottom .icon-group:nth-child(1),
+  .info-icons-bottom .icon-group:nth-child(2),
+  .info-icons-bottom .icon-group:nth-child(3) {
+    justify-self: start;
+  }
 }

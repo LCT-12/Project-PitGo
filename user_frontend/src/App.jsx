@@ -11,6 +11,7 @@ import Maintenance from "./components/Maintenance";
 import Home from "./pages/Home"; 
 import AllCar from "./pages/allCar";
 import CarDetail from "./pages/CarDetail";
+import Contact from "./pages/Contact";
 
 // --- LAYOUT CHO KHU VỰC TRANG CHỦ (PUBLIC) ---
 const PublicLayout = () => {
@@ -77,6 +78,9 @@ function App() {
         
         {/* Trang danh sách tất cả xe */}
         <Route path="all-cars" element={<AllCar />} />
+
+        {/* Trang Liên hệ */}
+        <Route path="contact" element={<Contact />} />
 
         {/* Trang danh sách xe theo hãng (Ví dụ: /Ferrari) */}
         <Route path=":brandName" element={<AllCar />} />

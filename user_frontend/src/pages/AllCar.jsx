@@ -102,7 +102,7 @@ const AllCar = () => {
       <div className="allcar-content">
         <aside className="filter-sidebar">
           
-  <h3><img src="/images/logo-car.png" alt="Car Icon" className="car-icon"/>BỘ LỌC - DÒNG XE</h3>
+  <h3><img src="/images/logo-car.png" alt="Car Icon" className="car-icon"/>Bộ lọc - dòng xe</h3>
   <div className="filter-group">
     <ul className="brand-filter-list">
       {["Tất cả", "Ferrari", "Porsche", "Mercedes", "McLaren", "Lamborghini"].map((brand) => (

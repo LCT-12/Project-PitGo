@@ -15,17 +15,10 @@ function Footer() {
             <Link to="/lamborghini" className="footer-link-item">Lamborghini</Link>
           </div>
 
-          {/* Cột 2: Ưu đãi & Bảng giá */}
-          <div className="footer-column">
-            <h4>Mua xe</h4>
-            <Link to="/offers" className="footer-link-item">Ưu đãi</Link>
-            <Link to="/price-list" className="footer-link-item">Bảng giá</Link>
-          </div>
-
-          {/* Cột 3: Hướng dẫn & Bộ sưu tập */}
+          {/* Cột 2: Hướng dẫn & Bộ sưu tập */}
           <div className="footer-column">
             <h4>Dịch vụ</h4>
-            <Link to="/user-guide" className="footer-link-item">Hướng dẫn sử dụng</Link>
+            <Link to="/contact" className="footer-link-item">Liên hệ</Link>
             <Link to="/collection" className="footer-link-item">Bộ sưu tập</Link>
           </div>
         </div>

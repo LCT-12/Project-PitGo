@@ -44,24 +44,21 @@ const CarDetail = () => {
   return (
     <div className="car-detail-wrapper">
       <div className="breadcrumb">
-        <Link to="/" className="breadcrumb-text1">
+        <Link to="/home" className="breadcrumb-text1">
           Trang chủ
         </Link>
 
         <span className="breadcrumb-separator"> &gt; </span>
-
         <Link to="/all-cars" className="breadcrumb-text2">
-          Danh sách sản phẩm
+          Sản phẩm
         </Link>
 
         <span className="breadcrumb-separator"> &gt; </span>
-
         <Link to={`/all-cars?brand=${car.brand}`} className="breadcrumb-text3">
           {car.brand}
         </Link>
 
         <span className="breadcrumb-separator"> &gt; </span>
-
         <b className="breadcrumb-text4">{car.carName}</b>
       </div>
 

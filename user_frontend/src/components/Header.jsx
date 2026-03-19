@@ -71,7 +71,7 @@ function Header() {
       <div className="header-top">
         <div className="header-logo">
           {/* File logo */}
-          <Link to="/">
+          <Link to="/home">
             <img
               src="/images/logo.png"
               alt="PitGo Logo"
@@ -90,7 +90,7 @@ function Header() {
 
         <div className="header-actions">
           {/* Nút Đăng nhập */}
-          <button className="action-btn" onClick={() => navigate("/login")}>
+          <button className="action-btn" onClick={() => navigate("/")}>
             <img
               src="/images/user.svg"
               alt="User Icon"
@@ -118,11 +118,9 @@ function Header() {
           <li
             className="nav-item-container"
             // ĐƯA SỰ KIỆN LÊN THẺ LI NÀY
-            // onMouseEnter={() => setIsProductMenuOpen(true)}
-            // onMouseLeave={() => setIsProductMenuOpen(false)}
-            onClick={() => {
-                setIsProductMenuOpen(!isProductMenuOpen);
-                setIsServiceMenuOpen(false);}}
+            onMouseEnter={() => setIsProductMenuOpen(true)}
+            onMouseLeave={() => setIsProductMenuOpen(false)}
+            
           >
             <div className="nav-title">
               Sản phẩm
@@ -185,11 +183,8 @@ function Header() {
           {/* Mục Dịch vụ */}
           <li 
             className="nav-item-container"
-            // onMouseEnter={() => setIsServiceMenuOpen(true)}
-            // onMouseLeave={() => setIsServiceMenuOpen(false)}
-            onClick={() => {
-              setIsServiceMenuOpen(!isServiceMenuOpen);
-              setIsProductMenuOpen(false);}}
+            onMouseEnter={() => setIsServiceMenuOpen(true)}
+            onMouseLeave={() => setIsServiceMenuOpen(false)}
           >
             <div className="nav-title">
               Dịch vụ
@@ -204,7 +199,7 @@ function Header() {
             {isServiceMenuOpen && (
               <div className="mega-menu service-menu" onClick={(e) => e.stopPropagation()}>
                 <ul className="service-dropdown-list">
-                   <li>
+                   {/* <li>
                     <Link 
                       to="/contact" 
                       className="service-item"
@@ -212,10 +207,10 @@ function Header() {
                     >
                       Liên hệ
                     </Link>
-                  </li>
+                  </li> */}
                   <li>
                     <Link 
-                      to="/maintenance" 
+                      to="/service" 
                       className="service-item"
                       onClick={() => setIsServiceMenuOpen(false)} // Đóng menu khi click
                     >
@@ -225,6 +220,15 @@ function Header() {
                 </ul>
               </div>
             )}
+          </li>
+
+             {/* Mục Liên hệ */}
+          <li className="nav-item-container">
+            <div className="nav-title">
+              <Link to="/contact" className="contact-link">
+                 Liên hệ
+              </Link>
+            </div>
           </li>
         </ul>
       </nav>

@@ -8,10 +8,12 @@ import Footer from "./components/Footer";
 import Maintenance from "./components/Maintenance";
 
 // Pages
+import Login from "./pages/Login";
 import Home from "./pages/Home"; 
 import AllCar from "./pages/allCar";
 import CarDetail from "./pages/CarDetail";
 import Contact from "./pages/Contact";
+import Service from "./pages/Service";
 
 // --- LAYOUT CHO KHU VỰC TRANG CHỦ (PUBLIC) ---
 const PublicLayout = () => {
@@ -74,8 +76,9 @@ function App() {
   return (
     <Routes>
 
-        <Route path="/" element={<Login />} />
-      
+      <Route path="/" element={<Login />} />
+        <Route element={<PublicLayout />}>
+
         <Route path="/home" element={<Home />} />
         
         {/* Trang danh sách tất cả xe */}
@@ -84,13 +87,16 @@ function App() {
         {/* Trang Liên hệ */}
         <Route path="contact" element={<Contact />} />
 
+        {/* Trang Bảo dưỡng */}
+        <Route path="service" element={<Service />} />
+
         {/* Trang danh sách xe theo hãng (Ví dụ: /Ferrari) */}
         <Route path=":brandName" element={<AllCar />} />
 
         {/* Trang chi tiết xe */}
         {/* Lưu ý: Bỏ dấu / ở đầu để nó hiểu là nối tiếp từ Route cha */}
         <Route path="/car/:id" element={<CarDetail />} />
-      
+      </Route>
     </Routes>
   );
 }

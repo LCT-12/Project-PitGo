@@ -41,6 +41,39 @@ const CarDetail = () => {
       </div>
     );
 
+  // --- Hàm xử lý thêm xe vào giỏ ---
+  const handleAddToCart = () => {
+    // 1. Lấy giỏ hàng hiện tại đang có từ localStorage
+    const savedCart = localStorage.getItem('pitgo_cart');
+    const currentCart = savedCart ? JSON.parse(savedCart) : [];
+
+    // 2. Kiểm tra xem xe này đã được thêm trước đó chưa (tránh trùng lặp)
+    // Kiểm tra dựa trên _id từ MongoDB
+    const isExist = currentCart.find(item => item.id === car._id);
+    if (isExist) {
+      alert("Xe này đã có trong danh sách quan tâm của bạn!");
+      return;
+    }
+
+    // 3. Tạo object xe mới khớp với cấu trúc hiển thị trong Cart.jsx
+    const newItem = {
+      id: car._id,
+      name: car.carName,
+      brand: car.brand,
+      year: car.year,
+      origin: car.origin,
+      type: car.isTrackOnly ? "Xe đua" : "Xe đường phố",
+      image: car.image
+    };
+
+    // 4. Thêm xe mới vào danh sách và lưu lại vào localStorage
+    const updatedCart = [...currentCart, newItem];
+    localStorage.setItem('pitgo_cart', JSON.stringify(updatedCart));
+    // Gửi một tín hiệu để Header biết cần cập nhật số lượng
+    window.dispatchEvent(new Event('cartUpdated'));
+    alert("Thêm vào danh sách thành công! Bạn có thể vào Giỏ hàng để xem lại.");
+  };
+
   return (
     <div className="car-detail-wrapper">
       <div className="breadcrumb">
@@ -75,7 +108,6 @@ const CarDetail = () => {
             </div>
           </div>
           <div className="action-button-group centered">
-            {/* <button className="btn-contact">LIÊN HỆ TƯ VẤN</button> */}
             <Link to="/contact" className="btn-contact">
               LIÊN HỆ TƯ VẤN
             </Link>
@@ -178,7 +210,10 @@ const CarDetail = () => {
               </ul>
             </div>
             <div className="add-cart-container">
-              <button className="btn-add-cart">THÊM GIỎ HÀNG</button>
+              {/* Đã gắn hàm handleAddToCart vào đây */}
+              <button className="btn-add-cart" onClick={handleAddToCart}>
+                THÊM GIỎ HÀNG
+              </button>
             </div>
           </div>
         </div>

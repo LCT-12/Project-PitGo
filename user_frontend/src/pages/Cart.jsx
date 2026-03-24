@@ -1,35 +1,78 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import '../index.css'; 
 
-// Import dữ liệu từ file tách rời
+// Import dữ liệu mặc định
 import { mockCartData } from '../mockData/mockCart'; 
 import { Appointment } from '../mockData/mockAptm';
 
 const Cart = () => {
-  // Quản lý bước hiện tại (1, 2, hoặc 3)
   const [step, setStep] = useState(1);
+  const [errorMessage, setErrorMessage] = useState("");
 
-  // Khởi tạo state bằng dữ liệu import
-  const [cartItems, setCartItems] = useState(mockCartData);
+  const [cartItems, setCartItems] = useState(() => {
+    const savedCart = localStorage.getItem('pitgo_cart');
+    return savedCart ? JSON.parse(savedCart) : mockCartData;
+  });
+  
   const [formData, setFormData] = useState(Appointment);
 
-  // Xử lý thay đổi form
+  useEffect(() => {
+    localStorage.setItem('pitgo_cart', JSON.stringify(cartItems));
+  }, [cartItems]);
+
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData({
       ...formData,
       [name]: type === 'checkbox' ? checked : value
     });
+    // Xóa lỗi ngay khi người dùng bắt đầu sửa lại thông tin
+    if (errorMessage) setErrorMessage("");
   };
 
-  // Xử lý xóa xe khỏi danh sách
   const handleRemoveItem = (id) => {
-    setCartItems(cartItems.filter(item => item.id !== id));
+    const updatedCart = cartItems.filter(item => item.id !== id);
+    setCartItems(updatedCart);
+    localStorage.setItem('pitgo_cart', JSON.stringify(updatedCart));
+    window.dispatchEvent(new Event('cartUpdated'));
   };
 
-  // Chuyển bước
-  const nextStep = () => setStep(step + 1);
+  // --- LOGIC XỬ LÝ KHI NHẤN XÁC NHẬN ---
+  const handleConfirm = () => {
+    // 1. Kiểm tra các thông tin nhập liệu bắt buộc
+    if (!formData.date) {
+      setErrorMessage("Vui lòng chọn ngày hẹn xem xe!");
+      return;
+    }
+    if (!formData.fullName || formData.fullName.trim() === "") {
+      setErrorMessage("Vui lòng nhập họ tên của bạn!");
+      return;
+    }
+    if (!formData.phone || formData.phone.trim() === "") {
+      setErrorMessage("Vui lòng nhập số điện thoại để chúng tôi liên hệ!");
+      return;
+    }
+    if (!formData.email || formData.email.trim() === "") {
+      setErrorMessage("Vui lòng nhập địa chỉ email!");
+      return;
+    }
+
+    // 2. KIỂM TRA PHẢI CHỌN ÍT NHẤT 1 DỊCH VỤ
+    // Kiểm tra xem có ô nào trong 3 ô checkbox được tích hay không
+    const hasSelectedService = formData.privateRoom || formData.technicalAdvice || formData.testDrive;
+    
+    if (!hasSelectedService) {
+      setErrorMessage("Vui lòng chọn ít nhất một dịch vụ (Private room, Tư vấn kỹ thuật hoặc Lái thử)");
+      return;
+    }
+
+    // Nếu tất cả thông tin đã đầy đủ
+    setErrorMessage("");
+    setStep(3);
+  };
+
+  const nextStep = () => setStep(step + 1); 
   const prevStep = () => setStep(step - 1);
 
   // ==========================================
@@ -39,24 +82,31 @@ const Cart = () => {
     <div className="cart-step-content">
       <h2 className="step-title">DANH SÁCH XE BẠN QUAN TÂM</h2>
       {cartItems.length === 0 ? (
-        <p>Giỏ hàng của bạn đang trống.</p>
+        <p style={{ textAlign: 'center', padding: '20px' }}>Giỏ hàng của bạn đang trống.</p>
       ) : (
-        cartItems.map(item => (
-          <div key={item.id} className="cart-item">
-            <img src={item.image} alt={item.name} className="cart-item-img" />
-            <div className="cart-item-info">
-              <h3>{item.name}</h3>
-              <p>Hãng: {item.brand}</p>
-              <p>Năm: {item.year}</p>
-              <p>Xuất xứ: {item.origin}</p>
-              <p>Loại: {item.type}</p>
+        <div className="cart-items-wrapper">
+          {cartItems.map(item => (
+            <div key={item.id} className="cart-item">
+              <img src={item.image} alt={item.name} className="cart-item-img" />
+              <div className="cart-item-info">
+                <h3>{item.name}</h3>
+                <p>Hãng: {item.brand}</p>
+                <p>Năm: {item.year}</p>
+                <p>Xuất xứ: {item.origin}</p>
+                <p>Loại: {item.type}</p>
+              </div>
+              <div className="cart-item-actions">
+                <button className="remove-btn" onClick={() => handleRemoveItem(item.id)}>-</button>
+                <Link to={`/car/${item.id}`} className="view-detail-btn">
+                  <img src="/images/eye-icon.svg" alt="Xem" />
+                </Link>
+              </div>
             </div>
-            <button className="remove-btn" onClick={() => handleRemoveItem(item.id)}>-</button>
-          </div>
-        ))
+          ))}
+        </div>
       )}
       <div className="cart-actions">
-        <Link to="/products" className="btn-secondary">QUAY LẠI TÌM XE</Link>
+        <Link to="/all-cars" className="btn-secondary">QUAY LẠI TÌM XE</Link>
         <button className="btn-primary" onClick={nextStep} disabled={cartItems.length === 0}>TIẾP TỤC</button>
       </div>
     </div>
@@ -67,7 +117,7 @@ const Cart = () => {
   // ==========================================
   const renderStep2 = () => (
     <div className="cart-step-content">
-      <h2 className="step-title">VUI LÒNG ĐIỀN ĐẦY ĐỦ THÔNG TIN ĐỂ ĐẶT LỊCH HẸN</h2>
+      <h2 className="step-title">THÔNG TIN LỊCH HẸN</h2>
       <div className="booking-form">
         <div className="form-row">
           <select name="location" value={formData.location} onChange={handleInputChange}>
@@ -75,34 +125,54 @@ const Cart = () => {
             <option value="Cơ sở 2">Cơ sở 2: 233A Phan Văn Trị, HCM</option>
             <option value="Cơ sở 3">Cơ sở 3: 69/68 Đặng Thùy Trâm, HCM</option>
           </select>
-          <input type="date" name="date" value={formData.date} onChange={handleInputChange} required />
+          <input type="date" name="date" value={formData.date} onChange={handleInputChange} />
         </div>
         
         <div className="form-row">
-          <input type="text" name="fullName" placeholder="Nhập họ tên *" value={formData.fullName} onChange={handleInputChange} required />
-          <input type="tel" name="phone" placeholder="Nhập số điện thoại *" value={formData.phone} onChange={handleInputChange} required />
-          <input type="email" name="email" placeholder="Nhập email *" value={formData.email} onChange={handleInputChange} required />
+          <input type="text" name="fullName" placeholder="Nhập họ tên *" value={formData.fullName} onChange={handleInputChange} />
+          <input type="tel" name="phone" placeholder="Nhập số điện thoại *" value={formData.phone} onChange={handleInputChange} />
+          <input type="email" name="email" placeholder="Nhập email *" value={formData.email} onChange={handleInputChange} />
         </div>
 
-        <div className="checkbox-group">
-          <label><input type="checkbox" name="privateRoom" checked={formData.privateRoom} onChange={handleInputChange} /> Private room</label>
-          <label><input type="checkbox" name="technicalAdvice" checked={formData.technicalAdvice} onChange={handleInputChange} /> Tư vấn kỹ thuật</label>
-          <label><input type="checkbox" name="testDrive" checked={formData.testDrive} onChange={handleInputChange} /> Lái thử</label>
+        <div className="services-container">
+          <div className="checkbox-group">
+            <span className="services-title">Dịch vụ:</span>
+            <label><input type="checkbox" name="privateRoom" checked={formData.privateRoom} onChange={handleInputChange} /> Private room</label>
+            <label><input type="checkbox" name="technicalAdvice" checked={formData.technicalAdvice} onChange={handleInputChange} /> Tư vấn kỹ thuật</label>
+            <label><input type="checkbox" name="testDrive" checked={formData.testDrive} onChange={handleInputChange} /> Lái thử</label>
+          </div>
         </div>
-
         <textarea name="notes" rows="4" placeholder="Ghi chú bổ sung" value={formData.notes} onChange={handleInputChange}></textarea>
+        
+        {/* HIỂN THỊ LỖI NGAY DƯỚI TEXTAREA */}
+        {errorMessage && (
+          <div style={{ 
+            color: '#d93025', 
+            backgroundColor: '#fce8e6', 
+            padding: '10px', 
+            borderRadius: '4px', 
+            marginTop: '10px', 
+            fontSize: '14px',
+            border: '1px solid #f5c2c7',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px'
+          }}>
+            <span>⚠️</span> {errorMessage}
+          </div>
+        )}
       </div>
 
       <div className="cart-actions">
         <button className="btn-secondary" onClick={prevStep}>QUAY LẠI</button>
-        <button className="btn-primary" onClick={nextStep}>XÁC NHẬN</button>
+        {/* Nút XÁC NHẬN bây giờ luôn bấm được, không bị mờ */}
+        <button className="btn-primary" onClick={handleConfirm}>
+          XÁC NHẬN
+        </button>
       </div>
     </div>
   );
 
-  // ==========================================
-  // Giao diện Bước 3: Thành công
-  // ==========================================
   const renderStep3 = () => (
     <div className="cart-step-content success-step">
       <h2 className="success-title">CHÚC MỪNG QUÝ KHÁCH ĐÃ ĐẶT LỊCH HẸN THÀNH CÔNG</h2>
@@ -117,14 +187,11 @@ const Cart = () => {
   return (
     <div className="cart-page-container">
       <div className="breadcrumb">
-        <Link to="/">Trang chủ</Link>
-        <span className="separator"> | </span>
-        <span className="current">Giỏ hàng - Đặt lịch</span>
+        <Link to="/home" className="breadcrumb-text1">Trang chủ</Link>
+        <span className="breadcrumb-separator"> &gt; </span>
+        <b className="breadcrumb-text4">Đặt lịch</b>      
       </div>
-
       <h1 className="page-main-title">ĐẶT LỊCH HẸN XEM XE</h1>
-
-      {/* Thanh tiến trình (Stepper) */}
       <div className="stepper-container">
         <div className={`step ${step >= 1 ? 'active' : ''}`}>[1] Danh sách xe</div>
         <div className="step-line">--------</div>
@@ -132,8 +199,6 @@ const Cart = () => {
         <div className="step-line">--------</div>
         <div className={`step ${step >= 3 ? 'active' : ''}`}>[3] Hoàn tất</div>
       </div>
-
-      {/* Render nội dung dựa vào biến step */}
       <div className="step-wrapper">
         {step === 1 && renderStep1()}
         {step === 2 && renderStep2()}

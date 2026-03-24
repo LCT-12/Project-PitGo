@@ -84,7 +84,12 @@ useEffect(() => {
 
         <div className="about-box contact-box">
           <div className="contact-logo">
-            <img src="/images/logo2.png" alt="PitGo Logo" style={{ maxWidth: '250px', height: 'auto' }} />
+            <Link 
+              to="/" 
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            >
+              <img src="/images/logo2.png" alt="PitGo Logo" style={{ maxWidth: '250px' }} />
+            </Link>
           </div>
           <div className="contact-info">
             <h3>THÔNG TIN LIÊN HỆ</h3>

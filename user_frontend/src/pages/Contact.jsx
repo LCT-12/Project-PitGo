@@ -6,11 +6,30 @@ import "../index.css";
 import Loading from "../components/Loading";
 import Error from "../components/Error";
 
-
 function Contact({ showAlert }) {
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const [contactInfo, setContactInfo] = useState(null);
+
+  useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/api/setting/");
+        if (response.data.contact_details) {
+          setContactInfo(response.data.contact_details);
+        }
+      } catch (err) {
+        console.error("Lỗi lấy thông tin liên hệ:", err);
+        setError("Không thể tải thông tin liên hệ.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchSettings();
+  }, []);
 
   // 1. Khởi tạo state để lưu dữ liệu form
   const [formData, setFormData] = useState({
@@ -69,7 +88,7 @@ function Contact({ showAlert }) {
       <form onSubmit={handleSubmit}> {/* Bọc form để xử lý Submit */}
         <div className="area-form">
           <p className="intro-text">
-            Nếu bạn có thắc mắc gì, có thể gửi yêu cầu cho chúng tôi, và chúng tôi sẽ liên lạc lại với bạn sớm nhất có thể.
+            Để nhận thông tin tư vấn chi tiết, vui lòng để lại lời nhắn. Chúng tôi sẽ liên hệ hỗ trợ trong thời gian sớm nhất.
           </p>
           <div className="form-wrapper">
             <div className="form-row">
@@ -125,8 +144,16 @@ function Contact({ showAlert }) {
       {/* Ô THỨ 2: THÔNG TIN CHI TIẾT (MAP & INFO) */}
       <div className="contact-container-grid">
         <div className="area-map">
-          {/* Để trống cho Map sau này */}
-          <div className="map-placeholder">Bản đồ sẽ hiển thị ở đây</div>
+          {contactInfo?.gmap ? (
+            <iframe
+              src={contactInfo.gmap}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              title="Bản đồ PitGo"
+            ></iframe>
+          ) : (
+            <div className="map-placeholder">Bản đồ đang được cập nhật...</div>
+          )}
         </div>
 
         <div className="area-info">
@@ -139,27 +166,57 @@ function Contact({ showAlert }) {
           <div className="info-icons-bottom">
             <div className="icon-group">
               <img src="/images/address.png" alt="Address" />
-              <p>69/68 Đặng Thùy Trâm, P. Bình Lợi Trung, HCM</p>
+              <p>{contactInfo?.address || "Đang cập nhật địa chỉ..."}</p>
             </div>
 
             <div className="icon-group">
               <img src="/images/email.png" alt="Email" />
-              <p>info@pitgo.com</p>
+              <p>{contactInfo?.email || "Đang cập nhật email..."}</p>
             </div>
 
             <div className="icon-group">
               <img src="/images/phone.svg" alt="Phone" />
-              <p className="phone-bold">0988 888 886 <br/> 0988 888 888</p>
+              <p className="phone-bold">
+                {contactInfo?.pn1 || "Đang cập nhật..."} 
+                {contactInfo?.pn2 ? ` - ${contactInfo.pn2}` : ""}
+              </p>
             </div>
 
             <div className="icon-group">
               <img src="/images/fb2.svg" alt="Facebook" />
-              <p>facebook.com/pitgo</p>
+              <p>
+                {contactInfo?.fb ? (
+                  <a 
+                    href={contactInfo.fb} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    style={{ textDecoration: 'none', color: 'inherit' }}
+                  >
+                    PitGo - Facebook
+                  </a>
+                ) : (
+                  "Đang cập nhật..."
+                )}
+              </p>
             </div>
 
+            {/* Link Instagram có thể click */}
             <div className="icon-group">
               <img src="/images/ig2.svg" alt="Instagram" />
-              <p>instagram.com/pitgo</p>
+              <p>
+                {contactInfo?.insta ? (
+                  <a 
+                    href={contactInfo.insta} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    style={{ textDecoration: 'none', color: 'inherit' }}
+                  >
+                    PitGo - Instagram
+                  </a>
+                ) : (
+                  "Đang cập nhật..."
+                )}
+              </p>
             </div>
           </div>
         </div>

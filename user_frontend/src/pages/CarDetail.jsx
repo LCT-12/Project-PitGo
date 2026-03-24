@@ -164,7 +164,7 @@ const CarDetail = () => {
                 className="spec-icon-img"
               />
               <span>
-                Loại: {car.isTrackOnly ? "Xe đua (Track Only)" : "Xe đường phố"}
+                Loại: {car.isTrackOnly ? "Xe đua" : "Xe đường phố"}
               </span>
             </div>
           </div>

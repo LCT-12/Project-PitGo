@@ -1289,6 +1289,8 @@ body {
   font-size: 16px;
   line-height: 1.6;
   margin-bottom: 30px;
+  text-align: center;
+  font-weight: 600;
 }
 
 .form-wrapper {
@@ -1356,6 +1358,18 @@ body {
   background-color: #ffffff; 
   border-right: 1px solid #797979;
   min-height: 450px;
+  /* Thêm thuộc tính này để iframe nếu có bo góc sẽ không bị tràn */
+  overflow: hidden; 
+  display: flex;
+  flex-direction: column;
+}
+
+/* THÊM MỚI: Định dạng trực tiếp cho iframe của Google Maps */
+.area-map iframe {
+  width: 100%;
+  height: 100%;
+  min-height: 450px; /* Ép iframe cao bằng đúng container cha */
+  border: none;
 }
 
 .map-placeholder {
@@ -1363,7 +1377,10 @@ body {
   align-items: center;
   justify-content: center;
   height: 100%;
+  min-height: 450px; /* Đảm bảo luôn giữ form kể cả khi không có iframe */
   color: #888;
+  background-color: #f1f5f9; /* (Tùy chọn) Thêm màu nền xám nhạt cho khung chờ */
+  font-style: italic; /* (Tùy chọn) Chữ nghiêng nhìn chuyên nghiệp hơn */
 }
 
 /* Info bên phải */

@@ -1,5 +1,6 @@
 import React from "react";
-import { Link } from 'react-router-dom'; 
+import { Link } from 'react-router-dom';
+
 function Footer() {
   return (
     <footer className="public-footer">
@@ -8,11 +9,13 @@ function Footer() {
           {/* Cột 1: Thương hiệu siêu xe */}
           <div className="footer-column">
             <h4>Các dòng xe</h4>
-            <Link to="/ferrari" className="footer-link-item">Ferrari</Link>
-            <Link to="/porsche" className="footer-link-item">Porsche</Link>
-            <Link to="/mercedes" className="footer-link-item">Mercedes</Link>
-            <Link to="/mclaren" className="footer-link-item">Mclaren</Link>
-            <Link to="/lamborghini" className="footer-link-item">Lamborghini</Link>
+            <div className="brand-list">
+              <Link to="/ferrari" className="footer-link-item">Ferrari</Link>
+              <Link to="/porsche" className="footer-link-item">Porsche</Link>
+              <Link to="/mercedes" className="footer-link-item">Mercedes</Link>
+              <Link to="/mclaren" className="footer-link-item">Mclaren</Link>
+              <Link to="/lamborghini" className="footer-link-item">Lamborghini</Link>
+            </div>
           </div>
 
           {/* Cột 2: Dịch vụ */}

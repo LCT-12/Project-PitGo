@@ -562,7 +562,7 @@ body {
 .public-footer {
   background-color: #2B2E33; /* Màu xám đen chính xác từ Axure */
   color: white;
-  padding: 40px 50px 20px;
+  padding: 20px 50px;
 }
 
 .footer-container {
@@ -582,7 +582,15 @@ body {
 .footer-column {
   display: flex;
   flex-direction: column;
-  gap: 20px;                  /* Khoảng cách giữa các dòng link */
+  gap: 10px;                  /* Khoảng cách giữa các dòng link */
+}
+
+.brand-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  column-gap: 30px;
+  row-gap: 10px;
+  text-align: center;
 }
 
 /* Kiểu chữ cho tiêu đề cột (Các dòng xe, Mua xe...) */
@@ -593,6 +601,7 @@ body {
   margin: 0;
   margin-bottom: 10px;        /* Khoảng cách dưới tiêu đề */
   white-space: nowrap;
+  text-align: center;
 }
 
 /* Kiểu chữ cho các đường link */
@@ -611,7 +620,7 @@ body {
 
 .footer-bottom {
   max-width: 100%;
-  margin: 40px auto 0;
+  margin: 20px auto 0;
   padding-top: 20px;
   border-top: 2px solid #797979; /* Đường kẻ ngang màu xám nhạt */
   display: flex;
@@ -971,6 +980,7 @@ body {
   color: #002D5E;
   font-size: 32px;
   margin: 0;
+  font-weight: bold;
 }
 
 /* Ô trạng thái (Status Badge) */

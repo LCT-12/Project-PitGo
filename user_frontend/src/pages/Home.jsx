@@ -58,7 +58,7 @@ useEffect(() => {
               </div>
 
               <div className="car-info">
-                <p>{car.price.toLocaleString()}.000.000.000 VNĐ</p>
+                <p className="car-price">{car.price.toLocaleString()}.000.000.000 VNĐ</p>
                 <h3 className="car-name">{car.carName}</h3>
               </div>
             </Link>
@@ -103,11 +103,11 @@ useEffect(() => {
             </div>
             <div className="info-row">
               <span className="label">Hotline:</span>
-              <p>0988 888 886</p>
+              <p>01234567890 - 09876543210</p>
             </div>
             <div className="info-row">
               <span className="label">Email:</span>
-              <p>info@racingcar.com</p>
+              <p>info@pitgo.com</p>
             </div>
           </div>
         </div>

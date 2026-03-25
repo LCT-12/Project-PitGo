@@ -482,21 +482,26 @@ body {
   align-items: flex; 
   width: 100%;
   box-sizing: border-box;
+  border-top: 1px solid #f0f0f0;
 }
 
 .cars-grid .car-price {
-  color: #1C2C5E !important; 
-  font-weight: 700;
-  font-size: 18px; /* kích thước giá tiền  */
-  margin-bottom: 8px;
+    color: #1C2C5E !important; /* Màu xanh đậm theo yêu cầu */
+    font-weight: 700;
+    font-size: 18px;
+    margin-bottom: 8px;
+    margin-top: -10px;
+    display: block;
+    text-decoration: none !important; /* Đảm bảo không bị gạch ngang chữ */
+    text-align: center;
 }
 
 .cars-grid .car-name {
-  color: #000 !important;
-  font-weight: 700;
-  font-size: 16px;
-  margin-bottom: 10px;
-  text-transform: none; 
+    color: #000 !important;
+    font-weight: 700;
+    font-size: 16px;
+    margin-top: -20px;
+    text-transform: none;
 }
  
 /* Viền đen phần Vì sao chọn chúng tôi */
@@ -506,7 +511,7 @@ body {
 }
 
 .about-box {
-  background: #d7d7d7; /* Màu xám theo Axure */
+  background: #DADADA; /* Màu xám */
   border: 3px solid #000; /* Viền đen dày y hệt ảnh */
   border-radius: 10px;
   padding: 30px;
@@ -515,7 +520,7 @@ body {
 
 .text-box p {
   color: #000;
-  font-size: 15px;
+  font-size: 16px;
   line-height: 1.6;
   text-align: justify;
 }
@@ -527,7 +532,9 @@ body {
 
 .contact-logo {
   flex: 1;
-  text-align: center;
+  display: flex;          /* Kích hoạt Flexbox */
+  justify-content: center; /* Căn giữa theo chiều ngang (Horizontal) */
+  align-items: center;     /* Căn giữa theo chiều dọc (Vertical) */
   font-size: 40px;
   font-weight: bold;
 }
@@ -546,6 +553,7 @@ body {
 
 .contact-info h3 {
   font-size: 16px;
+  font-weight: 700;
   margin-bottom: 20px;
 }
 
@@ -800,14 +808,14 @@ body {
 .car-item-card {
   background: #ffffff;
   border-radius: 12px;
-  padding: 20px;
+  padding: 15px;
   text-align: center;
   border: 1px solid #e5e7eb;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   display: flex;
   flex-direction: column;
   height: 100%; /* Đảm bảo card chiếm hết chiều cao của ô lưới */
-  min-height: 400px; /* Tăng nhẹ min-height để thoải mái không gian */
+  min-height: 320px; /* Tăng nhẹ min-height để thoải mái không gian */
 }
 
 .car-item-card:hover {
@@ -849,12 +857,12 @@ body {
   max-width: 100%;
   height: 100%;
   object-fit: contain;
-  scale: 1.5;
+  scale: 1.6;
 }
 
 /* Giá tiền */
 .car-price {
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 800;
   color: #1e293b; 
   padding: 10px;

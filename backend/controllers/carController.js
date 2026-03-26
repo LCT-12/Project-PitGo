@@ -4,25 +4,36 @@ const cloudinary = require("../config/cloudinary");
 // ================= CREATE =================
 exports.createCar = async (req, res) => {
   try {
-    let imageData = {};
-    if (req.file) {
-      const result = await new Promise((resolve, reject) => {
-        const stream = cloudinary.uploader.upload_stream(
-          { folder: "cars" },
-          (error, result) => {
-            if (error) reject(error);
-            resolve(result);
-          }
-        );
-        stream.end(req.file.buffer);
+    let imageUrls = [];
+    let publicIds = [];
+
+    // ĐÃ SỬA: Kiểm tra mảng req.files thay vì req.file
+    if (req.files && req.files.length > 0) {
+      // Dùng Promise.all để upload nhiều ảnh cùng lúc
+      const uploadPromises = req.files.map((file) => {
+        return new Promise((resolve, reject) => {
+          const stream = cloudinary.uploader.upload_stream(
+            { folder: "cars" },
+            (error, result) => {
+              if (error) reject(error);
+              resolve(result);
+            }
+          );
+          stream.end(file.buffer);
+        });
       });
-      imageData = { image: result.secure_url, public_id: result.public_id };
+
+      const results = await Promise.all(uploadPromises);
+      
+      // Tách kết quả trả về thành 2 mảng riêng biệt
+      imageUrls = results.map(result => result.secure_url);
+      publicIds = results.map(result => result.public_id);
     }
 
     const car = await Car.create({
       ...req.body,
-      ...imageData,
-      // Chuyển đổi dữ liệu từ FormData (luôn là string) sang đúng kiểu của Schema
+      images: imageUrls,       // Lưu mảng link ảnh
+      public_ids: publicIds,   // Lưu mảng id ảnh
       price: Number(req.body.price),
       year: Number(req.body.year),
       horsePower: Number(req.body.horsePower),
@@ -42,27 +53,33 @@ exports.updateCar = async (req, res) => {
 
     let updateData = { ...req.body };
 
-    if (req.file) {
-      // 1. Xóa ảnh cũ trên Cloudinary nếu có
-      if (car.public_id) {
-        await cloudinary.uploader.destroy(car.public_id);
+    // ĐÃ SỬA: Nếu người dùng upload ảnh mới lên
+    if (req.files && req.files.length > 0) {
+      // 1. Xóa TẤT CẢ ảnh cũ trên Cloudinary
+      if (car.public_ids && car.public_ids.length > 0) {
+        const destroyPromises = car.public_ids.map(id => cloudinary.uploader.destroy(id));
+        await Promise.all(destroyPromises);
       }
-      // 2. Upload ảnh mới
-      const result = await new Promise((resolve, reject) => {
-        const stream = cloudinary.uploader.upload_stream(
-          { folder: "cars" },
-          (error, result) => {
-            if (error) reject(error);
-            resolve(result);
-          }
-        );
-        stream.end(req.file.buffer);
+      
+      // 2. Upload TẤT CẢ ảnh mới
+      const uploadPromises = req.files.map((file) => {
+        return new Promise((resolve, reject) => {
+          const stream = cloudinary.uploader.upload_stream(
+            { folder: "cars" },
+            (error, result) => {
+              if (error) reject(error);
+              resolve(result);
+            }
+          );
+          stream.end(file.buffer);
+        });
       });
-      updateData.image = result.secure_url;
-      updateData.public_id = result.public_id;
+
+      const results = await Promise.all(uploadPromises);
+      updateData.images = results.map(result => result.secure_url);
+      updateData.public_ids = results.map(result => result.public_id);
     }
 
-    // Đảm bảo kiểu dữ liệu đúng cho MongoDB
     if (req.body.price) updateData.price = Number(req.body.price);
     if (req.body.isTrackOnly !== undefined) updateData.isTrackOnly = req.body.isTrackOnly === 'true';
 
@@ -86,7 +103,13 @@ exports.getAllCars = async (req, res) => {
 exports.deleteCar = async (req, res) => {
   try {
     const car = await Car.findById(req.params.id);
-    if (car?.public_id) await cloudinary.uploader.destroy(car.public_id);
+    
+    // ĐÃ SỬA: Xóa tất cả ảnh trên Cloudinary trước khi xóa xe trong DB
+    if (car?.public_ids && car.public_ids.length > 0) {
+      const destroyPromises = car.public_ids.map(id => cloudinary.uploader.destroy(id));
+      await Promise.all(destroyPromises);
+    }
+    
     await Car.findByIdAndDelete(req.params.id);
     res.json({ message: "Xóa thành công" });
   } catch (err) {

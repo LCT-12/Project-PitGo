@@ -81,13 +81,6 @@ function Header() {
           </Link>
         </div>
 
-        <div className="header-search">
-          <input type="text" placeholder="Nhập từ khóa để tìm kiếm" />
-          <button className="search-icon">
-            <img src="/images/search.svg" alt="Search Icon" />
-          </button>
-        </div>
-
         <div className="header-actions">
           <button className="action-btn" onClick={() => navigate("/login")}>
             <img src="/images/user.svg" alt="User Icon" className="action-icon" />
@@ -104,6 +97,12 @@ function Header() {
 
       <nav className="header-nav">
         <ul>
+          <li className="nav-item-container">
+            <div className="nav-title">
+              <Link to="/home">Trang chủ</Link>
+            </div>
+          </li>
+
           <li
             className="nav-item-container"
             onMouseEnter={() => setIsProductMenuOpen(true)}
@@ -151,32 +150,17 @@ function Header() {
             )}
           </li>
 
-          <li 
-            className="nav-item-container"
-            onMouseEnter={() => setIsServiceMenuOpen(true)}
-            onMouseLeave={() => setIsServiceMenuOpen(false)}
-          >
-            <div className="nav-title">
-              Dịch vụ
-              <img src="/images/arr2.png" alt="Arrow" className={`nav-arrow ${isServiceMenuOpen ? "open" : ""}`} />
-            </div>
+         
 
-            {isServiceMenuOpen && (
-              <div className="mega-menu service-menu" onClick={(e) => e.stopPropagation()}>
-                <ul className="service-dropdown-list">
-                  <li>
-                    <Link to="/service" className="service-item" onClick={() => setIsServiceMenuOpen(false)}>
-                      Bảo dưỡng
-                    </Link>
-                  </li>
-                </ul>
-              </div>
-            )}
+          <li className="nav-item-container">
+            <div className="nav-title">
+              <Link to="/services">Dịch vụ</Link>
+            </div>
           </li>
 
           <li className="nav-item-container">
             <div className="nav-title">
-              <Link to="/contact" className="contact-link">Liên hệ</Link>
+              <Link to="/contact">Liên hệ</Link>
             </div>
           </li>
         </ul>

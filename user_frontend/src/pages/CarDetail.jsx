@@ -107,12 +107,6 @@ const CarDetail = () => {
                 "Đang cập nhật nội dung mô tả cho mẫu xe này..."}
             </div>
           </div>
-          <div className="action-button-group centered">
-            <Link to="/contact" className="btn-contact">
-              LIÊN HỆ TƯ VẤN
-            </Link>
-            <button className="btn-test-drive">ĐĂNG KÝ LÁI THỬ</button>
-          </div>
         </div>
 
         <div className="info-column">
@@ -191,7 +185,7 @@ const CarDetail = () => {
             </div>
             <div className="spec-line">
               <img
-                src="/images/preview.svg"
+                src="/images/type.svg"
                 alt="Type"
                 className="spec-icon-img"
               />
@@ -209,12 +203,15 @@ const CarDetail = () => {
                 <li>- Bảo hành chính hãng không giới hạn km</li>
               </ul>
             </div>
-            <div className="add-cart-container">
-              {/* Đã gắn hàm handleAddToCart vào đây */}
-              <button className="btn-add-cart" onClick={handleAddToCart}>
-                THÊM GIỎ HÀNG
-              </button>
-            </div>
+          </div>
+
+          <div className="action-button-group centered">
+            <Link to="/contact" className="btn-contact">
+              LIÊN HỆ TƯ VẤN
+            </Link>
+            <Link to="/cart" className="btn-add-cart" onClick={handleAddToCart}>
+              THÊM GIỎ HÀNG
+            </Link>
           </div>
         </div>
       </div>

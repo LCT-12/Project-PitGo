@@ -14,7 +14,7 @@ import Home from "./pages/Home";
 import AllCar from "./pages/allCar";
 import CarDetail from "./pages/CarDetail";
 import Contact from "./pages/Contact";
-import Service from "./pages/Service";
+import Services from "./pages/Services";
 import Cart from "./pages/Cart";
 
 // --- LAYOUT CHO KHU VỰC TRANG CHỦ (PUBLIC) ---
@@ -113,7 +113,7 @@ function App() {
         <Route path="/contact" element={<Contact showAlert={showAlert} />} />
 
         {/* Trang Bảo dưỡng */}
-        <Route path="service" element={<Service showAlert={showAlert} />} />
+        <Route path="/services" element={<Services />} />
 
         {/* Trang danh sách xe theo hãng (Ví dụ: /Ferrari) */}
         <Route path=":brandName" element={<AllCar />} />

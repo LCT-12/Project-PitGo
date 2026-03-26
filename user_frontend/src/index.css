@@ -87,38 +87,6 @@ body {
   margin: 0; 
 }
 
-.header-search {
-  display: flex;
-  align-items: center;
-  border: 2px solid #333;
-  border-radius: 20px;
-  padding: 5px 15px;
-  width: 40%;            /* Thanh tìm kiếm chiếm 40% chiều rộng header */
-  max-width: 600px;      /* Kích thước thanh search */
-}
-
-.header-search input {
-  border: none;
-  outline: none;
-  width: 100%;
-  font-size: 15px;
-}
-
-.search-icon {
-  background: none;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.search-icon img {
-  width: 18px; /* Chỉnh kích thước icon kính lúp cho vừa vặn */
-  height: 18px;
-  transition: transform 0.2s ease;
-}
-
 /* Hiệu ứng mượt mà khi rê chuột vào kính lúp */
 .search-icon:hover img {
   transform: scale(1.1);
@@ -349,38 +317,7 @@ body {
 }
 
 /* --- MENU DỊCH VỤ --- */
-/* Custom lại kích thước menu Dịch vụ để nó không bị bè ra như menu Sản phẩm */
-.mega-menu.service-menu {
-  width: 100%;
-  padding: 20px 0;
-  left: 0; /* Canh trái theo chữ Dịch vụ */
-}
 
-/* Bỏ dấu chấm tròn của thẻ ul */
-.service-dropdown-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-/* Style cho từng mục Liên hệ / Bộ sưu tập */
-.service-item {
-  display: block;
-  margin-left: 30px;
-  padding: 5px 10px; /* Căn lề đều đặn (5px trên/dưới, 10px trái/phải) */
-  color: #333;
-  text-decoration: none;
-  font-size: 15px;
-  font-weight: 500;
-  transition: all 0.2s ease-in-out;
-  text-align: left; /* Ép chữ luôn canh trái cho thẳng hàng */
-}
-
-/* Hiệu ứng rê chuột vào từng mục của Dịch vụ */
-.service-item:hover {
-  background-color: #f8f8f8;
-  color: #D10000; /* Đổi sang màu đỏ PitGo */
-
-}
 
 /* --- TRANG CHỦ (HOME) --- */
 .home-container {
@@ -712,17 +649,97 @@ body {
   font-size: 30px;
   font-weight: 700;
   color: #000;
-  margin-bottom: 40px;
+  margin-bottom: 30px;
 }
 
-.allcar-subtitle {
-  text-align: center;
-  color: #666;
-  font-size: 18px;
-  max-width: 1000px;
-  margin: 0 auto 40px auto;
-  line-height: 1.5;
+/* Container bọc ngoài */
+.allcar-title-wrapper {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr; /* Chia thành 3 phần: Trái(1), Giữa(tự động), Phải(1) */
+  align-items: center;
+  margin-bottom: 40px;
+  padding: 0 20px;
+  position: relative;
 }
+
+/* Tiêu đề nằm ở cột số 2 (chính giữa) */
+.allcar-title {
+  grid-column: 2; 
+  margin: 0;
+  font-size: 28px;
+  text-transform: uppercase;
+  font-weight: bold;
+  text-align: center;
+}
+
+/* Thanh search nằm ở cột số 3 (sát lề phải) */
+.allcar-search {
+  grid-column: 3;
+  justify-self: end; /* Đẩy sát về bên phải của cột 3 */
+  
+  display: flex;
+  align-items: center;
+  border: 2px solid #000;
+  border-radius: 25px;
+  padding: 4px 12px;
+  width: 300px;       /* Độ dài nhỏ gọn */
+  transition: all 0.3s ease;
+  background-color: #fff;
+}
+
+/* Hiệu ứng khi click vào thanh search */
+.allcar-search:focus-within {
+  border-color: #20c997; /* Đổi màu xanh teal giống style của bạn */
+  box-shadow: 0 0 8px rgba(32, 201, 151, 0.2);
+}
+
+.allcar-search input {
+  border: none;
+  outline: none;
+  width: 100%;
+  font-size: 14px;
+  background: transparent;
+}
+
+
+
+.search-icon img {
+  width: 16px;
+  height: 16px;
+  opacity: 0.7;
+}
+
+.no-results {
+  grid-column: 1 / -1; 
+  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  
+  padding: 80px 20px;
+  border-radius: 12px;
+  
+  /* Căn giữa toàn bộ nội dung */
+  text-align: center;
+  margin: 20px 0;
+  width: 100%; /* Đảm bảo nó rộng hết mức có thể trong container */
+}
+
+.no-results img {
+  width: 120px;
+  margin-bottom: 20px;
+  opacity: 0.6;
+  filter: grayscale(1); /* Làm icon màu xám cho chuyên nghiệp */
+}
+
+.no-results p {
+  font-size: 1.2rem;
+  color: #666;
+  font-weight: 500;
+  margin: 0;
+}
+
 
 /* Bố cục chính */
 .allcar-content {
@@ -955,33 +972,6 @@ body {
   scale: 1.18;
 }
 
-/* Căn giữa cụm nút Liên hệ & Lái thử dưới ảnh */
-.action-button-group {
-  display: flex;
-  gap: 15px;
-  margin-top: 25px;
-  justify-content: center; /* Căn giữa 2 nút */
-}
-
-.btn-contact, .btn-test-drive, .btn-add-cart {
-  padding: 12px 25px;
-  font-weight: bold;
-  cursor: pointer;
-  border-radius: 5px;
-  border: none;
-  font-size: 15px;
-}
-
-.btn-contact {
-  background: #fff;
-  border: 1px solid #000;
-}
-
-.btn-test-drive {
-  background: #007BFF;
-  color: #fff;
-}
-
 /* Cột phải */
 .info-column {
   flex: 1;
@@ -1107,18 +1097,60 @@ body {
   line-height: 1.8;
 }
 
-/* Nút thêm giỏ hàng căn giữa dưới khung KM */
+/* Container bao quanh 2 nút */
+.action-button-group {
+    display: flex;
+    justify-content: center;
+    align-items: center; /* Căn trục giữa 2 nút */
+    gap: 15px;
+    margin-top: 25px;
+    width: 100%;
+}
+
+/* Style chung cho cả 2 thẻ Link */
+.btn-contact, .btn-add-cart {
+    /* Ép hiển thị Flex để chữ nằm đúng tâm nút */
+    display: inline-flex; 
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+
+    /* Cố định kích thước để bằng nhau tuyệt đối */
+    height: 50px; 
+    width: 250px; 
+    
+    /* Font & UI */
+    font-size: 17px;
+    font-weight: bold;
+    border-radius: 6px;
+    text-decoration: none;
+    box-sizing: border-box; /* Quan trọng: Để border không làm tăng chiều cao */
+    transition: all 0.3s ease;
+    cursor: pointer;
+    
+    /* Reset mọi padding/margin có thể gây lệch */
+    padding: 0;
+    margin: 0;
+}
+
+/* Nút LIÊN HỆ TƯ VẤN (Trắng viền đen) */
+.btn-contact {
+    background-color: #ffffff;
+    color: #000000;
+    border: 1px solid #000000;
+}
+
+/* Nút THÊM GIỎ HÀNG (Cam) */
 .btn-add-cart {
-  background: #FF8C00;
-  color: #fff;
-  margin-top: 25px; /* Tạo khoảng cách với khung trên */
-  padding: 12px 50px; /* Tăng độ dài nút cho giống hình */
-  font-size: 16px;
-  transition: background 0.3s;
+    background-color: #FF8C00;
+    color: #ffffff;
+    /* Thêm border cùng màu cam để độ dày bằng khít nút trắng */
+    border: 1px solid #FF8C00; 
 }
 
 .btn-add-cart:hover {
-  background: #e67e00;
+    background-color: #e67e00;
+    border-color: #e67e00;
 }
 
 .car-full-description-section {
@@ -1466,143 +1498,110 @@ body {
 /* ============================================================
    PUBLIC LAYOUT (TRANG Service) 
    ============================================================ */
-.service-page-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 40px 20px;
-  font-family: 'Arial', sans-serif;
-  color: #000;
+/* --- SERVICES CSS --- */
+
+:root {
+  --service-teal: #20c997;
+  --service-dark: #212529;
 }
 
-
-/* Breadcrumb */
-.service-page-container .breadcrumb {
-  font-size: 18px;
-  color: #333;
-  margin-bottom: 25px;
+.services-page-bg { 
+    min-height: 100vh;
 }
 
-.service-page-container .breadcrumb-text1, 
-.service-page-container .breadcrumb-text4 {
-  text-decoration: none;
-  color: #333; 
-  transition: 0.3s;
+/* Intro Section */
+.services-intro-section {
+    margin-bottom: 48px;
+    margin-top: 24px;
+    padding-left: 24px;
+    padding-right: 24px;
+    text-align: center;
 }
 
-
-.service-page-container .breadcrumb-text1:hover{
-  color: red;
+.services-main-title {
+    font-weight: bold;
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
 }
 
-
-.service-page-container.breadcrumb-separator {
-  margin: 0 5px;
-  color: #333;
-  font-weight: bold;
+.services-title-line {
+    width: 150px;
+    height: 2px;
+    background-color: var(--service-dark);
+    margin: 0 auto;
 }
 
-/* Hero Section */
-.service-hero {
-  text-align: center;
-  margin-bottom: 60px;
-}
-.service-main-title {
-  font-size: 30px;
-  font-weight: 700;
-  margin-bottom: 20px;
-}
-.service-hero-desc {
-  font-size: 16px;
-  font-weight: 700;
-  line-height: 1.6;
-  max-width: 1000px;
-  margin: 0 auto 40px auto;
-}
-.service-hero-banner img {
-  width: 100%;
-  height: auto;
-  display: block;
+.services-intro-text {
+    text-align: center;
+    margin-top: 1rem;
+    line-height: 1.6;
 }
 
-/* Info Section (Chữ bên trái, ảnh bên phải) */
-.service-info-section {
-  display: flex;
-  align-items: center;
-  gap: 40px;
-  margin-bottom: 80px;
-}
-.service-info-text {
-  flex: 1;
-  font-size: 18px;
-  line-height: 1.6;
-}
-.service-info-text ul {
-  padding-left: 20px;
-  margin: 15px 0;
-}
-.service-info-text li {
-  margin-bottom: 10px;
-}
-.service-info-image {
-  flex: 1;
-}
-.service-info-image img {
-  width: 100%;
-  height: auto;
-  border-radius: 8px; /* Bo góc nhẹ cho đẹp */
+/* Grid System (Thay thế Bootstrap Row/Col) */
+.services-grid-container {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 0 15px;
 }
 
-/* Benefits Section */
-.service-benefits {
-  margin-bottom: 60px;
-}
-.service-benefits-title {
-  text-align: center;
-  font-size: 24px;
-  font-weight: 700;
-  margin-bottom: 40px;
-  line-height: 1.4;
+.services-flex-row {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 -15px;
 }
 
-/* Grid 2 cột cho Lợi ích */
-.benefits-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 40px;
-}
-.benefit-card {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-.benefit-img img {
-  width: 100%;
-  height: 280px;
-  object-fit: cover; /* Giữ tỷ lệ ảnh không bị méo */
-}
-.benefit-content h3 {
-  font-size: 18px;
-  font-weight: 700;
-  margin: 0 0 10px 0;
-}
-.benefit-content p {
-  font-size: 18px;
-  margin: 0;
-  line-height: 1.5;
-  color: #333;
+.service-column-item {
+    width: 100%;
+    padding: 0 1.5rem;
+    margin-bottom: 3rem;
+    box-sizing: border-box;
 }
 
-/* Responsive cho Mobile */
-@media (max-width: 768px) {
-  .service-info-section {
-    flex-direction: column;
-  }
-  .benefits-grid {
-    grid-template-columns: 1fr; /* Xuống 1 cột trên điện thoại */
-  }
-  .benefit-img img {
-    height: auto;
-  }
+@media (min-width: 768px) {
+    .service-column-item { width: 50%; }
+}
+
+@media (min-width: 992px) {
+    .service-column-item { width: 33.3333%; }
+}
+
+/* Card Design */
+.service-card-box {
+    background-color: #fff;
+    border-radius: 0.375rem;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15); /* shadow */
+    padding: 1.5rem;
+    border-top: 4px solid var(--service-dark); /* border-top border-4 */
+    height: 100%;
+    transition: all 0.3s;
+}
+
+.service-card-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.service-icon-img {
+    width: 40px;
+}
+
+.service-item-name {
+    margin: 0 0 0 1rem;
+    font-size: 1.25rem;
+    font-weight: 500;
+}
+
+.service-item-desc {
+    margin: 0;
+    color: #6c757d;
+}
+
+/* Hiệu ứng hover từ file gốc */
+.pop:hover {
+    border-top-color: var(--service-teal) !important;
+    transform: scale(1.03);
+    transition: all 0.3s;
 }
 
 /* ============================================================

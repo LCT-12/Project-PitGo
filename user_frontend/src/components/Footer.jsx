@@ -21,7 +21,7 @@ function Footer() {
           {/* Cột 2: Dịch vụ */}
           <div className="footer-column">
             <h4>Dịch vụ</h4>
-            <Link to="/service" className="footer-link-item">Bảo dưỡng</Link>
+            <Link to="/services" className="footer-link-item">Khám phá dịch vụ</Link>
           </div>
 
           {/* Cột 3: Liên hệ */}

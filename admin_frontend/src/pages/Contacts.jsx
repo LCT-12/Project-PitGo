@@ -142,21 +142,27 @@ const toggleImportant = async (id, currentStatus) => {
   const handleDelete = async () => {
     if (mgToDelete) {
       try {
-        // Gọi API PATCH để cập nhật isDeleted: true lên MongoDB
-        await axios.patch(`${API}/${mgToDelete}`, {
-          isDeleted: true,
-        });
-
-        // Cập nhật lại giao diện ngay lập tức
-        setContacts(
-          contacts.map((m) =>
-            m._id === mgToDelete ? { ...m, isDeleted: true } : m,
-          ),
-        );
+        if (activeTab === "messages") {
+          // Xóa mềm: Chuyển vào thùng rác
+          await axios.patch(`${API}/${mgToDelete}`, {
+            isDeleted: true,
+          });
+          setContacts(
+            contacts.map((m) =>
+              m._id === mgToDelete ? { ...m, isDeleted: true } : m,
+            ),
+          );
+          showAlert("success", "Đã chuyển tin nhắn vào thùng rác!");
+        } else if (activeTab === "trash") {
+          // Xóa vĩnh viễn: Gọi API DELETE
+          await axios.delete(`${API}/${mgToDelete}`);
+          // Lọc bỏ tin nhắn này khỏi mảng state
+          setContacts(contacts.filter((m) => m._id !== mgToDelete));
+          showAlert("success", "Đã xóa vĩnh viễn tin nhắn!");
+        }
+        
         setShowDeleteModal(false);
         setMgToDelete(null);
-
-        showAlert("success", "Xóa tin nhắn thành công!");
       } catch (error) {
         showAlert("danger", "Không thể xóa tin nhắn. Vui lòng thử lại!");
       }
@@ -285,6 +291,7 @@ const toggleImportant = async (id, currentStatus) => {
                     <button
                       className="btn-view"
                       onClick={() => handleView(msg)}
+                      style={{ marginRight: "5px" }}
                     >
                       Xem
                     </button>
@@ -296,12 +303,22 @@ const toggleImportant = async (id, currentStatus) => {
                         Xóa
                       </button>
                     ) : (
-                      <button
-                        className="btn-undo"
-                        onClick={() => handleUndo(msg._id)}
-                      >
-                        Khôi phục
-                      </button>
+                      <>
+                        <button
+                          className="btn-undo"
+                          onClick={() => handleUndo(msg._id)}
+                          style={{ marginRight: "5px" }}
+                        >
+                          Khôi phục
+                        </button>
+                        {/* Nút xóa vĩnh viễn trong tab Thùng rác */}
+                        <button
+                          className="btn-delete"
+                          onClick={() => confirmDelete(msg._id)}
+                        >
+                          Xóa vĩnh viễn
+                        </button>
+                      </>
                     )}
                   </td>
                 </tr>
@@ -408,7 +425,6 @@ const toggleImportant = async (id, currentStatus) => {
                     className="checkbox-important"
                     type="checkbox"
                     checked={selectedMsg.isImportant}
-                    // Cập nhật truyền thêm selectedMsg.isImportant
                     onChange={() => toggleImportant(selectedMsg._id, selectedMsg.isImportant)}
                   />
                   <span className="slider-contact"></span>
@@ -449,8 +465,15 @@ const toggleImportant = async (id, currentStatus) => {
         <div className="modal-overlay">
           <div className="modal-box confirm-box">
             <div className="confirm-icon">⚠️</div>
-            <h3>Xác nhận xóa?</h3>
-            <p>Bạn có chắc chắn muốn xóa tin nhắn này không?</p>
+            {/* Đổi tiêu đề dựa theo tab */}
+            <h3>{activeTab === "trash" ? "Xóa vĩnh viễn?" : "Xác nhận xóa?"}</h3>
+            
+            <p>
+              {activeTab === "trash" 
+                ? "Hành động này sẽ xóa vĩnh viễn tin nhắn khỏi hệ thống và không thể hoàn tác. Bạn có chắc chắn không?" 
+                : "Bạn chắc chắn muốn chuyển tin nhắn này vào thùng rác không?"}
+            </p>
+            
             <div className="modal-actions confirm-actions">
               <button
                 className="cancel-btn"
@@ -459,7 +482,7 @@ const toggleImportant = async (id, currentStatus) => {
                 Hủy
               </button>
               <button className="delete-confirm-btn" onClick={handleDelete}>
-                Xác nhận, xóa
+                {activeTab === "trash" ? "Xóa vĩnh viễn" : "Xác nhận, xóa"}
               </button>
             </div>
           </div>

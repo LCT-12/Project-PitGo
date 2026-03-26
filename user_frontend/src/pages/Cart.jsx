@@ -6,7 +6,7 @@ import '../index.css';
 import { mockCartData } from '../mockData/mockCart'; 
 import { Appointment } from '../mockData/mockAptm';
 
-const Cart = () => {
+function Cart() {
   const [step, setStep] = useState(1);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -175,7 +175,7 @@ const Cart = () => {
 
   const renderStep3 = () => (
     <div className="cart-step-content success-step">
-      <h2 className="success-title">CHÚC MỪNG QUÝ KHÁCH ĐÃ ĐẶT LỊCH HẸN THÀNH CÔNG</h2>
+      <h2 className="success-title">BẠN ĐÃ ĐẶT LỊCH HẸN THÀNH CÔNG</h2>
       <p className="booking-code">Mã lịch hẹn: <strong>LHKH-001</strong></p>
       <div className="cart-actions center-actions">
         <Link to="/" className="btn-secondary">VỀ TRANG CHỦ</Link>

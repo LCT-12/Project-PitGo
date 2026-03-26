@@ -5,41 +5,95 @@ import Error from "../components/Error";
 
 import axios from "axios";
 
-function Home(){
+function Home() {
+  // KHAI BÁO ĐẦY ĐỦ CÁC STATE Ở ĐÂY (Đây là phần bạn bị thiếu)
+  const [cars, setCars] = useState([]);
+  const [generalSettings, setGeneralSettings] = useState({});
+  const [contactSettings, setContactSettings] = useState({});
+  const [currentSlide, setCurrentSlide] = useState(0);
+  
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-const [cars, setCars] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        // Gọi song song 2 API: Lấy danh sách xe và Lấy cài đặt hệ thống
+        const [carsRes, settingsRes] = await Promise.all([
+          axios.get("http://localhost:5000/api/car"),
+          axios.get("http://localhost:5000/api/setting/")
+        ]);
 
-const [loading, setLoading] = useState(true);
-const [error, setError] = useState(null);
+        setCars(carsRes.data);
+        
+        if (settingsRes.data.general_settings) {
+          const general = settingsRes.data.general_settings;
+          setGeneralSettings(general);
+          
+          // ĐỒNG BỘ SITE TITLE RA FRONTEND (Đổi tên tab trình duyệt)
+          if (general.site_title) {
+            document.title = general.site_title;
+          }
+        }
+        
+        if (settingsRes.data.contact_details) {
+          setContactSettings(settingsRes.data.contact_details);
+        }
+      } catch (error) {
+        console.error("Lỗi API chi tiết:", error);
+        setError("Lỗi tải dữ liệu. Vui lòng thử lại sau!");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
 
-useEffect(() => {
-  const fetchCars = async () => {
-    try {
-      setLoading(true);
-      const response = await axios.get("http://localhost:5000/api/car");
-      setCars(response.data);
-    } catch (error) {
-      setError("Lỗi tải dữ liệu - Trang chủ. Vui lòng thử lại sau!");
-    } finally {
-      setLoading(false);
-    }
-  };
-      fetchCars();
-    }, []);
+  // LOGIC TỰ ĐỘNG CHUYỂN ẢNH (SLIDER / CAROUSEL)
+  const banners = generalSettings.hero_banners && generalSettings.hero_banners.length > 0
+    ? generalSettings.hero_banners
+    : ["/images/dashboard-banner.png"]; // Ảnh mặc định nếu admin chưa nhập gì
+
+  useEffect(() => {
+    // Chuyển ảnh mỗi 3.5 giây
+    const timer = setInterval(() => {
+      setCurrentSlide((prevSlide) => (prevSlide + 1) % banners.length);
+    }, 3500);
+    return () => clearInterval(timer);
+  }, [banners.length]);
+
+  
 
   /* ================= STATES ================= */  
   if (loading) return <Loading message="LOADING..." />;
   if (error) return <Error message={error} />;
 
   return (
-    <div className="home-container">
+  <>
       {/* Hero Banner */}
-      <section className="hero-banner">
-        {/* Đặt ảnh dashboard xe vào thư mục public/images và gọi vào đây */}
-        <img src="/images/dashboard-banner.png" alt="Racing Car" className="banner-img" />
-        
+      <section className="hero-banner-slider">
+        {banners.map((imgUrl, index) => (
+          <img 
+            key={index}
+            src={imgUrl} 
+            alt={`PitGo Banner ${index + 1}`} 
+            className={`slide-img ${index === currentSlide ? "active" : ""}`} 
+          />
+        ))}
+        {/* Nút chấm bi nhỏ hiển thị số lượng slide bên dưới (Tùy chọn) */}
+        <div className="slide-dots">
+          {banners.map((_, index) => (
+            <span 
+              key={index} 
+              className={`dot ${index === currentSlide ? "active" : ""}`}
+              onClick={() => setCurrentSlide(index)}
+            ></span>
+          ))}
+        </div>
       </section>
 
+  <div className="home-container">
       {/* Car Grid Section */}
       <section className="cars-section">
         <div className="section-pill-btn">
@@ -93,26 +147,67 @@ useEffect(() => {
           </div>
           <div className="contact-info">
             <h3>THÔNG TIN LIÊN HỆ</h3>
-            <div className="info-row">
-              <span className="label">Địa chỉ:</span>
-              <div className="address-lines">
-                <p>- Cơ sở 1<br/>45 Nguyễn Khắc Nhu, P. Cầu Ông Lãnh, HCM</p>
-                <p>- Cơ sở 2<br/>233A Phan Văn Trị, P. Bình Lợi Trung, HCM</p>
-                <p>- Cơ sở 3<br/>69/68 Đặng Thùy Trâm, P. Bình Lợi Trung, HCM</p>
-              </div>
+            <div className="info-icons-bottom">
+            <div className="icon-group">
+              <img src="/images/address.png" alt="Address" />
+              <p>{contactSettings?.address || "Đang cập nhật địa chỉ..."}</p>
             </div>
-            <div className="info-row">
-              <span className="label">Hotline:</span>
-              <p>01234567890 - 09876543210</p>
+
+            <div className="icon-group">
+              <img src="/images/email.png" alt="Email" />
+              <p>{contactSettings?.email || "Đang cập nhật email..."}</p>
             </div>
-            <div className="info-row">
-              <span className="label">Email:</span>
-              <p>info@pitgo.com</p>
+
+            <div className="icon-group">
+              <img src="/images/phone.svg" alt="Phone" />
+              <p className="phone-bold">
+                {contactSettings?.pn1 || "Đang cập nhật..."} 
+                {contactSettings?.pn2 ? ` - ${contactSettings.pn2}` : ""}
+              </p>
             </div>
+
+            <div className="icon-group">
+              <img src="/images/fb2.svg" alt="Facebook" />
+              <p>
+                {contactSettings?.fb ? (
+                  <a 
+                    href={contactSettings.fb} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    style={{ textDecoration: 'none', color: 'inherit' }}
+                  >
+                    PitGo - Facebook
+                  </a>
+                ) : (
+                  "Đang cập nhật..."
+                )}
+              </p>
+            </div>
+
+            {/* Link Instagram có thể click */}
+            <div className="icon-group">
+              <img src="/images/ig2.svg" alt="Instagram" />
+              <p>
+                {contactSettings?.insta ? (
+                  <a 
+                    href={contactSettings.insta} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    style={{ textDecoration: 'none', color: 'inherit' }}
+                  >
+                    PitGo - Instagram
+                  </a>
+                ) : (
+                  "Đang cập nhật..."
+                )}
+              </p>
+            </div>
+          </div>
           </div>
         </div>
       </section>
     </div>
+  </>
   );
 };
 

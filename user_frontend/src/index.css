@@ -327,22 +327,56 @@ body {
 }
 
 /* --- PHẦN BANNER --- */
-.hero-banner {
-  width: 100vw;       /* Ép chiều rộng bằng 100% màn hình thiết bị */
+/* Container của Slider */
+.hero-banner-slider {
   position: relative;
-  left: 50%;          /* Đẩy sang giữa */
-  right: 50%;
-  margin-left: -50vw; /* Kéo ngược lại sát mép trái màn hình */
-  margin-right: -50vw;
-  padding: 0;
-  overflow: hidden;   /* Đảm bảo không bị hiện thanh cuộn ngang */
+  height: 587px; /* Chiều cao theo yêu cầu của bạn */
+  overflow-x: hidden;
+  background-color: #111827;
 }
 
-.banner-img {
+/* Các hình ảnh trong Slider */
+.slide-img {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
-  height: auto;       /* Tự động co giãn chiều cao theo tỷ lệ ảnh */
-  display: block;
-  object-fit: cover;  /* Giúp ảnh luôn đẹp trên mọi màn hình điện thoại/máy tính */
+  height: 100%;
+  object-fit: cover; 
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+}
+
+/* Chỉ bức ảnh nào có class 'active' mới hiện lên */
+.slide-img.active {
+  opacity: 1;
+}
+
+/* Các dấu chấm bi ở dưới cùng ảnh (Indicators) */
+.slide-dots {
+  position: absolute;
+  bottom: 30px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  z-index: 10;
+}
+
+.slide-dots .dot {
+  width: 12px;
+  height: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.slide-dots .dot.active {
+  background-color: rgba(255, 255, 255, 0.5); /* Màu đỏ chủ đạo của bạn */
+  width: 24px;
+  border-radius: 6px;
+  border: none;
 }
 
 /* --- Nút hình viên thuốc (Pill Button) --- */
@@ -492,21 +526,6 @@ body {
   font-size: 16px;
   font-weight: 700;
   margin-bottom: 20px;
-}
-
-.info-row {
-  display: flex;
-  margin-bottom: 15px;
-  font-size: 14px;
-}
-
-.info-row .label {
-  width: 80px;
-  color: #333;
-}
-
-.address-lines p {
-  margin-bottom: 10px;
 }
 
 /* --- FOOTER --- */

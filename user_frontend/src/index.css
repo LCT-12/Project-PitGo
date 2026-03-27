@@ -54,6 +54,416 @@ body {
   background: #f1f3f7;
 }
 
+/* ================= PUBLIC LAYOUT (TRANG LOGIN) ================= */
+
+/* TEXT CHUNG (Tránh dùng thẻ p, h2 trần) */
+.shared-h2 {
+  margin: 0 0 12px;
+  font-size: 30px;
+  font-weight: 600;
+}
+
+.shared-p {
+  margin-bottom: 16px;
+  color: #666;
+}
+
+/* PASSWORD WRAPPER */
+.password-wrapper {
+  position: relative;
+}
+
+.password-wrapper .form-input {
+  padding-right: 40px;
+}
+
+/* ICON MẮT */
+.eye-icon {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  color: #9ca3af;
+  cursor: pointer;
+}
+
+.eye-icon:hover {
+  color: #6b7280;
+}
+
+.login-container {
+  display: flex;
+  height: 100vh;
+  font-family: 'Inter', sans-serif;
+}
+
+/* LEFT */
+.login-left {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40%;
+  background: #ffffff;
+}
+
+.login-box {
+  width: 380px;
+}
+
+.login-box input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 15px;
+  border-radius: 10px;
+  
+  /* 1. Đổi viền mặc định thành màu đen nếu bạn muốn giống hình mới gửi */
+  border: 1.5px solid #000; 
+  
+  /* 2. QUAN TRỌNG: Bỏ viền xanh/đen mặc định của trình duyệt */
+  outline: none; 
+  
+  background: white;
+  transition: all 0.2s ease-in-out;
+}
+
+/* 3. Hiệu ứng khi click vào (Focus) */
+.login-box input:focus {
+  /* Giữ viền đen hoặc đổi sang đỏ tùy bạn chọn */
+  border-color: #fc0000; 
+  
+  /* Tạo lớp viền hồng nhạt bao ngoài (glow) */
+  box-shadow: 0 0 0 4px rgba(255, 182, 193, 0.4); 
+}
+
+/* LOGO */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 30px;
+}
+
+.logo-img {
+  width: 160px;            /* Tăng kích thước icon lên (bạn có thể chỉnh từ 60px - 120px tùy ý) */
+  height: auto;           /* Giữ nguyên tỷ lệ ảnh, không bị móp hay kéo giãn */
+  object-fit: contain;    /* Đảm bảo hình ảnh logo hiển thị trọn vẹn */
+  margin-bottom: -25px;
+}
+
+
+.logo span {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+/* TITLE */
+.login-title {
+  margin: 0 0 5px;
+  font-size: 30px;
+  font-weight: 700;
+}
+
+.login-desc {
+  margin-bottom: 20px;
+  color: #6b7280;
+}
+
+/* FORM */
+.form-input {
+  width: 100%;
+  margin-top: 8px;
+  margin-bottom: 18px;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  background: #f9fafb;
+}
+
+/* PASSWORD */
+.password-box {
+  position: relative;
+}
+
+.password-box span {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+}
+
+/* OPTIONS */
+.options {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+.login-options {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+  font-size: 14px;
+}
+
+/* Tùy chỉnh cho cụm checkbox và chữ */
+.login-options label {
+  display: flex;
+  align-items: center;
+  gap: 8px;            
+  cursor: pointer;
+  color: #4b5563;      
+  white-space: nowrap;
+  user-select: none;
+}
+
+/* Tùy chỉnh riêng cho ô input checkbox */
+.login-checkbox {
+  width: 16px;         
+  height: 16px;
+  margin-top: 12px;           
+  cursor: pointer;
+  accent-color: #dc2626; /* Màu sắc của checkbox */
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.forgot {
+  color: #dc2626;
+  cursor: pointer;
+  margin-top: 12px;
+}
+
+.forgot:hover {
+  text-decoration: underline;
+  color: #b90505;
+}
+
+/* BUTTON */
+.login-btn {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  background: #dc2626; 
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;       
+  justify-content: center;
+  align-items: center;
+  gap: 4px;            
+  transition: background 0.3s;
+}
+
+/* Định dạng mũi tên mặc định */
+.arrow {
+  display: inline-block;
+  transition: transform 0.3s ease; 
+}
+
+/* Khi hover vào button, mũi tên nhích qua phải 5px */
+.login-btn:hover .arrow {
+  transform: translateX(3px);
+}
+
+.login-btn:hover {
+  background: #b90505; 
+}
+
+/* ALERT */
+.alert {
+  margin-bottom: 15px;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.alert.error {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.alert.success {
+  background: #dcfce7;
+  color: #166534;
+}
+
+/* REGISTER */
+.register {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 14px;
+}
+
+.register-link {
+  margin: 0 0 4px;
+  font-weight: bold;
+  font-size: 15px;
+  color: #dc2626;
+  cursor: pointer;
+}
+
+/* RIGHT */
+.login-right {
+  position: relative;
+  width: 60%;
+  background: url("/images/auth_bg.jpg") center/cover no-repeat;
+}
+
+.login-right .overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+}
+
+/* OVERLAY GRADIENT */
+.right-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0.6) 10%,    /* Tối gần như tuyệt đối ở mép trái */
+    rgba(0, 0, 0, 0.5) 25%,   /* Vẫn giữ độ tối rất cao để làm nền cho chữ */
+    rgba(0, 0, 0, 0.25) 40%,    /* Bắt đầu lộ rõ ảnh xe hơn */
+    rgba(0, 0, 0, 0.2) 100%    /* Sáng nhất ở mép phải */
+  );
+  z-index: 1; /* Đảm bảo lớp này nằm trên .overlay */
+
+  
+}
+
+/* CONTENT RIGHT */
+.right-content {
+  position: absolute;
+  bottom: 80px;
+  left: 60px;
+  z-index: 2;
+  max-width: 520px;
+}
+
+/* TITLE */
+.right-title {
+  font-size: 55px;
+  font-weight: 700;
+  line-height: 1;
+  color: white;
+  white-space: nowrap;
+}
+
+.right-highlight {
+  color: #ef4444;
+}
+
+/* TEXT */
+.right-desc {
+  margin: 15px 0 32px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #ccc;
+  font-size: 18px;
+}
+
+/* MEMBER BOX */
+.member-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: fit-content;
+  margin-top: 25px;
+  padding: 10px 14px;
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+}
+
+/* AVATAR */
+/* AVATAR LIST - Container chung */
+.avatars {
+  display: flex;
+  align-items: center; /* Căn giữa các avatar theo chiều dọc */
+}
+
+/* Kiểu dáng chung cho cả ảnh và ô tròn +1k */
+.avatar-img,
+.avatar-more {
+  width: 32px;  /* Giữ nguyên kích thước */
+  height: 32px;
+  border-radius: 50%; /* Bo tròn */
+  border: 2px solid #111; /* Viền đen để tách biệt */
+  
+  /* Tăng độ đè lên nhau (giống hình 2) */
+  margin-left: -8px; 
+  
+  position: relative; /* Cần thiết để z-index hoạt động */
+  transition: transform 0.2s ease; /* Thêm hiệu ứng mượt khi hover */
+}
+
+/* Ảnh đầu tiên không bị dịch trái */
+.avatars > *:first-child {
+  margin-left: 0;
+}
+
+/* Xử lý thứ tự đè (z-index) */
+.avatars > *:nth-child(1) { z-index: 1; }
+.avatars > *:nth-child(2) { z-index: 2; }
+.avatars > *:nth-child(3) { z-index: 3; }
+.avatars > *:nth-child(4) { z-index: 4; }
+
+/* Thêm hiệu ứng khi hover: Avatar nổi lên */
+.avatar-img:hover {
+  transform: translateY(-3px) scale(1.05);
+  z-index: 10 !important; /* Đảm bảo ảnh đang hover nằm trên cùng */
+}
+
+
+/* Tùy chỉnh riêng cho ảnh avatar */
+.avatar-img {
+  object-fit: cover; /* Đảm bảo ảnh không bị méo */
+}
+
+
+/* Tùy chỉnh riêng cho ô tròn +1k */
+.avatar-more {
+  background-color: #cbd5e1; /* Màu nền xám nhạt */
+  color: #1e293b;      /* Màu chữ */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+
+/* ===== TEXT ===== */
+.member-text {
+  margin-left: 20px; /* Khoảng cách giữa cụm avatar và chữ */
+}
+
+/* 1000+ Thành viên */
+.member-bold {
+  font-size: 14px;
+  color: white;
+  font-weight: bold;
+}
+
+/* đã tham gia cộng đồng - Làm mờ đi giống hình 2 */
+.member-sub {
+  font-size: 12px;
+  color: #888; /* Thay đổi từ #bbb thành #888 để mờ hơn */
+  display: block; /* Đảm bảo chữ xuống dòng */
+}
+
+/* TEXT */
+.member-bold {
+  font-size: 14px;
+  color: white;
+}
+
+.member-sub {
+  font-size: 12px;
+  color: #bbb;
+}
+
 /* ================= PUBLIC LAYOUT (TRANG CHỦ) ================= */
 .public-layout {
   display: flex;

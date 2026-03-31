@@ -15,7 +15,7 @@ function Cart() {
     return savedCart ? JSON.parse(savedCart) : mockCartData;
   });
   
-  const [formData, setFormData] = useState(Appointment);
+  const [apt, setApt] = useState(Appointment);
 
   useEffect(() => {
     localStorage.setItem('pitgo_cart', JSON.stringify(cartItems));
@@ -23,8 +23,8 @@ function Cart() {
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setFormData({
-      ...formData,
+    setApt({
+      ...apt,
       [name]: type === 'checkbox' ? checked : value
     });
     // Xóa lỗi ngay khi người dùng bắt đầu sửa lại thông tin
@@ -41,26 +41,26 @@ function Cart() {
   // --- LOGIC XỬ LÝ KHI NHẤN XÁC NHẬN ---
   const handleConfirm = () => {
     // 1. Kiểm tra các thông tin nhập liệu bắt buộc
-    if (!formData.date) {
+    if (!apt.date) {
       setErrorMessage("Vui lòng chọn ngày hẹn xem xe!");
       return;
     }
-    if (!formData.fullName || formData.fullName.trim() === "") {
+    if (!apt.fullName || apt.fullName.trim() === "") {
       setErrorMessage("Vui lòng nhập họ tên của bạn!");
       return;
     }
-    if (!formData.phone || formData.phone.trim() === "") {
+    if (!apt.phone || apt.phone.trim() === "") {
       setErrorMessage("Vui lòng nhập số điện thoại để chúng tôi liên hệ!");
       return;
     }
-    if (!formData.email || formData.email.trim() === "") {
+    if (!apt.email || apt.email.trim() === "") {
       setErrorMessage("Vui lòng nhập địa chỉ email!");
       return;
     }
 
     // 2. KIỂM TRA PHẢI CHỌN ÍT NHẤT 1 DỊCH VỤ
     // Kiểm tra xem có ô nào trong 3 ô checkbox được tích hay không
-    const hasSelectedService = formData.privateRoom || formData.technicalAdvice || formData.testDrive;
+    const hasSelectedService = apt.privateRoom || apt.technicalAdvice || apt.testDrive;
     
     if (!hasSelectedService) {
       setErrorMessage("Vui lòng chọn ít nhất một dịch vụ (Private room, Tư vấn kỹ thuật hoặc Lái thử)");
@@ -120,29 +120,37 @@ function Cart() {
       <h2 className="step-title">THÔNG TIN LỊCH HẸN</h2>
       <div className="booking-form">
         <div className="form-row">
-          <select name="location" value={formData.location} onChange={handleInputChange}>
+          <select name="location" value={apt.location} onChange={handleInputChange}>
             <option value="Cơ sở 1">Cơ sở 1: 45 Nguyễn Khắc Nhu, HCM</option>
             <option value="Cơ sở 2">Cơ sở 2: 233A Phan Văn Trị, HCM</option>
             <option value="Cơ sở 3">Cơ sở 3: 69/68 Đặng Thùy Trâm, HCM</option>
           </select>
-          <input type="date" name="date" value={formData.date} onChange={handleInputChange} />
+          <input type="date" name="date" value={apt.date} onChange={handleInputChange} />
         </div>
         
         <div className="form-row">
-          <input type="text" name="fullName" placeholder="Nhập họ tên *" value={formData.fullName} onChange={handleInputChange} />
-          <input type="tel" name="phone" placeholder="Nhập số điện thoại *" value={formData.phone} onChange={handleInputChange} />
-          <input type="email" name="email" placeholder="Nhập email *" value={formData.email} onChange={handleInputChange} />
+          <input type="text" name="fullName" placeholder="Nhập họ tên *" value={apt.fullName} onChange={handleInputChange} />
+          <input type="tel" name="phone" placeholder="Nhập số điện thoại *" value={apt.phone} onChange={handleInputChange} />
+          <input type="email" name="email" placeholder="Nhập email *" value={apt.email} onChange={handleInputChange} />
         </div>
 
         <div className="services-container">
-          <div className="checkbox-group">
-            <span className="services-title">Dịch vụ:</span>
-            <label><input type="checkbox" name="privateRoom" checked={formData.privateRoom} onChange={handleInputChange} /> Private room</label>
-            <label><input type="checkbox" name="technicalAdvice" checked={formData.technicalAdvice} onChange={handleInputChange} /> Tư vấn kỹ thuật</label>
-            <label><input type="checkbox" name="testDrive" checked={formData.testDrive} onChange={handleInputChange} /> Lái thử</label>
+          <span className="services-title">Dịch vụ:</span>
+          <div className="checkbox-group">      
+            <label><input type="checkbox" name="technicalAdvice" checked={apt.technicalAdvice} onChange={handleInputChange} /> Tư vấn</label>
+            <label><input type="checkbox" name="testDrive" checked={apt.testDrive} onChange={handleInputChange} /> Lái thử</label>
+            <label><input type="checkbox" name="carMaintenance" checked={apt.carMaintenance} onChange={handleInputChange} />Bảo dưỡng</label>
+            <label><input type="checkbox" name="carWash" checked={apt.carWash} onChange={handleInputChange} />Rửa xe</label>
+            <label><input type="checkbox" name="carRepair" checked={apt.carRepair} onChange={handleInputChange} />Sửa chữa</label>
+            <label><input type="checkbox" name="carCare" checked={apt.carCare} onChange={handleInputChange} />Chăm sóc xe</label>
+            <label><input type="checkbox" name="carPerformance" checked={apt.carPerformance} onChange={handleInputChange} />Kiểm tra hiệu năng</label>
+            <label><input type="checkbox" name="carInterior" checked={apt.carInterior} onChange={handleInputChange} />Trang trí ngoại thất</label>
+            <label><input type="checkbox" name="carExterior" checked={apt.carExterior} onChange={handleInputChange} />Nâng cấp nội thất</label>
+            <label><input type="checkbox" name="carManagement" checked={apt.carManagement} onChange={handleInputChange} />Quản lý & Kí gửi xe</label>
+            <label><input type="checkbox" name="financialSupport" checked={apt.financialSupport} onChange={handleInputChange} />Hỗ trợ tài chính</label>
           </div>
         </div>
-        <textarea name="notes" rows="4" placeholder="Ghi chú bổ sung" value={formData.notes} onChange={handleInputChange}></textarea>
+        <textarea name="notes" rows="4" placeholder="Ghi chú" value={apt.notes} onChange={handleInputChange}></textarea>
         
         {/* HIỂN THỊ LỖI NGAY DƯỚI TEXTAREA */}
         {errorMessage && (

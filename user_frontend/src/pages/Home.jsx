@@ -98,6 +98,7 @@ function Home() {
       <section className="cars-section">
         <div className="section-pill-btn">
           <span>Siêu xe mới về</span>
+          <div className="home-title-line1"></div>
         </div>
         
         <div className="cars-grid">
@@ -124,6 +125,7 @@ function Home() {
       <section className="about-section">
         <div className="section-pill-btn">
           <span>Vì sao chọn chúng tôi</span>
+          <div className="home-title-line2"></div>
         </div>
 
         <div className="about-box text-box">

@@ -125,8 +125,9 @@ const CarDetail = () => {
           <div className="specs-list">
             <div className="spec-line">
               <img
-                src="/images/brand.png"
-                alt="Brand"
+                /* Chuyển tên hãng về chữ thường để khớp với tên file ảnh */
+                src={`/images/brand-${car.brand?.toLowerCase().replace(/\s+/g, '-')}.svg`}
+                alt={car.brand}
                 className="spec-icon-img"
               />
               <span>Hãng: {car.brand}</span>

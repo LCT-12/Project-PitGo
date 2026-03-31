@@ -1,6 +1,8 @@
 // --- Services.jsx ---
 import React, { useState, useEffect } from 'react';
-import '../index.css'; // Đảm bảo file này có tồn tại trong src/pages/
+import { Link } from "react-router-dom";
+import axios from "axios";
+import '../index.css'; 
 
 function Services() {
   const [services, setServices] = useState([]);
@@ -22,8 +24,13 @@ function Services() {
 
   return (
     <div className="services-page-bg">
+      <div className="breadcrumb">
+        <Link to="/home" className="breadcrumb-text1">Trang chủ</Link>
+        <span className="breadcrumb-separator"> &gt; </span>
+        <b className="breadcrumb-text4">Dịch vụ</b>       
+      </div>
       <div className="services-intro-section">
-        <h2 className="services-main-title">Dịch vụ</h2>
+        <h2 className="services-main-title">KHÁM PHÁ DỊCH VỤ</h2>
         <div className="services-title-line"></div>
       </div>
 

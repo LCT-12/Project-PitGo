@@ -56,7 +56,7 @@ function Header() {
     fetchCars();
   }, []);
 
-  const brands = ["Tất cả", "Ferrari", "Porsche", "Mercedes", "McLaren", "Lamborghini"];
+  const brands = ["Tất cả", "Ferrari", "Porsche", "Mercedes", "McLaren", "Lamborghini", "Bugatti"];
 
   const filteredCars =
     selectedBrand === "Tất cả"
@@ -143,7 +143,11 @@ function Header() {
                     </Link>
                   ))}
                   {filteredCars.length === 0 && (
-                    <p style={{ color: "#888", marginTop: "20px" }}>Đang cập nhật dòng xe này...</p>
+                    <div style={{ gridColumn: "1 / -1" }}> 
+                      <p style={{ color: "#888", marginTop: "20px", textAlign: "center" }}>
+                        Đang cập nhật dòng xe này...
+                      </p>
+                    </div>
                   )}
                 </div>
               </div>
@@ -161,6 +165,12 @@ function Header() {
           <li className="nav-item-container">
             <div className="nav-title">
               <Link to="/contact">Liên hệ</Link>
+            </div>
+          </li>
+
+          <li className="nav-item-container">
+            <div className="nav-title">
+              <Link to="/about-us">Giới thiệu</Link>
             </div>
           </li>
         </ul>

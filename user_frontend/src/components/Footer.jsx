@@ -15,6 +15,7 @@ function Footer() {
               <Link to="/mercedes" className="footer-link-item">Mercedes</Link>
               <Link to="/mclaren" className="footer-link-item">Mclaren</Link>
               <Link to="/lamborghini" className="footer-link-item">Lamborghini</Link>
+              <Link to="/bugatti" className="footer-link-item">Bugatti</Link>
             </div>
           </div>
 

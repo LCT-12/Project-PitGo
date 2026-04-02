@@ -236,13 +236,23 @@ export default function Login() {
 
         <div className="right-content">
           <h2 className="right-title">
-            Làm chủ <span className="right-highlight">tốc độ</span>, <br />
-            chinh phục đam mê.
+            {mode === "register" ? (
+              <>
+                Khởi đầu <span className="right-highlight">hành trình</span> <br />
+                của riêng bạn.
+              </>
+            ) : (
+              <>
+                Làm chủ <span className="right-highlight">tốc độ</span>, <br />
+                chinh phục đam mê.
+              </>
+            )}
           </h2>
 
           <p className="right-desc">
-            Kết nối với mạng lưới đại lý xe sang hàng đầu.
-            Trải nghiệm dịch vụ mua bán xe chuẩn 5 sao ngay hôm nay.
+            {mode === "register" 
+              ? "Trở thành thành viên của cộng đồng PitGo để nhận đặc quyền riêng biệt."
+              : "Kết nối với mạng lưới đại lý xe sang hàng đầu. Trải nghiệm dịch vụ chuẩn 5 sao."}
           </p>
 
           <div className="member-box">

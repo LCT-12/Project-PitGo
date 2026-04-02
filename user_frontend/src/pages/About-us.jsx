@@ -43,7 +43,7 @@ export default function About() {
           <section className="about-section">
             <h3>Sứ Mệnh PitGo</h3>
             <p>
-              PitGo ra đời để hiện thực hóa triết lý đó. Chúng tôi không chỉ là một trang web bán xe, mà là một hệ sinh thái số thông minh:
+              PitGo ra đời để hiện thực hóa triết lý đó. Chúng tôi không chỉ là một trang web bán siêu xe, mà là một hệ sinh thái số thông minh:
             </p>
             <ul className="mission-list">
               <li><strong>Tuyển chọn khắt khe:</strong> Mỗi chiếc xe đều là một tuyệt tác cơ khí đã qua kiểm định chuyên sâu.</li>

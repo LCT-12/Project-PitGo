@@ -24,7 +24,7 @@ const AdminLayout = ({ onLogout }) => {
       <div className="main">
         <Topbar onLogout={onLogout} />
         <div className="page-content">
-          <Outlet /> {/* Các trang Dashboard, Cars... sẽ hiển thị ở đây */}
+          <Outlet />
         </div>
       </div>
     </div>
@@ -35,7 +35,6 @@ function App() {
   // Trạng thái kiểm tra đăng nhập
   const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem("isAdminLoggedIn") === "true");
 
-  // State for managing alerts
   const [alert, setAlert] = useState(null);
 
   const showAlert = (type, msg) => {
@@ -47,7 +46,6 @@ function App() {
       try {
         const response = await axios.get('http://localhost:5000/api/setting/');
         if (response.data.general_settings) {
-          // Áp dụng Site Title cho toàn bộ ứng dụng
           document.title = response.data.general_settings.site_title || "Project-SX";
         }
       } catch (error) {

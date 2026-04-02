@@ -65,7 +65,7 @@ const AllCar = () => {
         <b className="breadcrumb-text4">{selectedBrand}</b>
       </div>
 
-      <div className="allcar-title-wrapper">
+      <div className="allcar-intro-section">
         <h1 className="allcar-title">
           {selectedBrand === "Tất cả" ? "Tất cả dòng xe" : `Dòng xe ${selectedBrand}`}
         </h1>
@@ -81,7 +81,11 @@ const AllCar = () => {
             <img src="/images/search.svg" alt="Search Icon" />
           </div>
         </div>
+
+        <div className="allcar-title-line"></div>
       </div>
+
+
 
       <div className="allcar-content">
         {/* Chỉ hiện Sidebar khi có kết quả */}

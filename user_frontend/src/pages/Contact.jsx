@@ -83,7 +83,11 @@ function Contact({ showAlert }) {
         <b className="breadcrumb-text4">Liên hệ</b>       
       </div>
 
-      <h1 className="contact-title">LIÊN HỆ VỚI CHÚNG TÔI</h1>
+      <div className="contact-intro-section">
+        <h1 className="contact-title">LIÊN HỆ VỚI CHÚNG TÔI</h1>
+        <div className="contact-title-line"></div>
+      </div>
+      
 
       <form onSubmit={handleSubmit}> {/* Bọc form để xử lý Submit */}
         <div className="area-form">

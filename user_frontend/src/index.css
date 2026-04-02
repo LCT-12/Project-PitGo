@@ -54,6 +54,416 @@ body {
   background: #f1f3f7;
 }
 
+/* ================= PUBLIC LAYOUT (TRANG LOGIN) ================= */
+
+/* TEXT CHUNG (Tránh dùng thẻ p, h2 trần) */
+.shared-h2 {
+  margin: 0 0 12px;
+  font-size: 30px;
+  font-weight: 600;
+}
+
+.shared-p {
+  margin-bottom: 16px;
+  color: #666;
+}
+
+/* PASSWORD WRAPPER */
+.password-wrapper {
+  position: relative;
+}
+
+.password-wrapper .form-input {
+  padding-right: 40px;
+}
+
+/* ICON MẮT */
+.eye-icon {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  color: #9ca3af;
+  cursor: pointer;
+}
+
+.eye-icon:hover {
+  color: #6b7280;
+}
+
+.login-container {
+  display: flex;
+  height: 100vh;
+  font-family: 'Inter', sans-serif;
+}
+
+/* LEFT */
+.login-left {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40%;
+  background: #ffffff;
+}
+
+.login-box {
+  width: 380px;
+}
+
+.login-box input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 15px;
+  border-radius: 10px;
+  
+  /* 1. Đổi viền mặc định thành màu đen nếu bạn muốn giống hình mới gửi */
+  border: 1.5px solid #000; 
+  
+  /* 2. QUAN TRỌNG: Bỏ viền xanh/đen mặc định của trình duyệt */
+  outline: none; 
+  
+  background: white;
+  transition: all 0.2s ease-in-out;
+}
+
+/* 3. Hiệu ứng khi click vào (Focus) */
+.login-box input:focus {
+  /* Giữ viền đen hoặc đổi sang đỏ tùy bạn chọn */
+  border-color: #fc0000; 
+  
+  /* Tạo lớp viền hồng nhạt bao ngoài (glow) */
+  box-shadow: 0 0 0 4px rgba(255, 182, 193, 0.4); 
+}
+
+/* LOGO */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 30px;
+}
+
+.logo-img {
+  width: 160px;            /* Tăng kích thước icon lên (bạn có thể chỉnh từ 60px - 120px tùy ý) */
+  height: auto;           /* Giữ nguyên tỷ lệ ảnh, không bị móp hay kéo giãn */
+  object-fit: contain;    /* Đảm bảo hình ảnh logo hiển thị trọn vẹn */
+  margin-bottom: -25px;
+}
+
+
+.logo span {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+/* TITLE */
+.login-title {
+  margin: 0 0 5px;
+  font-size: 30px;
+  font-weight: 700;
+}
+
+.login-desc {
+  margin-bottom: 20px;
+  color: #6b7280;
+}
+
+/* FORM */
+.form-input {
+  width: 100%;
+  margin-top: 8px;
+  margin-bottom: 18px;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  background: #f9fafb;
+}
+
+/* PASSWORD */
+.password-box {
+  position: relative;
+}
+
+.password-box span {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+}
+
+/* OPTIONS */
+.options {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+.login-options {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+  font-size: 14px;
+}
+
+/* Tùy chỉnh cho cụm checkbox và chữ */
+.login-options label {
+  display: flex;
+  align-items: center;
+  gap: 8px;            
+  cursor: pointer;
+  color: #4b5563;      
+  white-space: nowrap;
+  user-select: none;
+}
+
+/* Tùy chỉnh riêng cho ô input checkbox */
+.login-checkbox {
+  width: 16px;         
+  height: 16px;
+  margin-top: 12px;           
+  cursor: pointer;
+  accent-color: #dc2626; /* Màu sắc của checkbox */
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.forgot {
+  color: #dc2626;
+  cursor: pointer;
+  margin-top: 12px;
+}
+
+.forgot:hover {
+  text-decoration: underline;
+  color: #b90505;
+}
+
+/* BUTTON */
+.login-btn {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  background: #dc2626; 
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;       
+  justify-content: center;
+  align-items: center;
+  gap: 4px;            
+  transition: background 0.3s;
+}
+
+/* Định dạng mũi tên mặc định */
+.arrow {
+  display: inline-block;
+  transition: transform 0.3s ease; 
+}
+
+/* Khi hover vào button, mũi tên nhích qua phải 5px */
+.login-btn:hover .arrow {
+  transform: translateX(3px);
+}
+
+.login-btn:hover {
+  background: #b90505; 
+}
+
+/* ALERT */
+.alert {
+  margin-bottom: 15px;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.alert.error {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.alert.success {
+  background: #dcfce7;
+  color: #166534;
+}
+
+/* REGISTER */
+.register {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 14px;
+}
+
+.register-link {
+  margin: 0 0 4px;
+  font-weight: bold;
+  font-size: 15px;
+  color: #dc2626;
+  cursor: pointer;
+}
+
+/* RIGHT */
+.login-right {
+  position: relative;
+  width: 60%;
+  background: url("/images/auth_bg.jpg") center/cover no-repeat;
+}
+
+.login-right .overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+}
+
+/* OVERLAY GRADIENT */
+.right-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0.6) 10%,    /* Tối gần như tuyệt đối ở mép trái */
+    rgba(0, 0, 0, 0.5) 25%,   /* Vẫn giữ độ tối rất cao để làm nền cho chữ */
+    rgba(0, 0, 0, 0.25) 40%,    /* Bắt đầu lộ rõ ảnh xe hơn */
+    rgba(0, 0, 0, 0.2) 100%    /* Sáng nhất ở mép phải */
+  );
+  z-index: 1; /* Đảm bảo lớp này nằm trên .overlay */
+
+  
+}
+
+/* CONTENT RIGHT */
+.right-content {
+  position: absolute;
+  bottom: 80px;
+  left: 60px;
+  z-index: 2;
+  max-width: 520px;
+}
+
+/* TITLE */
+.right-title {
+  font-size: 55px;
+  font-weight: 700;
+  line-height: 1;
+  color: white;
+  white-space: nowrap;
+}
+
+.right-highlight {
+  color: #ef4444;
+}
+
+/* TEXT */
+.right-desc {
+  margin: 15px 0 32px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #ccc;
+  font-size: 18px;
+}
+
+/* MEMBER BOX */
+.member-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: fit-content;
+  margin-top: 25px;
+  padding: 10px 14px;
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+}
+
+/* AVATAR */
+/* AVATAR LIST - Container chung */
+.avatars {
+  display: flex;
+  align-items: center; /* Căn giữa các avatar theo chiều dọc */
+}
+
+/* Kiểu dáng chung cho cả ảnh và ô tròn +1k */
+.avatar-img,
+.avatar-more {
+  width: 32px;  /* Giữ nguyên kích thước */
+  height: 32px;
+  border-radius: 50%; /* Bo tròn */
+  border: 2px solid #111; /* Viền đen để tách biệt */
+  
+  /* Tăng độ đè lên nhau (giống hình 2) */
+  margin-left: -8px; 
+  
+  position: relative; /* Cần thiết để z-index hoạt động */
+  transition: transform 0.2s ease; /* Thêm hiệu ứng mượt khi hover */
+}
+
+/* Ảnh đầu tiên không bị dịch trái */
+.avatars > *:first-child {
+  margin-left: 0;
+}
+
+/* Xử lý thứ tự đè (z-index) */
+.avatars > *:nth-child(1) { z-index: 1; }
+.avatars > *:nth-child(2) { z-index: 2; }
+.avatars > *:nth-child(3) { z-index: 3; }
+.avatars > *:nth-child(4) { z-index: 4; }
+
+/* Thêm hiệu ứng khi hover: Avatar nổi lên */
+.avatar-img:hover {
+  transform: translateY(-3px) scale(1.05);
+  z-index: 10 !important; /* Đảm bảo ảnh đang hover nằm trên cùng */
+}
+
+
+/* Tùy chỉnh riêng cho ảnh avatar */
+.avatar-img {
+  object-fit: cover; /* Đảm bảo ảnh không bị méo */
+}
+
+
+/* Tùy chỉnh riêng cho ô tròn +1k */
+.avatar-more {
+  background-color: #cbd5e1; /* Màu nền xám nhạt */
+  color: #1e293b;      /* Màu chữ */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+
+/* ===== TEXT ===== */
+.member-text {
+  margin-left: 20px; /* Khoảng cách giữa cụm avatar và chữ */
+}
+
+/* 1000+ Thành viên */
+.member-bold {
+  font-size: 14px;
+  color: white;
+  font-weight: bold;
+}
+
+/* đã tham gia cộng đồng - Làm mờ đi giống hình 2 */
+.member-sub {
+  font-size: 12px;
+  color: #888; /* Thay đổi từ #bbb thành #888 để mờ hơn */
+  display: block; /* Đảm bảo chữ xuống dòng */
+}
+
+/* TEXT */
+.member-bold {
+  font-size: 14px;
+  color: white;
+}
+
+.member-sub {
+  font-size: 12px;
+  color: #bbb;
+}
+
 /* ================= PUBLIC LAYOUT (TRANG CHỦ) ================= */
 .public-layout {
   display: flex;
@@ -316,9 +726,6 @@ body {
   justify-content: center;
 }
 
-/* --- MENU DỊCH VỤ --- */
-
-
 /* --- TRANG CHỦ (HOME) --- */
 .home-container {
   max-width: 1280px;
@@ -380,7 +787,7 @@ body {
 }
 
 /* --- Nút hình viên thuốc (Pill Button) --- */
-.section-pill-btn {
+/* .section-pill-btn {
   text-align: center;
   margin: 40px 0;
 }
@@ -393,6 +800,35 @@ body {
   font-size: 18px;
   font-weight: bold;
   display: inline-block;
+} */
+
+.section-pill-btn {
+    margin-bottom: 48px;
+    margin-top: 45px;
+    padding-left: 24px;
+    padding-right: 24px;
+    text-align: center;
+}
+
+.section-pill-btn span {
+  text-align: center;
+  font-size: 30px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.home-title-line1 {
+    width: 150px;
+    height: 2px;
+    background-color: #212529;
+    margin: 0 auto;
+}
+
+.home-title-line2 {
+    width: 240px;
+    height: 2px;
+    background-color: #212529;
+    margin: 0 auto;
 }
 
 /* --- Lưới xe (Car Grid) --- */
@@ -523,7 +959,7 @@ body {
 }
 
 .contact-info h3 {
-  font-size: 16px;
+  font-size: 20px;
   font-weight: 700;
   margin-bottom: 20px;
 }
@@ -671,13 +1107,15 @@ body {
   margin-bottom: 30px;
 }
 
-/* Container bọc ngoài */
-.allcar-title-wrapper {
+/* Intro Section */
+.allcar-intro-section {
   display: grid;
   grid-template-columns: 1fr auto 1fr; /* Chia thành 3 phần: Trái(1), Giữa(tự động), Phải(1) */
-  align-items: center;
-  margin-bottom: 40px;
-  padding: 0 20px;
+  text-align: center;
+  margin-bottom: 48px;
+  margin-top: 24px;
+  padding-left: 24px;
+  padding-right: 24px;
   position: relative;
 }
 
@@ -685,11 +1123,24 @@ body {
 .allcar-title {
   grid-column: 2; 
   margin: 0;
-  font-size: 28px;
+  margin-bottom: 8px;
+  font-size: 30px;
   text-transform: uppercase;
   font-weight: bold;
   text-align: center;
 }
+
+.allcar-title-line {
+    grid-column: 2; 
+    width: 200px;
+    height: 2px;
+    background-color: #212529;
+    margin: 0 auto;
+}
+
+
+
+
 
 /* Thanh search nằm ở cột số 3 (sát lề phải) */
 .allcar-search {
@@ -1067,8 +1518,8 @@ body {
 }
 
 .spec-icon-img {
-  width: 30px;  /* Điều chỉnh kích thước to nhỏ*/
-  height: 30px;
+  width: 40px;  /* Điều chỉnh kích thước to nhỏ*/
+  height: 40px;
   object-fit: contain; /* Giữ nguyên tỉ lệ ảnh không bị méo */
   flex-shrink: 0; /* Giữ icon không bị bóp méo khi chữ quá dài */
   margin-top: 3px; /* Căn chỉnh icon cho khớp với dòng chữ đầu tiên */
@@ -1334,11 +1785,27 @@ body {
   font-weight: bold;
 }
 
+/* Intro Section */
+.contact-intro-section {
+    margin-bottom: 48px;
+    margin-top: 24px;
+    padding-left: 24px;
+    padding-right: 24px;
+    text-align: center;
+}
+
 .contact-title {
   text-align: center;
   font-size: 30px;
   font-weight: 700;
-  margin-bottom: 40px;
+  margin-bottom: 8px;
+}
+
+.contact-title-line {
+    width: 200px;
+    height: 2px;
+    background-color: #212529;
+    margin: 0 auto;
 }
 
 /* Ô THỨ 1: Cấu trúc Form */
@@ -1517,16 +1984,40 @@ body {
 /* ============================================================
    PUBLIC LAYOUT (TRANG Service) 
    ============================================================ */
-/* --- SERVICES CSS --- */
-
-:root {
-  --service-teal: #20c997;
-  --service-dark: #212529;
-}
 
 .services-page-bg { 
-    min-height: 100vh;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: 'Be Vietnam Pro', sans-serif;
 }
+
+/* Breadcrumb */
+.services-page-bg .breadcrumb {
+  font-size: 18px;
+  color: #333;
+  margin-bottom: 25px;
+}
+
+.services-page-bg .breadcrumb-text1, 
+.services-page-bg .breadcrumb-text4 {
+  text-decoration: none;
+  color: #333; 
+  transition: 0.3s;
+}
+
+
+.services-page-bg .breadcrumb-text1:hover{
+  color: red;
+}
+
+
+.services-page-bg.breadcrumb-separator {
+  margin: 0 5px;
+  color: #333;
+  font-weight: bold;
+}
+
 
 /* Intro Section */
 .services-intro-section {
@@ -1539,24 +2030,18 @@ body {
 
 .services-main-title {
     font-weight: bold;
-    font-size: 2rem;
-    margin-bottom: 0.5rem;
+    font-size: 30px;
+    margin-bottom: 8px;
 }
 
 .services-title-line {
-    width: 150px;
+    width: 200px;
     height: 2px;
-    background-color: var(--service-dark);
+    background-color: #212529;
     margin: 0 auto;
 }
 
-.services-intro-text {
-    text-align: center;
-    margin-top: 1rem;
-    line-height: 1.6;
-}
-
-/* Grid System (Thay thế Bootstrap Row/Col) */
+/* Grid System */
 .services-grid-container {
     max-width: 1140px;
     margin: 0 auto;
@@ -1590,7 +2075,7 @@ body {
     border-radius: 0.375rem;
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15); /* shadow */
     padding: 1.5rem;
-    border-top: 4px solid var(--service-dark); /* border-top border-4 */
+    border-top: 4px solid #212529; /* border-top border-4 */
     height: 100%;
     transition: all 0.3s;
 }
@@ -1618,7 +2103,7 @@ body {
 
 /* Hiệu ứng hover từ file gốc */
 .pop:hover {
-    border-top-color: var(--service-teal) !important;
+    border-top-color: #20c997 !important;
     transform: scale(1.03);
     transition: all 0.3s;
 }
@@ -1854,25 +2339,48 @@ body {
 .services-container {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 40px;
   margin: 15px 0;
 }
 
 .services-title {
   font-weight: 600;
   color: #333;
+  white-space: nowrap;
+  
 }
 .checkbox-group {
   display: flex;
-  gap: 30px;
-  padding: 10px 0;
+  /* Cho phép các phần tử tự động xuống hàng khi hết chiều rộng */
+  flex-wrap: wrap; 
+  /* Khoảng cách giữa các hàng (20px) và giữa các cột (30px) */
+  gap: 20px 30px; 
+  padding: 15px 0;
+  flex: 1;
 }
+
 .checkbox-group label {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 15px;
+  color: #374151;
+  /* Đặt min-width để các checkbox thẳng hàng theo cột (tùy chọn) */
+  min-width: 140px; 
+  transition: color 0.2s ease;
+}
+
+.checkbox-group label:hover {
+  color: #ef4444; /* Màu đỏ chủ đạo của PitGo khi hover */
+}
+
+/* Tùy chỉnh riêng cho ô input checkbox để trông hiện đại hơn */
+.checkbox-group input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: #ef4444; /* Màu khi checkbox được tích chọn */
 }
 .booking-form textarea {
   padding: 15px;
@@ -1939,3 +2447,284 @@ body {
 
 .btn-secondary { background-color: #fff; color: #333; border: 1px solid #ccc; }
 .btn-secondary:hover { background-color: #f2f2f2; }
+
+
+/* ================= PUBLIC LAYOUT (TRANG ABOUT-US) ================= */
+
+.about-container {
+  width: 100%;
+}
+
+/* ===== HERO ===== */
+.about-hero {
+  position: relative;
+  /* Sử dụng vh để cân đối theo chiều cao màn hình, thêm min-height tránh bị ép quá nhỏ */
+  height: 50vh; 
+  min-height: 400px;
+  background: url("/images/background_About_Us.jpg") center/cover no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.about-hero .overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.about-content {
+  position: relative;
+  text-align: center;
+  color: white;
+  max-width: 700px; /* Giới hạn chiều rộng để chữ không bị kéo dài ra hai bên */
+  padding: 0 20px;
+  z-index: 1;
+}
+
+.about-content h1 {
+  font-size: 45px;
+  font-weight: 800;
+  margin-bottom: 20px;
+  letter-spacing: -1px;
+}
+
+.about-content span {
+  color: #ef4444; /* Màu đỏ chủ đạo */
+}
+
+.hero-subtitle {
+  font-size: 18px;
+  line-height: 1.6;
+  color: #e5e7eb;
+}
+
+/* ===== BODY ===== */
+.about-body {
+  padding: 80px 20px; /* Tăng khoảng cách để giao diện thoáng hơn */
+  background: #f9fafb;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ===== TEXT ===== */
+.about-text .about-section {
+  margin-top: -20px;
+  margin-bottom: 40px;
+  text-align: left; /* Căn lề trái cho dễ đọc nội dung dài */
+  font-size: 18px;
+}
+
+.about-text .about-section h3 {
+  color: #111;
+  font-size: 24px;
+  margin-bottom: 15px;
+  position: relative;
+  padding-left: 15px;
+}
+
+/* Thêm vạch đỏ bên cạnh tiêu đề cho "chất" */
+.about-text .about-section h3::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 20px;
+  background: #ef4444;
+}
+
+.mission-list {
+  list-style: none;
+  padding: 0;
+  margin-top: 15px;
+}
+
+.mission-list li {
+  margin-bottom: 10px;
+  padding-left: 25px;
+  position: relative;
+  color: #4b5563;
+}
+
+/* Thêm icon bullet point tùy chỉnh */
+.mission-list li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: #ef4444;
+  font-weight: bold;
+}
+
+/* ===== STATS ===== */
+.about-stats {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap; /* Tự động xuống hàng trên mobile */
+  gap: 30px;
+  margin-bottom: 80px;
+  margin-top: 30px;
+  width: 100%;
+  max-width: 800px;
+}
+
+.stat-box {
+  background: white;
+  padding: 40px 20px;
+  border-radius: 16px;
+  flex: 1; /* Cho phép các box co giãn đều nhau */
+  min-width: 220px; /* Responsive: khi màn hình nhỏ hơn 220px sẽ tự xuống hàng */
+  text-align: center;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.stat-box:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.stat-box h3 {
+  color: #ef4444;
+  font-size: 35px;
+  font-weight: 800;
+  margin-bottom: 10px;
+}
+
+.stat-box p {
+  color: #6b7280;
+  font-size: 16px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* ===== VALUES ===== */
+.about-values {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 30px;
+  width: 100%;
+  max-width: 1000px;
+}
+
+.value-item {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  width: 30%; /* Chiều rộng của mỗi thẻ */
+  text-align: center; /* Căn giữa văn bản */
+  display: flex; /* Sắp xếp các phần tử con (img, h4, p) */
+  flex-direction: column; /* Xếp các phần tử con theo cột */
+  align-items: center; /* Căn giữa các phần tử con theo trục dọc */
+}
+
+.value-item:hover {
+  transform: translateY(-5px);
+}
+
+.value-item img {
+  width: 100%;           /* Chiếm hết chiều rộng của box chứa */
+  aspect-ratio: 16 / 9;  /* Ép mọi ảnh về tỉ lệ 16:9 */
+  object-fit: cover;     /* Cắt tỉa ảnh để lấp đầy khung hình mà không bị méo */
+  border-radius: 20px;
+  display: block;
+  margin-bottom: 15px;
+}
+
+.value-item h4 {
+  font-size: 20px;
+  color: #1f2937;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+.value-item p {
+  color: #6b7280;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+/* SECTION TEAM */
+.about-team {
+  margin-bottom: 48px;
+  margin-top: 50px;
+  padding-left: 24px;
+  padding-right: 24px;
+  text-align: center;
+}
+
+.team-title span {
+  color: #000;
+  padding: 10px 30px;
+  font-weight: bold;
+  font-size: 20px;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+.teams-title-line {
+    width: 200px;
+    height: 2px;
+    background-color: #212529;
+    margin: 0 auto;
+    margin-top: 8px;
+} 
+
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  padding: 0 20px;
+  max-width: 1200px; /* Giới hạn chiều rộng tối đa của cả khối (ví dụ: 800px) */
+  margin: 0 auto;   /* Căn giữa khối ảnh trên trang */
+  margin-top: 40px;
+}
+
+.team-member {
+  transition: transform 0.3s ease;
+}
+
+.team-member:hover {
+  transform: translateY(-10px);
+}
+
+.member-image {
+  width: 100%;
+  aspect-ratio: 3/4; /* Giữ tỉ lệ ảnh dọc như trong hình */
+  overflow: hidden;
+  margin-bottom: 20px;
+  border-radius: 8px; /* Bo góc nhẹ cho tinh tế */
+}
+
+.member-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.team-member h4 {
+  font-size: 1.4rem;
+  color: #333;
+  margin-bottom: 5px;
+  font-weight: 600;
+}
+
+.team-member .role {
+  font-size: 0.85rem;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Responsive cho mobile */
+@media (max-width: 768px) {
+  .team-grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+}

@@ -1,241 +1,225 @@
 import { useState } from "react"
 import "../index.css"
 import { mockUsers } from "../mockData/mockLogin"
-import { Link, useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 
 export default function Login() {
-
   const navigate = useNavigate()
-  const [mode, setMode] = useState("login")
-  const [showPassword, setShowPassword] = useState(false)
-  const [loading, setLoading] = useState(false)
-  const [alert, setAlert] = useState(null)
 
+  const [mode, setMode] = useState("login") // login | register | forgot
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [fullname, setFullname] = useState("")
-
-  const toggleMode = () => {
-    setMode(mode === "login" ? "register" : "login")
-    setAlert(null)
-  }
-
-  const forgotPassword = () => {
-    setMode("forgot")
-    setAlert(null)
-  }
+  const [loading, setLoading] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
 
   const handleSubmit = (e) => {
     e.preventDefault()
-
     setLoading(true)
-    setAlert(null)
 
     setTimeout(() => {
-
-      if (!email.includes("@")) {
-        setAlert({ type: "error", text: "Vui lòng nhập email hợp lệ!" })
-        setLoading(false)
-        return
-      }
-
+      // LOGIN
       if (mode === "login") {
-
         const user = mockUsers.find(
           (u) => u.email === email && u.password === password
         )
-
         if (user) {
-          setAlert({ type: "success", text: "Đăng nhập thành công!" })
-
-          setTimeout(() => {
-            navigate("/home")
-          }, 1000)
-
+          navigate("/home")
         } else {
-          setAlert({ type: "error", text: "Sai email hoặc mật khẩu!" })
+          alert("Sai email hoặc mật khẩu!")
         }
       }
 
+      // REGISTER
       if (mode === "register") {
-        setAlert({ type: "success", text: "Tạo tài khoản thành công!" })
+        if (!fullname) {
+          alert("Vui lòng nhập họ tên!")
+          setLoading(false)
+          return
+        }
+
+        alert("Đăng ký thành công!")
+        setMode("login")
       }
 
+      // FORGOT PASSWORD
       if (mode === "forgot") {
-        setAlert({ type: "success", text: "Đã gửi liên kết khôi phục!" })
+        if (!email.includes("@")) {
+          alert("Email không hợp lệ!")
+        } else {
+          alert("Đã gửi link khôi phục!")
+          setMode("login")
+        }
       }
 
       setLoading(false)
 
-    }, 1500)
+    }, 1000)
   }
 
   return (
-    <div className="flex min-h-screen w-full bg-gray-50 text-gray-900">
+    <div className="login-container">
 
-      {/* LEFT FORM */}
-      <div className="flex w-full flex-col justify-center bg-white px-8 py-12 shadow-2xl md:w-1/2">
+      {/* LEFT */}
+      <div className="login-left">
+        <div className="login-box">
 
-        <div className="mx-auto w-full max-w-md">
-
-          {/* ✅ LOGO FIX */}
-          <div className="mb-10 flex items-center gap-3">
-            <img src="/images/logo.jpg" alt="PitGo Logo" className="w-12 h-12 object-contain" />
-            <span className="text-3xl font-bold">
-              Pit<span className="text-black-600">Go</span>
-            </span>
+          {/* LOGO */}
+          <div className="logo">
+            <img className="logo-img" src="/images/logo.png" alt="logo" />
           </div>
 
-          {/* Title */}
-          <div className="mb-8">
+          {/* TITLE */}
+          <h1 className="login-title">
+            {mode === "login" && "Chào mừng trở lại!"}
+            {mode === "register" && "Tạo tài khoản"}
+            {mode === "forgot" && "Khôi phục mật khẩu"}
+          </h1>
 
-            {mode === "login" && (
-              <>
-                <h1 className="text-3xl font-bold">Chào mừng trở lại!</h1>
-                <p className="text-gray-500">
-                  Nhập thông tin để quản lý bộ sưu tập xe của bạn.
-                </p>
-              </>
-            )}
-
-            {mode === "register" && (
-              <>
-                <h1 className="text-3xl font-bold">Tạo tài khoản mới</h1>
-                <p className="text-gray-500">
-                  Đăng ký ngay để nhận báo giá xe độc quyền.
-                </p>
-              </>
-            )}
-
-            {mode === "forgot" && (
-              <>
-                <h1 className="text-3xl font-bold">Khôi phục mật khẩu</h1>
-                <p className="text-gray-500">
-                  Nhập email để nhận liên kết đặt lại mật khẩu.
-                </p>
-              </>
-            )}
-
-          </div>
-
-          {/* ALERT */}
-          {alert && (
-            <div className={`mb-6 p-3 rounded-lg text-sm border
-              ${alert.type === "error"
-                ? "bg-red-50 text-red-600 border-red-200"
-                : "bg-green-50 text-green-700 border-green-200"}`}
-            >
-              {alert.text}
-            </div>
-          )}
+          <p className="login-desc">
+            {mode === "login" &&
+              "Nhập thông tin để quản lý bộ sưu tập xe của bạn."}
+            {mode === "register" &&
+              "Tạo tài khoản để bắt đầu trải nghiệm."}
+            {mode === "forgot" &&
+              "Nhập email để nhận link đặt lại mật khẩu."}
+          </p>
 
           {/* FORM */}
-          <form onSubmit={handleSubmit} className="flex flex-col">
+          <form onSubmit={handleSubmit}>
 
+            {/* FULLNAME */}
             {mode === "register" && (
               <input
+                className="form-input"
                 type="text"
-                placeholder="Họ và tên đầy đủ"
-                className="mb-5 p-3 rounded-xl border"
+                placeholder="Họ và tên"
                 value={fullname}
                 onChange={(e) => setFullname(e.target.value)}
+                required
               />
             )}
 
+            {/* EMAIL */}
             <input
+              className="form-input"
               type="email"
               placeholder="example@pitgo.com"
-              required
-              className="mb-5 p-3 rounded-xl border"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              required
             />
 
+            {/* PASSWORD */}
             {mode !== "forgot" && (
-              <div className="relative mb-5">
-
+              <div className="password-wrapper">
                 <input
+                  className="form-input"
                   type={showPassword ? "text" : "password"}
                   placeholder="Mật khẩu"
-                  required
-                  className="p-3 rounded-xl border w-full"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  required
                 />
 
-                <button
-                  type="button"
+                {/* ICON MẮT */}
+                <span
+                  className="eye-icon"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-3 text-gray-400"
                 >
-                  👁
-                </button>
+                  {showPassword ? (
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M1 12C1 12 5 4 12 4C19 4 23 12 23 12C23 12 19 20 12 20C5 20 1 12 1 12Z" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <circle cx="12" cy="12" r="3" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                ) : (
 
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M17.94 17.94C16.2 19.24 14.2 20 12 20C5 20 1 12 1 12C2.17 9.8 4 7.85 6.1 6.1" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M9.88 4.24C10.55 4.08 11.26 4 12 4C19 4 23 12 23 12C22.25 13.43 21.36 14.72 20.35 15.82" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <circle cx="12" cy="12" r="3" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M1 1L23 23" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                  )}
+                </span>
               </div>
             )}
 
+            {/* OPTIONS */}
             {mode === "login" && (
-              <div className="flex justify-between text-sm mb-5">
-
-                <label className="flex gap-2">
-                  <input type="checkbox" />
-                  Ghi nhớ
+              <div className="login-options">
+                <label>
+                  <input className="login-checkbox" type="checkbox" /> Ghi nhớ
                 </label>
-
-                <button
-                  type="button"
-                  className="text-red-600"
-                  onClick={forgotPassword}
+                <span
+                  className="forgot"
+                  onClick={() => setMode("forgot")}
                 >
                   Quên mật khẩu?
-                </button>
-
+                </span>
               </div>
             )}
 
-            <button
-              type="submit"
-              className="bg-red-600 text-white py-3 rounded-xl font-bold"
-              disabled={loading}
-            >
-              {loading
-                ? "Đang xử lý..."
-                : mode === "login"
-                ? "Đăng nhập"
-                : mode === "register"
-                ? "Tạo tài khoản"
-                : "Gửi liên kết"}
-            </button>
+            {/* BUTTON */}
+            <button type="submit" className="login-btn">
+            {loading ? (
+              "Đang xử lý..."
+            ) : (
+              <>
+                {mode === "login"
+                  ? "Đăng nhập"
+                  : mode === "register"
+                  ? "Tạo tài khoản"
+                  : "Gửi liên kết"}
+                <span className="arrow">
+                  <svg 
+                    width="16" 
+                    height="16" 
+                    viewBox="0 0 24 24" 
+                    fill="none" 
+                    stroke="currentColor" 
+                    strokeWidth="2.5" 
+                    strokeLinecap="round" 
+                    strokeLinejoin="round"
+                  >
+                    <line x1="3" y1="12" x2="17" y2="12"></line>
+                    <polyline points="13 8 17 12 13 16"></polyline>
+                  </svg>
+                </span>
+              </>
+            )}
+          </button>
 
           </form>
 
-          {/* FOOTER */}
-          <div className="mt-8 text-center text-sm">
+        
+          {/* TOGGLE */}
+          <div className="register">
 
             {mode === "login" && (
               <>
-                Chưa là thành viên?
-                <button onClick={toggleMode} className="text-red-600 ml-1">
+                Chưa là thành viên?{" "}
+                <span className="register-link" onClick={() => setMode("register")}>
                   Đăng ký ngay
-                </button>
+                </span>
               </>
             )}
 
             {mode === "register" && (
               <>
-                Đã có tài khoản?
-                <button onClick={toggleMode} className="text-red-600 ml-1">
+                Đã có tài khoản?{" "}
+                <span className="register-link" onClick={() => setMode("login")}>
                   Đăng nhập
-                </button>
+                </span>
               </>
             )}
 
             {mode === "forgot" && (
               <>
-                Đã nhớ mật khẩu?
-                <button onClick={() => setMode("login")} className="text-red-600 ml-1">
-                  Quay lại
-                </button>
+                Đã nhớ mật khẩu?{" "}
+                <span className="register-link" onClick={() => setMode("login")}>
+                  Quay lại đăng nhập
+                </span>
               </>
             )}
 
@@ -244,25 +228,36 @@ export default function Login() {
         </div>
       </div>
 
-      {/* RIGHT IMAGE */}
-      <div className="hidden md:flex w-1/2 relative bg-black">
+      {/* RIGHT */}
+      <div className="login-right">
 
-        <img
-          src="/images/auth_bg.jpg"
-          className="absolute inset-0 w-full h-full object-cover opacity-90"
-        />
+        <div className="overlay"></div>
+        <div className="right-overlay"></div>
 
-        <div className="absolute inset-0 bg-black/70"></div>
-
-        <div className="relative text-white p-16 flex flex-col justify-end">
-
-          <h2 className="text-5xl font-bold">
-            Làm chủ <span className="text-red-500">tốc độ</span>
+        <div className="right-content">
+          <h2 className="right-title">
+            Làm chủ <span className="right-highlight">tốc độ</span>, <br />
+            chinh phục đam mê.
           </h2>
 
-          <p className="text-gray-300 mt-4 max-w-md">
+          <p className="right-desc">
             Kết nối với mạng lưới đại lý xe sang hàng đầu.
+            Trải nghiệm dịch vụ mua bán xe chuẩn 5 sao ngay hôm nay.
           </p>
+
+          <div className="member-box">
+            <div className="avatars">
+              <img className="avatar-img" src="/images/billgate.jpg" alt="" />
+              <img className="avatar-img" src="/images/jackma.jpg" alt="" />
+              <img className="avatar-img" src="/images/pnvuong.jpg" alt="" />
+              <div className="avatar-more">+1k</div>
+            </div>
+
+            <div className="member-text">
+              <strong className="member-bold">1000+ Thành viên </strong>
+              <span className="member-sub">đã tham gia cộng đồng</span>
+            </div>
+          </div>
 
         </div>
 

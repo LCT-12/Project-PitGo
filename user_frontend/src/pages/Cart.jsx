@@ -69,10 +69,6 @@ function Cart() {
     // Nếu tất cả thông tin đã đầy đủ
     setErrorMessage("");
     setStep(3);
-
-    // setCartItems([]); // 1. Xóa sạch state giỏ hàng hiện tại
-    // localStorage.removeItem('pitgo_cart'); // 2. Xóa dữ liệu trong bộ nhớ trình duyệt
-    // window.dispatchEvent(new Event('cartUpdated')); // 3. Thông báo cho Navbar cập nhật lại số lượng (nếu có)
   };
   
   const nextStep = () => setStep(step + 1); 

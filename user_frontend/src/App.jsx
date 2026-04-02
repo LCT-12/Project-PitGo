@@ -15,7 +15,7 @@ import AllCar from "./pages/allCar";
 import CarDetail from "./pages/CarDetail";
 import Contact from "./pages/Contact";
 import Services from "./pages/Services";
-import Cart from "./pages/Cart";
+import Appointment from "./pages/Appointment";
 import About from "./pages/About-us";
 
 // --- LAYOUT CHO KHU VỰC TRANG CHỦ (PUBLIC) ---
@@ -100,8 +100,8 @@ function App() {
         {/* Trang danh sách tất cả xe */}
         <Route path="/all-cars" element={<AllCar />} />
 
-        {/* Trang Giỏ hàng */}
-        <Route path="/cart" element={<Cart showAlert={showAlert} />} />
+        {/* Trang Đặt lịch hẹn */}
+        <Route path="/appointment" element={<Appointment showAlert={showAlert} />} />
 
         {/* Trang Liên hệ */}
         <Route path="/contact" element={<Contact showAlert={showAlert} />} />
@@ -109,14 +109,10 @@ function App() {
         {/* Trang Bảo dưỡng */}
         <Route path="/services" element={<Services />} />
 
-<<<<<<< HEAD
-        {/* Trang danh sách xe theo hãng */}
-=======
         {/* Trang Giới thiệu */}
         <Route path="/about-us" element={<About />} />
 
         {/* Trang danh sách xe theo hãng (Ví dụ: /Ferrari) */}
->>>>>>> 8779366d1ce18877d472ae283687b41fbc292d83
         <Route path=":brandName" element={<AllCar />} />
 
         {/* Trang chi tiết xe */}

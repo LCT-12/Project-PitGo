@@ -3,23 +3,41 @@ import { Link } from 'react-router-dom';
 import '../index.css'; 
 
 // Import dữ liệu mặc định
-import { mockCartData } from '../mockData/mockCart'; 
-import { Appointment } from '../mockData/mockAptm';
+// import { mockAppointmentData } from '../mockData/mockAppointment'; 
+// import { Appointment } from '../mockData/mockAptm';
 
-function Cart() {
+function Appointment({ showAlert }) {
   const [step, setStep] = useState(1);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const [cartItems, setCartItems] = useState(() => {
-    const savedCart = localStorage.getItem('pitgo_cart');
-    return savedCart ? JSON.parse(savedCart) : mockCartData;
+  const [appointmentItems, setAppointmentItems] = useState(() => {
+    const savedAppointment = localStorage.getItem('pitgo_appointment');
+    return savedAppointment ? JSON.parse(savedAppointment) : [];
   });
   
-  const [apt, setApt] = useState(Appointment);
+  const [apt, setApt] = useState({
+    location: "Cơ sở 1",
+    date: "",
+    fullName: "",
+    phone: "",
+    email: "",
+    technicalAdvice: false,
+    testDrive: false,
+    carMaintenance: false,
+    carWash: false,
+    carRepair: false,
+    carCare: false,
+    carPerformance: false,
+    carInterior: false,
+    carExterior: false,
+    carManagement: false,
+    financialSupport: false,
+    notes: ""
+  });
 
   useEffect(() => {
-    localStorage.setItem('pitgo_cart', JSON.stringify(cartItems));
-  }, [cartItems]);
+    localStorage.setItem('pitgo_appointment', JSON.stringify(appointmentItems));
+  }, [appointmentItems]);
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -32,10 +50,10 @@ function Cart() {
   };
 
   const handleRemoveItem = (id) => {
-    const updatedCart = cartItems.filter(item => item.id !== id);
-    setCartItems(updatedCart);
-    localStorage.setItem('pitgo_cart', JSON.stringify(updatedCart));
-    window.dispatchEvent(new Event('cartUpdated'));
+    const updatedAppointment = appointmentItems.filter(item => item.id !== id);
+    setAppointmentItems(updatedAppointment);
+    localStorage.setItem('pitgo_appointment', JSON.stringify(updatedAppointment));
+    window.dispatchEvent(new Event('appointmentUpdated'));
   };
 
   // --- LOGIC XỬ LÝ KHI NHẤN XÁC NHẬN ---
@@ -79,23 +97,23 @@ function Cart() {
   // Giao diện Bước 1: Danh sách xe
   // ==========================================
   const renderStep1 = () => (
-    <div className="cart-step-content">
+    <div className="appointment-step-content">
       <h2 className="step-title">DANH SÁCH XE BẠN QUAN TÂM</h2>
-      {cartItems.length === 0 ? (
+      {appointmentItems.length === 0 ? (
         <p style={{ textAlign: 'center', padding: '20px' }}>Giỏ hàng của bạn đang trống.</p>
       ) : (
-        <div className="cart-items-wrapper">
-          {cartItems.map(item => (
-            <div key={item.id} className="cart-item">
-              <img src={item.image} alt={item.name} className="cart-item-img" />
-              <div className="cart-item-info">
+        <div className="appointment-items-wrapper">
+          {appointmentItems.map(item => (
+            <div key={item.id} className="appointment-item">
+              <img src={item.image} alt={item.name} className="appointment-item-img" />
+              <div className="appointment-item-info">
                 <h3>{item.name}</h3>
                 <p>Hãng: {item.brand}</p>
                 <p>Năm: {item.year}</p>
                 <p>Xuất xứ: {item.origin}</p>
                 <p>Loại: {item.type}</p>
               </div>
-              <div className="cart-item-actions">
+              <div className="appointment-item-actions">
                 <button className="remove-btn" onClick={() => handleRemoveItem(item.id)}>-</button>
                 <Link to={`/car/${item.id}`} className="view-detail-btn">
                   <img src="/images/eye-icon.svg" alt="Xem" />
@@ -105,9 +123,9 @@ function Cart() {
           ))}
         </div>
       )}
-      <div className="cart-actions">
+      <div className="appointment-actions">
         <Link to="/all-cars" className="btn-secondary">QUAY LẠI TÌM XE</Link>
-        <button className="btn-primary" onClick={nextStep} disabled={cartItems.length === 0}>TIẾP TỤC</button>
+        <button className="btn-primary" onClick={nextStep} disabled={appointmentItems.length === 0}>TIẾP TỤC</button>
       </div>
     </div>
   );
@@ -116,7 +134,7 @@ function Cart() {
   // Giao diện Bước 2: Điền thông tin
   // ==========================================
   const renderStep2 = () => (
-    <div className="cart-step-content">
+    <div className="appointment-step-content">
       <h2 className="step-title">THÔNG TIN LỊCH HẸN</h2>
       <div className="booking-form">
         <div className="form-row">
@@ -171,7 +189,7 @@ function Cart() {
         )}
       </div>
 
-      <div className="cart-actions">
+      <div className="appointment-actions">
         <button className="btn-secondary" onClick={prevStep}>QUAY LẠI</button>
         {/* Nút XÁC NHẬN bây giờ luôn bấm được, không bị mờ */}
         <button className="btn-primary" onClick={handleConfirm}>
@@ -182,10 +200,10 @@ function Cart() {
   );
 
   const renderStep3 = () => (
-    <div className="cart-step-content success-step">
+    <div className="appointment-step-content success-step">
       <h2 className="success-title">BẠN ĐÃ ĐẶT LỊCH HẸN THÀNH CÔNG</h2>
       <p className="booking-code">Mã lịch hẹn: <strong>LHKH-001</strong></p>
-      <div className="cart-actions center-actions">
+      <div className="appointment-actions center-actions">
         <Link to="/" className="btn-secondary">VỀ TRANG CHỦ</Link>
         <Link to="/contact" className="btn-primary">LIÊN HỆ HỖ TRỢ</Link>
       </div>
@@ -193,7 +211,7 @@ function Cart() {
   );
 
   return (
-    <div className="cart-page-container">
+    <div className="appointment-page-container">
       <div className="breadcrumb">
         <Link to="/home" className="breadcrumb-text1">Trang chủ</Link>
         <span className="breadcrumb-separator"> &gt; </span>
@@ -216,4 +234,4 @@ function Cart() {
   );
 };
 
-export default Cart;
+export default Appointment;

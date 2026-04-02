@@ -1,78 +1,80 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 function Users({ showAlert }) {
   const [users, setUsers] = useState([]);
   const [showModal, setShowModal] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  // Thông tin định danh & Liên lạc
+  // States cho Form
   const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [phone, setPhone] = useState("");
-
-  // Thông tin cá nhân & Địa chỉ
   const [dob, setDob] = useState("");
   const [nationalId, setNationalId] = useState("");
   const [country, setCountry] = useState("");
   const [address, setAddress] = useState("");
   const [role, setRole] = useState("Standard");
+  const [status, setStatus] = useState("Active");
 
-  // Trạng thái & UI
-  const [status, setStatus] = useState("Active"); // Active/Locked
-  const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
-  // State cho chức năng Edit/Delete
   const [editingUser, setEditingUser] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [userToDelete, setUserToDelete] = useState(null);
 
-  const handleStatusChange = (e) => {
-    setStatus(e.target.checked ? "Active" : "Locked");
+  // 1. TẢI DỮ LIỆU TỪ MONGODB
+  const fetchUsers = async () => {
+    try {
+      const res = await axios.get("http://localhost:5000/api/users");
+      setUsers(res.data);
+    } catch (error) {
+      console.error("Lỗi tải danh sách khách hàng:", error);
+    }
   };
 
-  // Cập nhật hàm handleSubmit để lưu thông tin khách hàng
-  const handleSubmit = (e) => {
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  // 2. XỬ LÝ LƯU (THÊM/SỬA)
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
     const userData = {
-      id: editingUser ? editingUser.id : Date.now(),
-      name: userName,
-      email: email,
-      phone: phone,
-      dob: dob,
-      nationalId: nationalId,
-      country: country,
-      address: address,
-      password: password,
-      status: status,
-      role: role,
+      name: userName, email, password, phone, dob, 
+      nationalId, country, address, status, role
     };
 
-    setTimeout(() => {
+    try {
       if (editingUser) {
-        setUsers(users.map((u) => (u.id === editingUser.id ? userData : u)));
+        const res = await axios.put(`http://localhost:5000/api/users/${editingUser._id}`, userData);
+        setUsers(users.map((u) => (u._id === editingUser._id ? res.data : u)));
+        showAlert("success", "Cập nhật thông tin khách hàng thành công!");
       } else {
-        setUsers((prev) => [...prev, userData]);
+        const res = await axios.post("http://localhost:5000/api/users/register", userData);
+        setUsers([res.data, ...users]);
+        showAlert("success", "Thêm khách hàng mới thành công!");
       }
-      setLoading(false);
       setShowModal(false);
       resetForm();
-      showAlert(
-        "success",
-        `Khách hàng ${editingUser ? "cập nhật" : "thêm"} thành công!`,
-      );
-    }, 500);
+    } catch (err) {
+      showAlert("danger", err.response?.data?.message || "Đã xảy ra lỗi hệ thống!");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  // Cập nhật hàm handleEdit để đổ dữ liệu khách hàng lên form
+  // 3. ĐỔ DỮ LIỆU VÀO FORM KHI EDIT
   const handleEdit = (user) => {
     setEditingUser(user);
     setUserName(user.name);
     setEmail(user.email);
     setPassword(user.password);
-    setPhone(user.phone);
     setDob(user.dob);
+    setPhone(user.phone);
     setNationalId(user.nationalId);
     setCountry(user.country);
     setAddress(user.address);
@@ -81,35 +83,22 @@ function Users({ showAlert }) {
     setShowModal(true);
   };
 
-  // Hàm resetForm chuẩn cho khách hàng
   const resetForm = () => {
     setEditingUser(null);
-    setUserName("");
-    setEmail("");
-    setPassword("");
-    setPhone("");
-    setDob("");
-    setNationalId("");
-    setCountry("");
-    setAddress("");
-    setStatus("Active");
-    setRole("Standard");
+    setUserName(""); setEmail(""); setPassword(""); setPhone("");
+    setDob(""); setNationalId(""); setCountry(""); setAddress("");
+    setStatus("Active"); setRole("Standard");
   };
 
-  const confirmDelete = (userId) => {
-    setUserToDelete(userId);
-    setShowDeleteModal(true);
-  };
-
-  const handleDelete = (id) => {
+  // 4. XÓA KHÁCH HÀNG
+  const handleDelete = async () => {
     try {
-      setUsers(users.filter((user) => user.id !== userToDelete));
+      await axios.delete(`http://localhost:5000/api/users/${userToDelete}`);
+      setUsers(users.filter((u) => u._id !== userToDelete));
       setShowDeleteModal(false);
-      setUserToDelete(null);
-      showAlert("success", "Khách hàng đã được xóa thành công!");
+      showAlert("success", "Đã xóa khách hàng khỏi hệ thống!");
     } catch (err) {
-      console.log(err);
-      showAlert("danger", "Không thể xóa khách hàng.");
+      showAlert("danger", "Xóa thất bại!");
     }
   };
 
@@ -139,7 +128,6 @@ function Users({ showAlert }) {
               <th>Hạng</th>
               <th>Email</th>
               <th>SĐT</th>
-              <th>CMND/CCCD</th>
               <th>Ngày Sinh</th>
               <th>Địa chỉ</th>
               <th>Trạng thái</th>
@@ -150,7 +138,7 @@ function Users({ showAlert }) {
             {users.length === 0 ? (
               <tr>
                 <td
-                  colSpan="10"
+                  colSpan="9"
                   style={{
                     textAlign: "center",
                     padding: "20px",
@@ -174,7 +162,6 @@ function Users({ showAlert }) {
                   </td>
                   <td>{user.email}</td>
                   <td>{user.phone}</td>
-                  <td>{user.nationalId}</td>
                   <td>{user.dob}</td>
                   <td className="text-truncate" style={{ maxWidth: "150px" }}>
                     {user.address}
@@ -238,12 +225,35 @@ function Users({ showAlert }) {
                 </div>
                 <div className="form-group">
                   <label>Password</label>
-                  <input
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                  />
+                  <div className="password-wrapper">
+                    <input
+                      className="form-input"
+                      type={showPassword ? "text" : "password"}
+                      placeholder="Mật khẩu"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                      
+                    />
+                    <span
+                      className="eye-icon"
+                      onClick={() => setShowPassword(!showPassword)}
+                    >
+                      {showPassword ? (
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M1 12C1 12 5 4 12 4C19 4 23 12 23 12C23 12 19 20 12 20C5 20 1 12 1 12Z" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          <circle cx="12" cy="12" r="3" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                      ) : (
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M17.94 17.94C16.2 19.24 14.2 20 12 20C5 20 1 12 1 12C2.17 9.8 4 7.85 6.1 6.1" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          <path d="M9.88 4.24C10.55 4.08 11.26 4 12 4C19 4 23 12 23 12C22.25 13.43 21.36 14.72 20.35 15.82" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          <circle cx="12" cy="12" r="3" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          <path d="M1 1L23 23" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                      )}
+                    </span>
+                  </div>
                 </div>
               </div>
 

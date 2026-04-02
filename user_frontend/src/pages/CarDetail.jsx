@@ -3,7 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import axios from "axios";
 import "../index.css";
 
-const CarDetail = () => {
+function CarDetail({ showAlert }) {
   const { id } = useParams();
 
   const [car, setCar] = useState(null);
@@ -42,20 +42,17 @@ const CarDetail = () => {
     );
 
   // --- Hàm xử lý thêm xe vào giỏ ---
-  const handleAddToCart = () => {
-    // 1. Lấy giỏ hàng hiện tại đang có từ localStorage
-    const savedCart = localStorage.getItem('pitgo_cart');
-    const currentCart = savedCart ? JSON.parse(savedCart) : [];
+const handleAppointment = () => {
+    // 1. SỬA pitgo_Appointment THÀNH pitgo_appointment
+    const savedAppointment = localStorage.getItem('pitgo_appointment');
+    const currentAppointment = savedAppointment ? JSON.parse(savedAppointment) : [];
 
-    // 2. Kiểm tra xem xe này đã được thêm trước đó chưa (tránh trùng lặp)
-    // Kiểm tra dựa trên _id từ MongoDB
-    const isExist = currentCart.find(item => item.id === car._id);
+    const isExist = currentAppointment.find(item => item.id === car._id);
     if (isExist) {
-      alert("Xe này đã có trong danh sách quan tâm của bạn!");
+      showAlert("danger", "Xe này đã có trong danh sách quan tâm của bạn!");
       return;
     }
 
-    // 3. Tạo object xe mới khớp với cấu trúc hiển thị trong Cart.jsx
     const newItem = {
       id: car._id,
       name: car.carName,
@@ -66,12 +63,15 @@ const CarDetail = () => {
       image: car.image
     };
 
-    // 4. Thêm xe mới vào danh sách và lưu lại vào localStorage
-    const updatedCart = [...currentCart, newItem];
-    localStorage.setItem('pitgo_cart', JSON.stringify(updatedCart));
-    // Gửi một tín hiệu để Header biết cần cập nhật số lượng
-    window.dispatchEvent(new Event('cartUpdated'));
-    alert("Thêm vào danh sách thành công! Bạn có thể vào Giỏ hàng để xem lại.");
+    const updatedAppointment = [...currentAppointment, newItem];
+    
+    // 2. SỬA pitgo_Appointment THÀNH pitgo_appointment
+    localStorage.setItem('pitgo_appointment', JSON.stringify(updatedAppointment));
+    
+    // 3. SỬA AppointmentUpdated THÀNH appointmentUpdated
+    window.dispatchEvent(new Event('appointmentUpdated'));
+    
+    showAlert("success", "Thêm vào danh sách lịch hẹn thành công!");
   };
 
   return (
@@ -123,15 +123,14 @@ const CarDetail = () => {
           </p>
 
           <div className="specs-list">
-            <div className="spec-line">
+            {/* <div className="spec-line">
               <img
-                /* Chuyển tên hãng về chữ thường để khớp với tên file ảnh */
                 src={`/images/brand-${car.brand?.toLowerCase().replace(/\s+/g, '-')}.svg`}
                 alt={car.brand}
                 className="spec-icon-img"
               />
-              <span>Hãng: {car.brand}</span>
-            </div>
+              <span>{car.brand}</span>
+            </div> */}
             <div className="spec-line">
               <img
                 src="/images/speed.png"
@@ -210,8 +209,8 @@ const CarDetail = () => {
             <Link to="/contact" className="btn-contact">
               LIÊN HỆ TƯ VẤN
             </Link>
-            <Link to="/cart" className="btn-add-cart" onClick={handleAddToCart}>
-              THÊM GIỎ HÀNG
+            <Link to="/appointment" className="btn-add-appointment" onClick={handleAppointment}>
+              ĐẶT LỊCH HẸN
             </Link>
           </div>
         </div>

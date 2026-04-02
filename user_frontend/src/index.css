@@ -55,6 +55,105 @@ body {
 }
 
 /* ================= PUBLIC LAYOUT (TRANG LOGIN) ================= */
+/* MODAL THÔNG BÁO & XÁC NHẬN (CONFIRM BOX) CHUNG */
+/* Lớp phủ màn hình tối lại */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(2px); /* Tùy chọn: làm mờ nhẹ phía sau */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999; /* Z-index cực cao để chắc chắn nằm trên cùng, đè lên cả Header */
+}
+
+.modal-box.confirm-box {
+  background-color: #ffffff;
+  width: 400px;
+  max-width: 90%;
+  padding: 30px 25px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  animation: fadeInZoom 0.25s ease-out forwards; /* Hiệu ứng nảy mượt mà */
+}
+
+.confirm-icon {
+  font-size: 45px;
+  margin-bottom: 15px;
+  line-height: 1;
+}
+
+/* Tiêu đề Modal */
+.confirm-box h3 {
+  margin: 0 0 10px 0;
+  color: #111827;
+  font-size: 20px;
+}
+
+/* Dòng chữ mô tả */
+.confirm-box p {
+  color: #4b5563;
+  font-size: 15px;
+  margin: 0;
+}
+
+/* Cụm 2 nút bấm */
+.modal-actions.confirm-actions {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 25px;
+}
+
+/* Nút Trở lại / Hủy */
+.cancel-btn {
+  padding: 10px 20px;
+  background-color: #f3f4f6;
+  color: #374151;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cancel-btn:hover {
+  background-color: #e5e7eb;
+  color: #111827;
+}
+
+/* Nút Hành động chính (Xóa / Đăng nhập / Đăng xuất) */
+.delete-confirm-btn {
+  padding: 10px 20px;
+  background-color: #ef4444; /* Mặc định là đỏ cho Đăng xuất/Xóa */
+  color: #ffffff;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: filter 0.2s ease;
+}
+
+.delete-confirm-btn:hover {
+  filter: brightness(0.9);
+}
+
+/* Hiệu ứng Animation mở Modal */
+@keyframes fadeInZoom {
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
 
 /* TEXT CHUNG (Tránh dùng thẻ p, h2 trần) */
 .shared-h2 {
@@ -94,7 +193,6 @@ body {
 .login-container {
   display: flex;
   height: 100vh;
-  font-family: 'Inter', sans-serif;
 }
 
 /* LEFT */
@@ -1578,7 +1676,7 @@ body {
 }
 
 /* Style chung cho cả 2 thẻ Link */
-.btn-contact, .btn-add-cart {
+.btn-contact, .btn-add-appointment {
     /* Ép hiển thị Flex để chữ nằm đúng tâm nút */
     display: inline-flex; 
     justify-content: center;
@@ -1611,14 +1709,14 @@ body {
 }
 
 /* Nút THÊM GIỎ HÀNG (Cam) */
-.btn-add-cart {
+.btn-add-appointment {
     background-color: #FF8C00;
     color: #ffffff;
     /* Thêm border cùng màu cam để độ dày bằng khít nút trắng */
     border: 1px solid #FF8C00; 
 }
 
-.btn-add-cart:hover {
+.btn-add-appointment:hover {
     background-color: #e67e00;
     border-color: #e67e00;
 }
@@ -2109,9 +2207,9 @@ body {
 }
 
 /* ============================================================
-   PUBLIC LAYOUT (TRANG Cart) 
+   PUBLIC LAYOUT (TRANG Appointment) 
    ============================================================ */
-  .cart-page-container {
+  .appointment-page-container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 40px 20px;
@@ -2120,26 +2218,26 @@ body {
 }
 
 /* Breadcrumb */
-.cart-page-container .breadcrumb {
+.appointment-page-container .breadcrumb {
   font-size: 18px;
   color: #333;
   margin-bottom: 25px;
 }
 
-.cart-page-container .breadcrumb-text1, 
-.cart-page-container .breadcrumb-text4 {
+.appointment-page-container .breadcrumb-text1, 
+.appointment-page-container .breadcrumb-text4 {
   text-decoration: none;
   color: #333; 
   transition: 0.3s;
 }
 
 
-.cart-page-container .breadcrumb-text1:hover{
+.appointment-page-container .breadcrumb-text1:hover{
   color: red;
 }
 
 
-.cart-page-container.breadcrumb-separator {
+.appointment-page-container.breadcrumb-separator {
   margin: 0 5px;
   color: #333;
   font-weight: bold;
@@ -2174,7 +2272,7 @@ body {
 }
 
 /* ================= STEP CONTENT ================= */
-.cart-step-content {
+.appointment-step-content {
   background-color: #ffffff;
   border: 5px solid #000;
   border-radius: 10px;
@@ -2191,7 +2289,7 @@ body {
 }
 
 /* Vùng chứa danh sách xe */
-.cart-items-wrapper {
+.appointment-items-wrapper {
     max-height: 450px;    /* Chiều cao tối đa (khoảng bằng 2.5 - 3 sản phẩm) */
     overflow-y: auto;     /* Hiện thanh cuộn khi nội dung vượt quá max-height */
     padding-right: 10px;  /* Khoảng cách để thanh cuộn không đè lên nút bấm */
@@ -2199,26 +2297,26 @@ body {
 }
 
 /* Tùy chỉnh thanh cuộn cho đẹp và mỏng hơn (chỉ dành cho Chrome/Safari/Edge) */
-.cart-items-wrapper::-webkit-scrollbar {
+.appointment-items-wrapper::-webkit-scrollbar {
     width: 6px;
 }
 
-.cart-items-wrapper::-webkit-scrollbar-track {
+.appointment-items-wrapper::-webkit-scrollbar-track {
     background: #f1f1f1;
     border-radius: 10px;
 }
 
-.cart-items-wrapper::-webkit-scrollbar-thumb {
+.appointment-items-wrapper::-webkit-scrollbar-thumb {
     background: #ccc;
     border-radius: 10px;
 }
 
-.cart-items-wrapper::-webkit-scrollbar-thumb:hover {
+.appointment-items-wrapper::-webkit-scrollbar-thumb:hover {
     background: #999;
 }
 
-/* Cart Item (Bước 1) */
-.cart-item {
+/* Appointment Item (Bước 1) */
+.appointment-item {
   display: flex;
   align-items: center;
   background: #fff;
@@ -2228,23 +2326,23 @@ body {
   margin-bottom: 20px;
   position: relative;
 }
-.cart-item-img {
+.appointment-item-img {
   width: 350px;
   height: auto;
   object-fit: cover;
   margin-right: 30px;
 }
-.cart-item-info h3 {
+.appointment-item-info h3 {
   font-size: 22px;
   margin: 0 0 15px 0;
 }
-.cart-item-info p {
+.appointment-item-info p {
   margin: 5px 0;
   color: #555;
   font-size: 20px;
 }
 /* Container bọc 2 nút ở phía bên phải */
-.cart-item-actions {
+.appointment-item-actions {
   display: flex;
   flex-direction: column; /* Xếp theo chiều dọc */
   align-items: center;
@@ -2416,7 +2514,7 @@ body {
 }
 
 /* ================= ACTIONS BUTTONS ================= */
-.cart-actions {
+.appointment-actions {
   display: flex;         /* Kích hoạt flexbox */
   justify-content: center; /* Đưa các thành phần bên trong vào giữa theo chiều ngang */
   align-items: center;     /* Căn giữa theo chiều dọc */

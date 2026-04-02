@@ -6,38 +6,53 @@ function Header() {
   const navigate = useNavigate();
   const [isProductMenuOpen, setIsProductMenuOpen] = useState(false);
   const [selectedBrand, setSelectedBrand] = useState("Tất cả");
-  const [isServiceMenuOpen, setIsServiceMenuOpen] = useState(false);
 
   const [cars, setCars] = useState([]);
   const [loading, setLoading] = useState(true);
 
   // --- State quản lý số lượng sản phẩm trong giỏ ---
-  const [cartCount, setCartCount] = useState(0);
+  const [appointmentCount, setAppointmentCount] = useState(0);
+
+  // --- THÊM STATE CHO ĐĂNG NHẬP / ĐĂNG XUẤT ---
+  const [currentUser, setCurrentUser] = useState(null);
+  const [showLoginPromptModal, setShowLoginPromptModal] = useState(false);
+  const [showLogoutConfirmModal, setShowLogoutConfirmModal] = useState(false);
 
   useEffect(() => {
-    // Hàm cập nhật số lượng từ localStorage
-    const updateCartCount = () => {
-      const savedCart = localStorage.getItem('pitgo_cart');
-      if (savedCart) {
-        const cartItems = JSON.parse(savedCart);
-        setCartCount(cartItems.length);
+    // 1. Kiểm tra User đã đăng nhập chưa
+    const checkUser = () => {
+      const savedUser = localStorage.getItem("pitgo_user");
+      if (savedUser) {
+        setCurrentUser(JSON.parse(savedUser));
       } else {
-        setCartCount(0);
+        setCurrentUser(null);
       }
     };
+    checkUser();
 
-    // Chạy lần đầu khi component mount
-    updateCartCount();
+    // 2. Cập nhật số lượng giỏ hàng Đặt lịch
+    const updateAppointmentCount = () => {
+      const savedAppointment = localStorage.getItem('pitgo_appointment');
+      if (savedAppointment) {
+        const appointmentItems = JSON.parse(savedAppointment);
+        setAppointmentCount(appointmentItems.length);
+      } else {
+        setAppointmentCount(0);
+      }
+    };
+    updateAppointmentCount();
 
-    // Lắng nghe sự kiện storage (khi thay đổi ở tab khác hoặc trang khác)
-    window.addEventListener('storage', updateCartCount);
-
-    // Tạo một Custom Event để cập nhật ngay trong cùng một trang (Dùng cho CarDetail)
-    window.addEventListener('cartUpdated', updateCartCount);
+    // Lắng nghe sự kiện để cập nhật đồng bộ
+    window.addEventListener('storage', updateAppointmentCount);
+    window.addEventListener('storage', checkUser); // Lắng nghe cả đăng nhập
+    window.addEventListener('appointmentUpdated', updateAppointmentCount);
+    window.addEventListener('userUpdated', checkUser); // Custom event cho User
 
     return () => {
-      window.removeEventListener('storage', updateCartCount);
-      window.removeEventListener('cartUpdated', updateCartCount);
+      window.removeEventListener('storage', updateAppointmentCount);
+      window.removeEventListener('storage', checkUser);
+      window.removeEventListener('appointmentUpdated', updateAppointmentCount);
+      window.removeEventListener('userUpdated', checkUser);
     };
   }, []);
 
@@ -72,100 +87,186 @@ function Header() {
     }
   };
 
+  // --- XỬ LÝ CLICK ĐẶT LỊCH ---
+  const handleAppointmentClick = () => {
+    if (currentUser) {
+      navigate("/appointment");
+    } else {
+      setShowLoginPromptModal(true); // Hiện modal cảnh báo nếu chưa đăng nhập
+    }
+  };
+
+  // --- XỬ LÝ ĐĂNG XUẤT ---
+  const handleLogout = () => {
+    localStorage.removeItem("pitgo_user");
+    setCurrentUser(null);
+    setShowLogoutConfirmModal(false);
+    window.dispatchEvent(new Event('userUpdated')); // Báo cho các component khác
+    navigate("/");
+  };
+
   return (
-    <header className="public-header">
-      <div className="header-top">
-        <div className="header-logo">
-          <Link to="/home">
-            <img src="/images/logo.png" alt="PitGo Logo" style={{ height: "74px", display: "block" }} />
-          </Link>
-        </div>
+    <>
+      <header className="public-header">
+        <div className="header-top">
+          <div className="header-logo">
+            <Link to="/home">
+              <img src="/images/logo.png" alt="PitGo Logo" style={{ height: "74px", display: "block" }} />
+            </Link>
+          </div>
 
-        <div className="header-actions">
-          <button className="action-btn" onClick={() => navigate("/login")}>
-            <img src="/images/user.svg" alt="User Icon" className="action-icon" />
-            Đăng nhập
-          </button>
-
-          {/* Nút Giỏ hàng đã được cập nhật số lượng */}
-          <button className="action-btn" onClick={() => navigate("/cart")}>
-            <img src="/images/schedule-calendar.svg" alt="Cart Icon" className="action-icon" />
-            Đặt lịch {cartCount >= 0 && `(${cartCount})`}
-          </button>
-        </div>
-      </div>
-
-      <nav className="header-nav">
-        <ul>
-          <li className="nav-item-container">
-            <div className="nav-title">
-              <Link to="/home">Trang chủ</Link>
-            </div>
-          </li>
-
-          <li
-            className="nav-item-container"
-            onMouseEnter={() => setIsProductMenuOpen(true)}
-            onMouseLeave={() => setIsProductMenuOpen(false)}
-          >
-            <div className="nav-title">
-              Sản phẩm
-              <img src="/images/arr1.png" alt="Arrow" className={`nav-arrow ${isProductMenuOpen ? "open" : ""}`} />
-            </div>
-
-            {isProductMenuOpen && (
-              <div className="mega-menu" onClick={(e) => e.stopPropagation()}>
-                <ul className="brand-tabs">
-                  {brands.map((brand) => (
-                    <li
-                      key={brand}
-                      className={`brand-tab ${selectedBrand === brand ? "active" : ""}`}
-                      onMouseEnter={() => setSelectedBrand(brand)}
-                      onDoubleClick={() => handleDoubleClick(brand)}
-                      style={{ userSelect: "none", cursor: "pointer" }}
-                    >
-                      {brand}
-                    </li>
-                  ))}
-                </ul>
-
-                <div className="car-grid">
-                  {filteredCars.slice(0, 4).map((car) => (
-                    <Link
-                      to={`/car/${car._id}`}
-                      key={car.id}
-                      className="car-card"
-                      onClick={() => setIsProductMenuOpen(false)}
-                    >
-                      <img src={car.image} alt={car.carName} />
-                      <h4 className="car-name" title={car.carName}>{car.carName}</h4>
-                      <p>{car.price.toLocaleString()}.000.000.000 VNĐ</p>
-                    </Link>
-                  ))}
-                  {filteredCars.length === 0 && (
-                    <p style={{ color: "#888", marginTop: "20px" }}>Đang cập nhật dòng xe này...</p>
-                  )}
-                </div>
+          <div className="header-actions">
+            {/* THAY ĐỔI NÚT ĐĂNG NHẬP / ĐĂNG XUẤT */}
+            {currentUser ? (
+              <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
+                <span style={{ color: "#fff", fontWeight: "bold" }}>
+                  Chào, {currentUser.name}!
+                </span>
+                <button className="action-btn" onClick={() => setShowLogoutConfirmModal(true)}>
+                  <img src="/images/user.svg" alt="User Icon" className="action-icon" />
+                  Đăng xuất
+                </button>
               </div>
+            ) : (
+              <button className="action-btn" onClick={() => navigate("/login")}>
+                <img src="/images/user.svg" alt="User Icon" className="action-icon" />
+                Đăng nhập
+              </button>
             )}
-          </li>
 
-         
+            {/* Nút Đặt lịch ĐÃ ĐƯỢC BẢO VỆ */}
+            <button className="action-btn" onClick={handleAppointmentClick}>
+              <img src="/images/schedule-calendar.svg" alt="Appointment Icon" className="action-icon" />
+              Đặt lịch {appointmentCount >= 0 && `(${appointmentCount})`}
+            </button>
+          </div>
+        </div>
 
-          <li className="nav-item-container">
-            <div className="nav-title">
-              <Link to="/services">Dịch vụ</Link>
+        <nav className="header-nav">
+          <ul>
+            <li className="nav-item-container">
+              <div className="nav-title">
+                <Link to="/home">Trang chủ</Link>
+              </div>
+            </li>
+
+            <li
+              className="nav-item-container"
+              onMouseEnter={() => setIsProductMenuOpen(true)}
+              onMouseLeave={() => setIsProductMenuOpen(false)}
+            >
+              <div className="nav-title">
+                Sản phẩm
+                <img src="/images/arr1.png" alt="Arrow" className={`nav-arrow ${isProductMenuOpen ? "open" : ""}`} />
+              </div>
+
+              {isProductMenuOpen && (
+                <div className="mega-menu" onClick={(e) => e.stopPropagation()}>
+                  <ul className="brand-tabs">
+                    {brands.map((brand) => (
+                      <li
+                        key={brand}
+                        className={`brand-tab ${selectedBrand === brand ? "active" : ""}`}
+                        onMouseEnter={() => setSelectedBrand(brand)}
+                        onDoubleClick={() => handleDoubleClick(brand)}
+                        style={{ userSelect: "none", cursor: "pointer" }}
+                      >
+                        {brand}
+                      </li>
+                    ))}
+                  </ul>
+
+                  <div className="car-grid">
+                    {filteredCars.slice(0, 4).map((car) => (
+                      <Link
+                        to={`/car/${car._id}`}
+                        key={car._id}
+                        className="car-card"
+                        onClick={() => setIsProductMenuOpen(false)}
+                      >
+                        <img src={car.image} alt={car.carName} />
+                        <h4 className="car-name" title={car.carName}>{car.carName}</h4>
+                        <p>{car.price.toLocaleString()}.000.000.000 VNĐ</p>
+                      </Link>
+                    ))}
+                    {filteredCars.length === 0 && (
+                      <p style={{ color: "#888", marginTop: "20px" }}>Đang cập nhật dòng xe này...</p>
+                    )}
+                  </div>
+                </div>
+              )}
+            </li>
+
+            <li className="nav-item-container">
+              <div className="nav-title">
+                <Link to="/services">Dịch vụ</Link>
+              </div>
+            </li>
+
+            <li className="nav-item-container">
+              <div className="nav-title">
+                <Link to="/contact">Liên hệ</Link>
+              </div>
+            </li>
+          </ul>
+        </nav>
+      </header>
+
+      {/* ================= MODALS ================= */}
+      
+      {/* 1. Modal Yêu cầu đăng nhập khi bấm Đặt Lịch */}
+      {showLoginPromptModal && (
+        <div className="modal-overlay">
+          <div className="modal-box confirm-box">
+            <div className="confirm-icon">🔒</div>
+            <h3>Yêu cầu Đăng nhập</h3>
+            <p style={{ marginTop: "10px", lineHeight: "1.5" }}>
+              Bạn cần đăng nhập bằng tài khoản PitGo để có thể tiến hành đặt lịch hẹn xem xe và sử dụng các dịch vụ đặc quyền.
+            </p>
+            <div className="modal-actions confirm-actions" style={{ marginTop: "20px" }}>
+              <button
+                className="cancel-btn"
+                onClick={() => setShowLoginPromptModal(false)}
+              >
+                Trở lại xem xe
+              </button>
+              <button 
+                className="delete-confirm-btn" 
+                style={{ backgroundColor: "#0d6efd" }} // Màu xanh cho thân thiện
+                onClick={() => {
+                  setShowLoginPromptModal(false);
+                  navigate("/login");
+                }}
+              >
+                Đăng nhập ngay
+              </button>
             </div>
-          </li>
+          </div>
+        </div>
+      )}
 
-          <li className="nav-item-container">
-            <div className="nav-title">
-              <Link to="/contact">Liên hệ</Link>
+      {/* 2. Modal Xác nhận Đăng xuất */}
+      {showLogoutConfirmModal && (
+        <div className="modal-overlay">
+          <div className="modal-box confirm-box">
+            <div className="confirm-icon">⚠️</div>
+            <h3>Xác nhận Đăng xuất?</h3>
+            <p>Bạn có chắc chắn muốn đăng xuất khỏi tài khoản hiện tại không?</p>
+            <div className="modal-actions confirm-actions" style={{ marginTop: "20px" }}>
+              <button
+                className="cancel-btn"
+                onClick={() => setShowLogoutConfirmModal(false)}
+              >
+                Hủy
+              </button>
+              <button className="delete-confirm-btn" onClick={handleLogout}>
+                Xác nhận
+              </button>
             </div>
-          </li>
-        </ul>
-      </nav>
-    </header>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 

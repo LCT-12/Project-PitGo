@@ -576,6 +576,39 @@ body {
     box-sizing: border-box; /* Rất quan trọng */
 }
 
+/* Khung bọc ngoài cùng: cần có position relative để làm gốc định vị cho icon */
+.password-wrapper {
+  position: relative;
+  width: 100%;
+  display: block;
+}
+
+/* Thẻ input cần thêm padding bên phải để chữ khi gõ không bị đè lên icon */
+.password-wrapper .form-input {
+  width: 100%;
+  padding-right: 40px; /* Tạo khoảng trống bên phải cho icon */
+  /* Các thuộc tính khác của input bạn giữ nguyên (border, padding-left, height...) */
+}
+
+/* Định vị icon nằm đè lên trên input, dịch sang sát mép phải và căn giữa theo chiều dọc */
+.password-wrapper .eye-icon {
+  position: absolute;
+  right: 12px; /* Cách lề phải 12px */
+  top: 50%; /* Đẩy xuống nửa chiều cao */
+  transform: translateY(-50%); /* Căn giữa chính xác theo chiều dọc */
+  cursor: pointer; /* Đổi con trỏ chuột thành hình bàn tay để dễ click */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #9ca3af; /* Màu icon, bạn có thể đổi theo ý muốn */
+}
+
+/* Hiệu ứng hover cho đẹp */
+.password-wrapper .eye-icon:hover svg path,
+.password-wrapper .eye-icon:hover svg circle {
+  stroke: #4b5563; /* Đổi màu khi di chuột vào */
+}
+
 input[type="text"],
 input[type="email"],
 input[type="date"],

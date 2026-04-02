@@ -419,6 +419,7 @@ function Cars({ showAlert }) {
                     <option value="Mercedes">Mercedes</option>
                     <option value="Mclaren">Mclaren</option>
                     <option value="Lamborghini">Lamborghini</option>
+                    <option value="Bugatti">Bugatti</option>
                   </select>
                 </div>
                 <div className="form-group">

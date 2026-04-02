@@ -1065,6 +1065,15 @@ input:focus {
   background: #fee2e2;
   color: #991b1b;
 }
+.badge.blue {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.badge.orange {
+  background: #ffedd5;
+  color: #9a3412;
+}
 
 .badge.all {
   background-color: #1e293b; 

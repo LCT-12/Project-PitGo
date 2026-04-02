@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios'; // BẮT BUỘC IMPORT AXIOS
 import '../index.css'; 
 
-// Import dữ liệu mặc định
-// import { mockAppointmentData } from '../mockData/mockAppointment'; 
-// import { Appointment } from '../mockData/mockAptm';
-
-function Appointment({ showAlert }) {
+function Appointment() {
   const [step, setStep] = useState(1);
   const [errorMessage, setErrorMessage] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [bookingCode, setBookingCode] = useState("");
 
   const [appointmentItems, setAppointmentItems] = useState(() => {
     const savedAppointment = localStorage.getItem('pitgo_appointment');
@@ -18,7 +17,7 @@ function Appointment({ showAlert }) {
   const [apt, setApt] = useState({
     location: "Cơ sở 1",
     date: "",
-    fullName: "",
+    userName: "",
     phone: "",
     email: "",
     technicalAdvice: false,
@@ -35,6 +34,26 @@ function Appointment({ showAlert }) {
     notes: ""
   });
 
+  // ================= TÍNH NĂNG AUTO-FILL THÔNG TIN KHÁCH HÀNG =================
+  useEffect(() => {
+    const savedUser = localStorage.getItem('pitgo_user');
+    if (savedUser) {
+      try {
+        const currentUser = JSON.parse(savedUser);
+        // Cập nhật state apt với thông tin user (giữ nguyên các trường khác)
+        setApt(prevApt => ({
+          ...prevApt,
+          userName: currentUser.name || "",
+          phone: currentUser.phone || "",
+          email: currentUser.email || ""
+        }));
+      } catch (error) {
+        console.error("Lỗi khi đọc dữ liệu User:", error);
+      }
+    }
+  }, []); // Mảng rỗng [] giúp hook này chỉ chạy 1 lần duy nhất khi mở trang
+  // ============================================================================
+
   useEffect(() => {
     localStorage.setItem('pitgo_appointment', JSON.stringify(appointmentItems));
   }, [appointmentItems]);
@@ -45,7 +64,6 @@ function Appointment({ showAlert }) {
       ...apt,
       [name]: type === 'checkbox' ? checked : value
     });
-    // Xóa lỗi ngay khi người dùng bắt đầu sửa lại thông tin
     if (errorMessage) setErrorMessage("");
   };
 
@@ -57,36 +75,66 @@ function Appointment({ showAlert }) {
   };
 
   // --- LOGIC XỬ LÝ KHI NHẤN XÁC NHẬN ---
-  const handleConfirm = () => {
-    // 1. Kiểm tra các thông tin nhập liệu bắt buộc
-    if (!apt.date) {
-      setErrorMessage("Vui lòng chọn ngày hẹn xem xe!");
-      return;
-    }
-    if (!apt.fullName || apt.fullName.trim() === "") {
-      setErrorMessage("Vui lòng nhập họ tên của bạn!");
-      return;
-    }
-    if (!apt.phone || apt.phone.trim() === "") {
-      setErrorMessage("Vui lòng nhập số điện thoại để chúng tôi liên hệ!");
-      return;
-    }
-    if (!apt.email || apt.email.trim() === "") {
-      setErrorMessage("Vui lòng nhập địa chỉ email!");
-      return;
-    }
+  const handleConfirm = async () => {
+    // 1. Kiểm tra Validate (Đã bọc thêm String() để chống sập khi dữ liệu là dạng Số)
+    if (!apt.date) return setErrorMessage("Vui lòng chọn ngày hẹn xem xe!");
+    if (!String(apt.userName || "").trim()) return setErrorMessage("Vui lòng nhập họ tên của bạn!");
+    if (!String(apt.phone || "").trim()) return setErrorMessage("Vui lòng nhập số điện thoại!");
+    if (!String(apt.email || "").trim()) return setErrorMessage("Vui lòng nhập địa chỉ email!");
 
-    // 2. KIỂM TRA PHẢI CHỌN ÍT NHẤT 1 DỊCH VỤ
-    // Kiểm tra xem có ô nào trong 3 ô checkbox được tích hay không
     const hasSelectedService = apt.technicalAdvice || apt.testDrive || apt.carMaintenance || apt.carWash || apt.carRepair || apt.carCare || apt.carPerformance || apt.carInterior || apt.carExterior || apt.carManagement || apt.financialSupport;    
-    if (!hasSelectedService) {
-      setErrorMessage("Vui lòng chọn ít nhất một dịch vụ");
-      return;
-    }
+    if (!hasSelectedService) return setErrorMessage("Vui lòng chọn ít nhất một dịch vụ");
 
-    // Nếu tất cả thông tin đã đầy đủ
-    setErrorMessage("");
-    setStep(3);
+    try {
+      setLoading(true);
+      
+      // 2. Lấy thông tin User đang đăng nhập
+      const currentUser = JSON.parse(localStorage.getItem('pitgo_user') || '{}');
+
+      // 3. Gom các dịch vụ được tích vào 1 mảng
+      const selectedServices = [];
+      if (apt.technicalAdvice) selectedServices.push("Tư vấn");
+      if (apt.testDrive) selectedServices.push("Lái thử");
+      if (apt.carMaintenance) selectedServices.push("Bảo dưỡng");
+      if (apt.carWash) selectedServices.push("Rửa xe");
+      if (apt.carRepair) selectedServices.push("Sửa chữa");
+      if (apt.carCare) selectedServices.push("Chăm sóc xe");
+      if (apt.carPerformance) selectedServices.push("Kiểm tra hiệu năng");
+      if (apt.carInterior) selectedServices.push("Trang trí nội thất");
+      if (apt.carExterior) selectedServices.push("Nâng cấp ngoại thất");
+      if (apt.carManagement) selectedServices.push("Quản lý & Ký gửi xe");
+      if (apt.financialSupport) selectedServices.push("Hỗ trợ tài chính");
+
+      // 4. Gói dữ liệu gửi lên Backend
+      const payload = {
+        userId: currentUser._id || currentUser.id || "guest",
+        fullName: apt.userName,
+        phone: apt.phone,
+        email: apt.email,
+        location: apt.location,
+        date: apt.date,
+        services: selectedServices,
+        notes: apt.notes,
+        cars: appointmentItems
+      };
+
+      const response = await axios.post("http://localhost:5000/api/appointments", payload);
+
+      // 5. Thành công: Lưu mã Booking Code, Xóa LocalStorage và chuyển Bước 3
+      setBookingCode(response.data.bookingCode); // Lưu mã để hiển thị
+      
+      localStorage.removeItem('pitgo_appointment'); // Dọn dẹp giỏ hàng
+      setAppointmentItems([]);
+      window.dispatchEvent(new Event('appointmentUpdated')); // Báo Header reset số lượng
+
+      setErrorMessage("");
+      setStep(3);
+    } catch (error) {
+      console.error(error);
+      setErrorMessage("Lỗi kết nối máy chủ, vui lòng thử lại sau!");
+    } finally {
+      setLoading(false);
+    }
   };
   
   const nextStep = () => setStep(step + 1); 
@@ -146,7 +194,7 @@ function Appointment({ showAlert }) {
         </div>
         
         <div className="form-row">
-          <input type="text" name="fullName" placeholder="Nhập họ tên *" value={apt.fullName} onChange={handleInputChange} />
+          <input type="text" name="userName" placeholder="Nhập họ tên *" value={apt.userName} onChange={handleInputChange} />
           <input type="tel" name="phone" placeholder="Nhập số điện thoại *" value={apt.phone} onChange={handleInputChange} />
           <input type="email" name="email" placeholder="Nhập email *" value={apt.email} onChange={handleInputChange} />
         </div>
@@ -161,27 +209,19 @@ function Appointment({ showAlert }) {
             <label><input type="checkbox" name="carRepair" checked={apt.carRepair} onChange={handleInputChange} />Sửa chữa</label>
             <label><input type="checkbox" name="carCare" checked={apt.carCare} onChange={handleInputChange} />Chăm sóc xe</label>
             <label><input type="checkbox" name="carPerformance" checked={apt.carPerformance} onChange={handleInputChange} />Kiểm tra hiệu năng</label>
-            <label><input type="checkbox" name="carInterior" checked={apt.carInterior} onChange={handleInputChange} />Trang trí ngoại thất</label>
-            <label><input type="checkbox" name="carExterior" checked={apt.carExterior} onChange={handleInputChange} />Nâng cấp nội thất</label>
-            <label><input type="checkbox" name="carManagement" checked={apt.carManagement} onChange={handleInputChange} />Quản lý & Kí gửi xe</label>
+            <label><input type="checkbox" name="carInterior" checked={apt.carInterior} onChange={handleInputChange} />Trang trí nội thất</label>
+            <label><input type="checkbox" name="carExterior" checked={apt.carExterior} onChange={handleInputChange} />Nâng cấp ngoại thất</label>
+            <label><input type="checkbox" name="carManagement" checked={apt.carManagement} onChange={handleInputChange} />Quản lý & Ký gửi xe</label>
             <label><input type="checkbox" name="financialSupport" checked={apt.financialSupport} onChange={handleInputChange} />Hỗ trợ tài chính</label>
           </div>
         </div>
         <textarea name="notes" rows="4" placeholder="Ghi chú" value={apt.notes} onChange={handleInputChange}></textarea>
         
-        {/* HIỂN THỊ LỖI NGAY DƯỚI TEXTAREA */}
         {errorMessage && (
           <div style={{ 
-            color: '#d93025', 
-            backgroundColor: '#fce8e6', 
-            padding: '10px', 
-            borderRadius: '4px', 
-            marginTop: '10px', 
-            fontSize: '14px',
-            border: '1px solid #f5c2c7',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px'
+            color: '#d93025', backgroundColor: '#fce8e6', padding: '10px', 
+            borderRadius: '4px', marginTop: '10px', fontSize: '14px',
+            border: '1px solid #f5c2c7', display: 'flex', alignItems: 'center', gap: '8px'
           }}>
             <span>⚠️</span> {errorMessage}
           </div>
@@ -189,10 +229,9 @@ function Appointment({ showAlert }) {
       </div>
 
       <div className="appointment-actions">
-        <button className="btn-secondary" onClick={prevStep}>QUAY LẠI</button>
-        {/* Nút XÁC NHẬN bây giờ luôn bấm được, không bị mờ */}
-        <button className="btn-primary" onClick={handleConfirm}>
-          XÁC NHẬN
+        <button className="btn-secondary" onClick={prevStep} disabled={loading}>QUAY LẠI</button>
+        <button className="btn-primary" onClick={handleConfirm} disabled={loading}>
+          {loading ? "ĐANG XỬ LÝ..." : "XÁC NHẬN"}
         </button>
       </div>
     </div>
@@ -201,10 +240,10 @@ function Appointment({ showAlert }) {
   const renderStep3 = () => (
     <div className="appointment-step-content success-step">
       <h2 className="success-title">BẠN ĐÃ ĐẶT LỊCH HẸN THÀNH CÔNG</h2>
-      <p className="booking-code">Mã lịch hẹn: <strong>LHKH-001</strong></p>
+      <p className="booking-code">Mã lịch hẹn: <strong>{bookingCode}</strong></p>
       <div className="appointment-actions center-actions">
         <Link to="/" className="btn-secondary">VỀ TRANG CHỦ</Link>
-        <Link to="/contact" className="btn-primary">LIÊN HỆ HỖ TRỢ</Link>
+        <Link to="/contact" className="btn-primary">LIÊN HỆ</Link>
       </div>
     </div>
   );

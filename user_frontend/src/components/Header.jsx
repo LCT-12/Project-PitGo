@@ -15,6 +15,8 @@ function Header() {
 
   // --- THÊM STATE CHO ĐĂNG NHẬP / ĐĂNG XUẤT ---
   const [currentUser, setCurrentUser] = useState(null);
+  const [userName, setUserName] = useState("");
+
   const [showLoginPromptModal, setShowLoginPromptModal] = useState(false);
   const [showLogoutConfirmModal, setShowLogoutConfirmModal] = useState(false);
 
@@ -87,15 +89,6 @@ function Header() {
     }
   };
 
-  // --- XỬ LÝ CLICK ĐẶT LỊCH ---
-  const handleAppointmentClick = () => {
-    if (currentUser) {
-      navigate("/appointment");
-    } else {
-      setShowLoginPromptModal(true); // Hiện modal cảnh báo nếu chưa đăng nhập
-    }
-  };
-
   // --- XỬ LÝ ĐĂNG XUẤT ---
   const handleLogout = () => {
     localStorage.removeItem("pitgo_user");
@@ -116,12 +109,19 @@ function Header() {
           </div>
 
           <div className="header-actions">
-            {/* Logic hiển thị Đăng nhập/Đăng xuất */}
+            {/* Logic: Nếu có User thì hiện Lời chào + Đặt Lịch + Đăng xuất. Nếu chưa có thì CHỈ hiện Đăng nhập */}
             {currentUser ? (
               <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
-                <span style={{ color: "#fff", fontWeight: "bold" }}>
-                  Chào, {currentUser.name}!
+                <span style={{ fontWeight: "bold" }}>
+                  Chào, {currentUser?.name || currentUser?.email?.split('@')[0] || "Bạn"} !
                 </span>
+                
+                {/* Nút Đặt lịch ĐÃ ĐƯỢC CHUYỂN VÀO ĐÂY (Chỉ hiện khi đăng nhập) */}
+                <button className="action-btn" onClick={() => navigate("/appointment")}>
+                  <img src="/images/schedule-calendar.svg" alt="Appointment Icon" className="action-icon" />
+                  Đặt lịch {appointmentCount > 0 && `(${appointmentCount})`}
+                </button>
+
                 <button className="action-btn" onClick={() => setShowLogoutConfirmModal(true)}>
                   <img src="/images/user.svg" alt="User Icon" className="action-icon" />
                   Đăng xuất
@@ -133,12 +133,6 @@ function Header() {
                 Đăng nhập
               </button>
             )}
-
-            {/* Nút Đặt lịch */}
-            <button className="action-btn" onClick={handleAppointmentClick}>
-              <img src="/images/schedule-calendar.svg" alt="Appointment Icon" className="action-icon" />
-              Đặt lịch {appointmentCount >= 0 && `(${appointmentCount})`}
-            </button>
           </div>
         </div>
 
@@ -223,39 +217,7 @@ function Header() {
       </header>
 
       {/* ================= MODALS ================= */}
-      
-      {/* 1. Modal Yêu cầu đăng nhập khi bấm Đặt Lịch */}
-      {showLoginPromptModal && (
-        <div className="modal-overlay">
-          <div className="modal-box confirm-box">
-            <div className="confirm-icon">🔒</div>
-            <h3>Yêu cầu Đăng nhập</h3>
-            <p style={{ marginTop: "10px", lineHeight: "1.5" }}>
-              Bạn cần đăng nhập bằng tài khoản PitGo để có thể tiến hành đặt lịch hẹn xem xe và sử dụng các dịch vụ đặc quyền.
-            </p>
-            <div className="modal-actions confirm-actions" style={{ marginTop: "20px" }}>
-              <button
-                className="cancel-btn"
-                onClick={() => setShowLoginPromptModal(false)}
-              >
-                Trở lại xem xe
-              </button>
-              <button 
-                className="delete-confirm-btn" 
-                style={{ backgroundColor: "#0d6efd" }} // Màu xanh cho thân thiện
-                onClick={() => {
-                  setShowLoginPromptModal(false);
-                  navigate("/login");
-                }}
-              >
-                Đăng nhập ngay
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* 2. Modal Xác nhận Đăng xuất */}
+      {/* Modal Xác nhận Đăng xuất */}
       {showLogoutConfirmModal && (
         <div className="modal-overlay">
           <div className="modal-box confirm-box">

@@ -1158,7 +1158,6 @@ body {
   max-width: 1400px; /* Chiều rộng */
   margin: 0 auto;
   padding: 30px 40px;
-  font-family: 'Be Vietnam Pro', sans-serif;
   background-color: #F3F4F6; /* Màu nền nhạt của toàn trang */
 }
 
@@ -1327,7 +1326,6 @@ body {
   text-transform: uppercase;    
   margin: 0;                    
   color: #000;                  
-  font-family: 'Be Vietnam Pro', sans-serif;
 }
 
 .car-icon {
@@ -1472,7 +1470,6 @@ body {
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
-  font-family: Arial, sans-serif;
 }
 
 /* Breadcrumb */
@@ -1542,7 +1539,6 @@ body {
 }
 
 .car-title-display {
-  font-family: 'Times New Roman', serif;
   color: #002D5E;
   font-size: 32px;
   margin: 0;
@@ -1849,7 +1845,6 @@ body {
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
-  font-family: 'Be Vietnam Pro', sans-serif;
 }
 
 /* Breadcrumb */
@@ -2082,7 +2077,6 @@ body {
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
-  font-family: 'Be Vietnam Pro', sans-serif;
 }
 
 /* Breadcrumb */
@@ -2208,7 +2202,6 @@ body {
   max-width: 1200px;
   margin: 0 auto;
   padding: 40px 20px;
-  font-family: 'Arial', sans-serif;
   color: #333;
 }
 
@@ -2482,7 +2475,6 @@ body {
   border: 1px solid #ccc;
   border-radius: 5px;
   resize: vertical;
-  font-family: inherit;
 }
 
 /* Success (Bước 3) */

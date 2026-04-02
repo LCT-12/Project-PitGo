@@ -14,6 +14,7 @@ const contactRoutes = require("./routes/contactRoutes");
 const carRoutes = require("./routes/carRoutes");
 const adminRoutes = require("./routes/adminRoutes");
 const userRoutes = require('./routes/userRoutes');
+const appointmentRoutes = require('./routes/appointmentRoutes');
 
 // 1. Cấu hình môi trường (Luôn để đầu tiên)
 dotenv.config();
@@ -76,6 +77,7 @@ app.use("/api/admin", adminRoutes);
 app.use("/api/contact", contactRoutes);
 app.use("/api/car", carRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/appointments', appointmentRoutes);
 
 // 6. Khởi động Server theo thứ tự chuẩn
 const startServer = async () => {

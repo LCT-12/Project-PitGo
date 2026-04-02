@@ -30,9 +30,9 @@ function Sidebar() {
         </li>
 
         <li>
-          <NavLink to="/orders">
-            <span className="icon">🛒</span>
-            <span className="text">Orders</span>
+          <NavLink to="/appointments">
+            <span className="icon">🗓️</span>
+            <span className="text">Appointments</span>
           </NavLink>
         </li>
 

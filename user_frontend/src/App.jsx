@@ -24,7 +24,7 @@ const PublicLayout = () => {
     <div className="public-layout">
       <Header />
       <main className="public-content">
-        <Outlet /> {/* Nơi hiển thị Home và các trang khách hàng khác */}
+        <Outlet />
       </main>
       <Footer />
     </div>
@@ -49,9 +49,7 @@ function App() {
         const shutdownStatus = response.data.general_settings.shutdown;
         setIsShutdown(shutdownStatus);
 
-        // Cập nhật tiêu đề trang luôn cho đồng bộ
-        document.title =
-          response.data.general_settings.site_title || "Project-SX";
+        document.title = response.data.general_settings.site_title || "Project-SX";
       }
     } catch (error) {
       console.error("Error checking system status:", error);
@@ -61,13 +59,10 @@ function App() {
   useEffect(() => {
     const checkStatus = async () => {
       try {
-        // Gọi tới API của Backend (đảm bảo URL này đúng với server của bạn)
         const response = await axios.get("http://localhost:5000/api/setting/");
         if (response.data.general_settings) {
           setIsShutdown(response.data.general_settings.shutdown);
-          // Tiện thể cập nhật Title cho trang User luôn
-          document.title =
-            response.data.general_settings.site_title || "My Project";
+          document.title = response.data.general_settings.site_title || "My Project";
         }
       } catch (error) {
         console.error("Error fetching status:", error);
@@ -78,9 +73,8 @@ function App() {
     checkStatus();
   }, [location]);
 
-  if (loading) return null; // Hoặc hiệu ứng loading nhẹ
+  if (loading) return null;
 
-  // Nếu Shutdown được bật, chặn đứng và chỉ hiện trang Maintenance
   if (isShutdown) {
     return <Maintenance />;
   }
@@ -96,7 +90,6 @@ function App() {
           />
         )}
     <Routes>
-      {/* Route Login đứng riêng (không cần Header/Footer) */}
 
       <Route path="/login" element={<Login showAlert={showAlert} />} />
         <Route element={<PublicLayout />}>
@@ -116,10 +109,14 @@ function App() {
         {/* Trang Bảo dưỡng */}
         <Route path="/services" element={<Services />} />
 
+<<<<<<< HEAD
+        {/* Trang danh sách xe theo hãng */}
+=======
         {/* Trang Giới thiệu */}
         <Route path="/about-us" element={<About />} />
 
         {/* Trang danh sách xe theo hãng (Ví dụ: /Ferrari) */}
+>>>>>>> 8779366d1ce18877d472ae283687b41fbc292d83
         <Route path=":brandName" element={<AllCar />} />
 
         {/* Trang chi tiết xe */}

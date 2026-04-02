@@ -78,10 +78,9 @@ function Appointment({ showAlert }) {
 
     // 2. KIỂM TRA PHẢI CHỌN ÍT NHẤT 1 DỊCH VỤ
     // Kiểm tra xem có ô nào trong 3 ô checkbox được tích hay không
-    const hasSelectedService = apt.privateRoom || apt.technicalAdvice || apt.testDrive;
-    
+    const hasSelectedService = apt.technicalAdvice || apt.testDrive || apt.carMaintenance || apt.carWash || apt.carRepair || apt.carCare || apt.carPerformance || apt.carInterior || apt.carExterior || apt.carManagement || apt.financialSupport;    
     if (!hasSelectedService) {
-      setErrorMessage("Vui lòng chọn ít nhất một dịch vụ (Private room, Tư vấn kỹ thuật hoặc Lái thử)");
+      setErrorMessage("Vui lòng chọn ít nhất một dịch vụ");
       return;
     }
 
@@ -89,7 +88,7 @@ function Appointment({ showAlert }) {
     setErrorMessage("");
     setStep(3);
   };
-
+  
   const nextStep = () => setStep(step + 1); 
   const prevStep = () => setStep(step - 1);
 

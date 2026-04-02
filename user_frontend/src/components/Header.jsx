@@ -44,9 +44,9 @@ function Header() {
 
     // Lắng nghe sự kiện để cập nhật đồng bộ
     window.addEventListener('storage', updateAppointmentCount);
-    window.addEventListener('storage', checkUser); // Lắng nghe cả đăng nhập
+    window.addEventListener('storage', checkUser); 
     window.addEventListener('appointmentUpdated', updateAppointmentCount);
-    window.addEventListener('userUpdated', checkUser); // Custom event cho User
+    window.addEventListener('userUpdated', checkUser); 
 
     return () => {
       window.removeEventListener('storage', updateAppointmentCount);
@@ -71,7 +71,7 @@ function Header() {
     fetchCars();
   }, []);
 
-  const brands = ["Tất cả", "Ferrari", "Porsche", "Mercedes", "McLaren", "Lamborghini"];
+  const brands = ["Tất cả", "Ferrari", "Porsche", "Mercedes", "McLaren", "Lamborghini", "Bugatti"];
 
   const filteredCars =
     selectedBrand === "Tất cả"
@@ -101,7 +101,7 @@ function Header() {
     localStorage.removeItem("pitgo_user");
     setCurrentUser(null);
     setShowLogoutConfirmModal(false);
-    window.dispatchEvent(new Event('userUpdated')); // Báo cho các component khác
+    window.dispatchEvent(new Event('userUpdated')); 
     navigate("/");
   };
 
@@ -116,7 +116,7 @@ function Header() {
           </div>
 
           <div className="header-actions">
-            {/* THAY ĐỔI NÚT ĐĂNG NHẬP / ĐĂNG XUẤT */}
+            {/* Logic hiển thị Đăng nhập/Đăng xuất */}
             {currentUser ? (
               <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
                 <span style={{ color: "#fff", fontWeight: "bold" }}>
@@ -134,7 +134,7 @@ function Header() {
               </button>
             )}
 
-            {/* Nút Đặt lịch ĐÃ ĐƯỢC BẢO VỆ */}
+            {/* Nút Đặt lịch */}
             <button className="action-btn" onClick={handleAppointmentClick}>
               <img src="/images/schedule-calendar.svg" alt="Appointment Icon" className="action-icon" />
               Đặt lịch {appointmentCount >= 0 && `(${appointmentCount})`}
@@ -190,7 +190,11 @@ function Header() {
                       </Link>
                     ))}
                     {filteredCars.length === 0 && (
-                      <p style={{ color: "#888", marginTop: "20px" }}>Đang cập nhật dòng xe này...</p>
+                      <div style={{ gridColumn: "1 / -1" }}> 
+                        <p style={{ color: "#888", marginTop: "20px", textAlign: "center" }}>
+                          Đang cập nhật dòng xe này...
+                        </p>
+                      </div>
                     )}
                   </div>
                 </div>
@@ -206,6 +210,12 @@ function Header() {
             <li className="nav-item-container">
               <div className="nav-title">
                 <Link to="/contact">Liên hệ</Link>
+              </div>
+            </li>
+
+            <li className="nav-item-container">
+              <div className="nav-title">
+                <Link to="/about-us">Giới thiệu</Link>
               </div>
             </li>
           </ul>

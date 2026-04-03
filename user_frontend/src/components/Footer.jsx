@@ -30,6 +30,12 @@ function Footer() {
             <h4>Liên hệ</h4>
             <Link to="/contact" className="footer-link-item">Liên hệ với chúng tôi</Link>
           </div>
+
+          {/* Cột 4: Giới thiệu */}
+          <div className="footer-column">
+            <h4>Giới thiệu</h4>
+            <Link to="/about-us" className="footer-link-item">Về chúng tôi</Link>
+          </div>
         </div>
       </div>
       

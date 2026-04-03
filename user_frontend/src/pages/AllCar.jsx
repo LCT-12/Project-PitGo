@@ -14,7 +14,7 @@ const AllCar = () => {
   const [cars, setCars] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [searchTerm, setSearchTerm] = useState(""); // State duy nhất để tìm kiếm
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     const fetchCars = async () => {
@@ -43,13 +43,17 @@ const AllCar = () => {
 
   const handleBrandChange = (brand) => {
     setSelectedBrand(brand);
+    setSearchTerm(""); // Reset tìm kiếm khi đổi thương hiệu để tránh nhầm lẫn
   };
 
-  // LOGIC AUTO SEARCH: Lọc trực tiếp dựa trên searchTerm
-  const filteredCars = cars.filter((car) => {
-    const matchesBrand = selectedBrand === "Tất cả" || car.brand.toLowerCase() === selectedBrand.toLowerCase();
-    const matchesSearch = car.carName.toLowerCase().includes(searchTerm.toLowerCase().trim());
-    return matchesBrand && matchesSearch;
+  // 1. Lọc danh sách xe theo thương hiệu trước
+  const carsByBrand = cars.filter((car) => {
+    return selectedBrand === "Tất cả" || car.brand.toLowerCase() === selectedBrand.toLowerCase();
+  });
+
+  // 2. Sau đó mới lọc theo từ khóa tìm kiếm
+  const filteredCars = carsByBrand.filter((car) => {
+    return car.carName.toLowerCase().includes(searchTerm.toLowerCase().trim());
   });
 
   if (loading) return <Loading message="ĐANG TẢI DỮ LIỆU..." />;
@@ -75,7 +79,7 @@ const AllCar = () => {
             type="text" 
             placeholder="Nhập từ khóa tìm kiếm..." 
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)} // Cập nhật và lọc ngay lập tức
+            onChange={(e) => setSearchTerm(e.target.value)}
           />
           <div className="search-icon">
             <img src="/images/search.svg" alt="Search Icon" />
@@ -85,33 +89,28 @@ const AllCar = () => {
         <div className="allcar-title-line"></div>
       </div>
 
-
-
       <div className="allcar-content">
-        {/* Chỉ hiện Sidebar khi có kết quả */}
-        
-          <aside className="filter-sidebar">
-            <h3><img src="/images/logo-car.png" alt="Car Icon" className="car-icon"/>Bộ lọc - Dòng xe</h3>
-            <ul className="brand-filter-list">
-              {["Tất cả", "Ferrari", "Porsche", "Mercedes", "McLaren", "Lamborghini"].map((brand) => (
-                <li key={brand}>
-                  <label className="custom-checkbox">
-                    <input
-                      type="checkbox"
-                      checked={selectedBrand === brand}
-                      onChange={() => handleBrandChange(brand)}
-                    />
-                    <span className="checkmark"></span>
-                    <span className="brand-name">{brand}</span>
-                  </label>
-                </li>
-              ))}
-            </ul>
-          </aside>
-        
+        <aside className="filter-sidebar">
+          <h3><img src="/images/logo-car.png" alt="Car Icon" className="car-icon"/>Bộ lọc - Dòng xe</h3>
+          <ul className="brand-filter-list">
+            {["Tất cả", "Ferrari", "Porsche", "Mercedes", "McLaren", "Lamborghini", "Bugatti"].map((brand) => (
+              <li key={brand}>
+                <label className="custom-checkbox">
+                  <input
+                    type="checkbox"
+                    checked={selectedBrand === brand}
+                    onChange={() => handleBrandChange(brand)}
+                  />
+                  <span className="checkmark"></span>
+                  <span className="brand-name">{brand}</span>
+                </label>
+              </li>
+            ))}
+          </ul>
+        </aside>
 
-        {/* Nếu không có kết quả, div no-results sẽ tự động chiếm 100% nhờ grid-column 1/-1 */}
         <main className="car-display-grid">
+          {/* TRƯỜNG HỢP 1: Có kết quả lọc cuối cùng */}
           {filteredCars.length > 0 ? (
             filteredCars.map((car) => (
               <Link to={`/car/${car._id}`} key={car._id} className="car-item-link">
@@ -126,7 +125,17 @@ const AllCar = () => {
             ))
           ) : (
             <div className="no-results">
-              <p>Không tồn tại kết quả tìm kiếm cho: "<strong>{searchTerm}</strong>"</p>
+              {/* TRƯỜNG HỢP 2: Thương hiệu đó chưa có xe nào trong cơ sở dữ liệu */}
+              {carsByBrand.length === 0 ? (
+                <div className="empty-brand-message">
+                   <p>Dữ liệu xe {selectedBrand} đang được cập nhật</p>
+                </div>
+              ) : (
+                /* TRƯỜNG HỢP 3: Có xe nhưng tìm kiếm không khớp */
+                <div className="search-fail-message">
+                   <p>Không tìm thấy kết quả phù hợp cho từ khóa: "<strong>{searchTerm}</strong>"</p>
+                </div>
+              )}
             </div>
           )}
         </main>

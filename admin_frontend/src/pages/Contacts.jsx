@@ -203,7 +203,7 @@ const toggleImportant = async (id, currentStatus) => {
           alignItems: "center",
         }}
       >
-        <h2>Customer Messages</h2>
+        <h2>Quản lý Tin nhắn</h2>
         <div className="search-container">
           <input
             type="text"

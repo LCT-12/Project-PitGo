@@ -1,10 +1,11 @@
 import { NavLink } from "react-router-dom";
+import LogoImg from './logo_white.png';
 
 function Sidebar() {
   return (
     <aside className="sidebar">
       <div className="sidebar-header">
-        <h3 className="logo-text">ADMIN</h3>
+        <img style={{ width: "220px", height: "auto" }} src={LogoImg} alt="Logo" />
       </div>
 
       <ul className="menu">
@@ -18,35 +19,35 @@ function Sidebar() {
         <li>
           <NavLink to="/cars">
             <span className="icon">🚗</span>
-            <span className="text">Cars</span>
+            <span className="text">Quản lý Xe</span>
           </NavLink>
         </li>
 
         <li>
           <NavLink to="/customers">
             <span className="icon">👤</span>
-            <span className="text">Customers</span>
+            <span className="text">Quản lý Khách hàng</span>
           </NavLink>
         </li>
 
         <li>
           <NavLink to="/appointments">
             <span className="icon">🗓️</span>
-            <span className="text">Appointments</span>
+            <span className="text">Quản lý Lịch hẹn</span>
           </NavLink>
         </li>
 
         <li>
           <NavLink to="/contacts">
             <span className="icon">📩</span>
-            <span className="text">Contacts</span>
+            <span className="text">Quản lý Tin nhắn</span>
           </NavLink>
         </li>
 
         <li>
           <NavLink to="/Settings">
             <span className="icon">⚙</span>
-            <span className="text">Settings</span>
+            <span className="text">Cài Đặt</span>
           </NavLink>
         </li>
       </ul>

@@ -4,18 +4,18 @@ const carSchema = new mongoose.Schema({
     // Thông tin cơ bản
     carName: { type: String, required: true },
     brand: { type: String, required: true },
-    price: { type: Number, required: true },
+    price: { type: String, required: true },
     
     // ĐÃ SỬA: Chuyển thành mảng (Array) để chứa nhiều link ảnh và nhiều ID từ Cloudinary
     images: [{ type: String }], 
     public_ids: [{ type: String }], 
     
     // Thông số kỹ thuật
-    year: { type: Number },
+    year: { type: String },
     top_speed: { type: String },
     acceleration: { type: String },
     engine: { type: String },
-    horsePower: { type: Number },
+    horsePower: { type: String },
     fuel_type: { type: String },
     origin: { type: String },
     

@@ -112,7 +112,7 @@ function Users({ showAlert }) {
           marginBottom: "20px",
         }}
       >
-        <h2>Customers Management</h2>
+        <h2>Quản lý Khách hàng</h2>
         <button className="add-btn" onClick={() => setShowModal(true)}>
           Thêm Khách Hàng
         </button>

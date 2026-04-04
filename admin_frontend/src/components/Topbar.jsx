@@ -11,7 +11,7 @@ function Topbar({ onLogout }) {
   return (
     <header className="topbar">
       <h2>WELCOME BACK, ADMINISTRATOR</h2>
-      <a href="#" onClick={handleLogout} className="logout-btn">LOG OUT</a>
+      <a href="#" onClick={handleLogout} className="logout-btn">ĐĂNG XUẤT</a>
     </header>
   );
 }

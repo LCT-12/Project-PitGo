@@ -209,13 +209,13 @@ function Cars({ showAlert }) {
     gap: "10px"
 }}>
     {/* Khối bên trái: Tiêu đề */}
-    <h2 style={{ margin: 0 }}>Cars Management</h2>
+    <h2 style={{ margin: 0 }}>Quản lý Sản phẩm</h2>
 
     {/* Khối bên phải: Bộ lọc và Nút Thêm xe */}
     <div style={{ 
         display: "flex", 
         alignItems: "center", 
-        gap: "15px" // Khoảng cách giữa các badge và nút Thêm
+        gap: "15px"
     }}>
         {/* Nhóm bộ lọc (kiểu Badge như trong ảnh của bạn) */}
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>

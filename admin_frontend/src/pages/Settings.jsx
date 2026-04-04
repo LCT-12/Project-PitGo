@@ -245,19 +245,19 @@ function Settings({ showAlert }) {
           marginBottom: "20px",
         }}
       >
-        <h2>Settings</h2>
+        <h2>Cài Đặt Chung</h2>
       </div>
 
       {/* General Settings Section */}
       <div className="settings-card">
         <div className="card-header">
-          <h5 className="section-title">General Settings</h5>
+          <h5 className="section-title">Thiết lập trang</h5>
           <button className="btn-edit" onClick={handleGeneralEditClick}>
             <i className="bi bi-pencil-square"></i> EDIT
           </button>
         </div>
         <div className="card-content">
-          <h6 className="label">Site Title</h6>
+          <h6 className="label">Tiêu đề</h6>
           <p className="data-text">
             {generalData.site_title || "Chưa có tiêu đề"}
           </p>
@@ -306,20 +306,20 @@ function Settings({ showAlert }) {
       {/* Contact Details Section */}
       <div className="settings-card">
         <div className="card-header">
-          <h5 className="section-title">Contact Settings</h5>
+          <h5 className="section-title">Cài Đặt Liên Hệ</h5>
           <button className="btn-edit" onClick={handleContactEditClick}>
             <i className="bi bi-pencil-square"></i> EDIT
           </button>
         </div>
         <div className="card-content grid-2-col">
-          <div className="contact-col">
-            <h6 className="label">Address</h6>
+          <div className="contact-col" style={{overflow: "hidden"}}>
+            <h6 className="label">Địa chỉ</h6>
             <p className="data-text">{contactData.address || "Not set"}</p>
             <h6 className="label">Google Maps Link</h6>
             <p className="data-text truncate">
               {contactData.gmap || "Not set"}
             </p>
-            <h6 className="label">Phone Numbers</h6>
+            <h6 className="label">Số Điện Thoại</h6>
             <p className="data-text">
               <i className="bi bi-telephone-fill"></i>{" "}
               {contactData.pn1 || "N/A"}
@@ -342,15 +342,14 @@ function Settings({ showAlert }) {
       {/* Security Settings Card */}
       <div className="settings-card">
         <div className="card-header">
-          <h5 className="section-title">Security Settings</h5>
+          <h5 className="section-title">Bảo mật</h5>
           <button className="btn-edit" onClick={() => setShowPassModal(true)}>
-            <i className="bi bi-shield-lock"></i> CHANGE PASSWORD
+            <i className="bi bi-shield-lock"></i> Đổi mật khẩu
           </button>
         </div>
         <div className="card-content">
           <p className="text-muted">
-            It is recommended to update your password periodically to ensure the
-            security of your account.
+            Để bảo mật tài khoản admin, bạn nên thay đổi mật khẩu định kỳ và không chia sẻ thông tin đăng nhập với người khác.
           </p>
         </div>
       </div>
@@ -360,11 +359,11 @@ function Settings({ showAlert }) {
         <div className="custom-modal-overlay">
           <div className="custom-modal-dialog">
             <div className="modal-header">
-              <h5>Edit General Settings</h5>
+              <h5>Chỉnh sửa Thiết lập Trang</h5>
             </div>
             <div className="modal-body">
               <div className="form-group">
-                <label>Site Title</label>
+                <label>Tiêu đề Trang</label>
                 <input
                   type="text"
                   value={tempData.site_title || ""}

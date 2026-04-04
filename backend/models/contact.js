@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 
 const contactSchema = new mongoose.Schema({
-    customId: { type: String, unique: true }, // VD: 19032025 - 001
-    date: { type: String }, // VD: 14:30 19/03/2025
+    customId: { type: String, unique: true },
+    date: { type: String },
     name: { type: String, required: true },
     email: { type: String, required: true },
     subject: { type: String },

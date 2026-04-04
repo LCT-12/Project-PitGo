@@ -99,27 +99,19 @@ export default function About() {
           <div className="team-grid">
             <div className="team-member">
               <div className="member-image">
-                <img src="/images/member1.jpeg" alt="Phạm Đình Anh Khôi" />
-              </div>
-              <h4>Phạm Đình Anh Khôi</h4>
-              <p className="role">Member</p>
-            </div>
-
-            <div className="team-member">
-              <div className="member-image">
                 <img src="/images/member2.jpg" alt="Lâm Công Tiến" />
               </div>
               <h4>Lâm Công Tiến</h4>
               <p className="role">Leader</p>
             </div>
 
-            {/* <div className="team-member">
+            <div className="team-member">
               <div className="member-image">
-                <img src="/images/member3.jpg" alt="Nguyễn Minh Quang" />
+                <img src="/images/member1.jpeg" alt="Phạm Đình Anh Khôi" />
               </div>
-              <h4>Nguyễn Minh Quang</h4>
+              <h4>Phạm Đình Anh Khôi</h4>
               <p className="role">Member</p>
-            </div> */}
+            </div>
           </div>
         </div>
 

@@ -48,7 +48,7 @@ body {
   flex: 1;
   display: flex;
   flex-direction: column;
-  min-width: 0; /* Quan trọng nhất: Cho phép nội dung co lại, không đẩy Sidebar */
+  min-width: 0; 
   background: #f1f3f7;
   min-height: 100vh;
 }
@@ -61,10 +61,10 @@ body {
 /* ================= COMPONENT: ALERT ================= */
 .custom-alert-container {
     position: fixed;
-    top: 80px;            /* Khoảng cách từ trên xuống theo ý bạn */
-    right: 20px;          /* Khoảng cách từ lề phải */
+    top: 80px;            
+    right: 20px;          
     z-index: 10001;
-    min-width: 300px;     /* Độ rộng tối thiểu của alert */
+    min-width: 300px;     
     max-width: 400px;
     animation: fadeInDown 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
@@ -173,7 +173,7 @@ body {
 
 .admin-table {
   width: 100%;
-  min-width: 900px; /* Đảm bảo bảng đủ rộng để không méo chữ */
+  min-width: 900px; 
   border-collapse: collapse;
 }
 
@@ -272,8 +272,8 @@ body {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    display: block;  /* Bắt buộc nó hành xử như một khối */
-    width: 100%;     /* Ép giới hạn chiều rộng 100% của khung cha */
+    display: block;  
+    width: 100%;     
 }
 
 .section-title {
@@ -300,8 +300,6 @@ body {
     from { transform: translateY(-20px); opacity: 0; }
     to { transform: translateY(0); opacity: 1; }
 }
-
-/* ================= ORDERS PAGE ================= */
 
 /* ================= CARS PAGE ================= */
 .filter-container {
@@ -341,7 +339,7 @@ body {
 .img-fill {
   width: 100%;
   height: 100%;
-  object-fit: cover; /* Hoặc 'cover' - toàn bộ hoặc lấp đầy */
+  object-fit: cover; 
 }
 
 .no-image-placeholder {
@@ -357,7 +355,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    position: relative; /* Quan trọng để z-index của ảnh hoạt động */
+    position: relative; 
 }
 
 .car-thumbnail {
@@ -368,13 +366,13 @@ body {
     cursor: pointer;
     position: relative;
     z-index: 1;
-    transition: transform 0.3s ease, z-index 0s; /* z-index đổi ngay lập tức */
+    transition: transform 0.3s ease, z-index 0s; 
 }
 
 /* Hiệu ứng phóng to khi hover */
 .car-thumbnail:hover {
     transform: scale(2.5);
-    z-index: 10; /* Đẩy ảnh lên trên các hàng và text xung quanh */
+    z-index: 10; 
 }
 
 
@@ -402,18 +400,18 @@ body {
 
 .msg-text {
   line-height: 1.6;
-  white-space: pre-wrap; /* Giữ nguyên xuống dòng của lời nhắn */
+  white-space: pre-wrap; 
 }
 
 .custom-select-status {
   width: 25%;
-  padding: 10px 12px;      /* Khoảng cách đệm bên trong */
+  padding: 10px 12px;      
   border: 1px solid #e2e8f0; 
-  border-radius: 8px;      /* Bo góc theo style hiện đại */
+  border-radius: 8px;      
   background-color: #fff;
   font-size: 14px;
   outline: none;
-  text-align:start;        /* Căn chữ về bên trái */
+  text-align:start;       
   cursor: pointer;
   appearance: none; /* Xóa icon mặc định của trình duyệt */
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
@@ -481,7 +479,6 @@ body {
 }
 
 /* ================= MODALS & FORMS ================= */
-/* Rút gọn mô tả ... */
 .text-truncate {
   max-width: 150px;
   white-space: nowrap;
@@ -580,40 +577,35 @@ body {
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 8px;;
-    box-sizing: border-box; /* Rất quan trọng */
+    box-sizing: border-box; 
 }
 
-/* Khung bọc ngoài cùng: cần có position relative để làm gốc định vị cho icon */
 .password-wrapper {
   position: relative;
   width: 100%;
   display: block;
 }
 
-/* Thẻ input cần thêm padding bên phải để chữ khi gõ không bị đè lên icon */
 .password-wrapper .form-input {
   width: 100%;
-  padding-right: 40px; /* Tạo khoảng trống bên phải cho icon */
-  /* Các thuộc tính khác của input bạn giữ nguyên (border, padding-left, height...) */
+  padding-right: 40px; 
 }
 
-/* Định vị icon nằm đè lên trên input, dịch sang sát mép phải và căn giữa theo chiều dọc */
 .password-wrapper .eye-icon {
   position: absolute;
-  right: 12px; /* Cách lề phải 12px */
-  top: 50%; /* Đẩy xuống nửa chiều cao */
-  transform: translateY(-50%); /* Căn giữa chính xác theo chiều dọc */
-  cursor: pointer; /* Đổi con trỏ chuột thành hình bàn tay để dễ click */
+  right: 12px;
+  top: 50%; 
+  transform: translateY(-50%); 
+  cursor: pointer; 
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #9ca3af; /* Màu icon, bạn có thể đổi theo ý muốn */
+  color: #9ca3af; 
 }
 
-/* Hiệu ứng hover cho đẹp */
 .password-wrapper .eye-icon:hover svg path,
 .password-wrapper .eye-icon:hover svg circle {
-  stroke: #4b5563; /* Đổi màu khi di chuột vào */
+  stroke: #4b5563; 
 }
 
 input[type="text"],
@@ -672,7 +664,7 @@ input:focus {
   outline: none;
   background-color: white;
   cursor: pointer;
-  appearance: none; /* Xóa icon mặc định của trình duyệt nếu muốn */
+  appearance: none;
   background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 10px center;
@@ -698,8 +690,8 @@ input:focus {
 }
 
 .info-section {
-  flex: 1;                /* Mỗi cột chiếm đúng 50% */
-  min-width: 0;           /* Ngăn chặn việc nội dung dài làm giãn cột */
+  flex: 1;                
+  min-width: 0;           
   display: flex;
   flex-direction: column;
 }
@@ -789,19 +781,19 @@ input:focus {
 
 /* CSS Selection Order */
 .custom-select-order {
-  width: 100%;             /* Chiếm hết chiều rộng của cột cha */
-  padding: 10px 12px;      /* Khoảng cách đệm bên trong */
+  width: 100%;             
+  padding: 10px 12px;     
   border: 1px solid #e2e8f0; 
-  border-radius: 8px;      /* Bo góc theo style hiện đại */
+  border-radius: 8px;     
   background-color: #fff;
   font-size: 14px;
   color: #334155;
   outline: none;
-  box-sizing: border-box;  /* Rất quan trọng: Giữ padding không làm giãn khung */
-  display: block;          /* Đưa về dạng khối để dễ kiểm soát */
-  text-align: left;        /* Căn chữ về bên trái */
+  box-sizing: border-box;  
+  display: block;        
+  text-align: left;       
   cursor: pointer;
-  appearance: none; /* Xóa icon mặc định của trình duyệt */
+  appearance: none; 
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 12px center;
@@ -933,7 +925,7 @@ input:focus {
 }
 
 .page-btn.active {
-  background-color: #1e293b; /* Màu đen/xám đậm đồng bộ admin */
+  background-color: #1e293b; 
   color: white;
   border-color: #1e293b;
 }
@@ -1009,7 +1001,7 @@ input:focus {
 /* Ô input tìm kiếm */
 .search-input {
   width: 100%;
-  padding: 10px 35px 10px 15px; /* Padding-right 35px để chữ không bị nút X đè lên */
+  padding: 10px 35px 10px 15px;
   border: 1px solid #e2e8f0;
   border-radius: 8px;
   outline: none;
@@ -1291,12 +1283,12 @@ input:checked + .slider:before {
 .segmented-control button {
   flex: 1;
   border: none;
-  background: transparent; /* Nút trong suốt để thấy slider bên dưới */
+  background: transparent;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
   color: #64748b;
-  z-index: 2; /* Nằm trên slider để bấm được */
+  z-index: 2; 
   transition: color 0.3s ease;
 }
 
@@ -1314,7 +1306,7 @@ input:checked + .slider:before {
   background: white;
   border-radius: 8px;;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* Hiệu ứng trượt mượt */
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
   z-index: 0;
 }
 

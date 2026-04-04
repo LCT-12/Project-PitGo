@@ -8,7 +8,6 @@ function Services() {
   const [services, setServices] = useState([]);
 
   useEffect(() => {
-    // Thêm dữ liệu mẫu để trang không bị trống
     setServices([
         { id: 1, icon: 'wrench.svg', name: 'Bảo dưỡng', description: 'Duy trì phong độ đỉnh cao với quy trình chăm sóc định kỳ chuyên biệt cho từng dòng siêu xe.' },
         { id: 2, icon: 'wash-clean-sponge.svg', name: 'Rửa xe', description: 'Làm sạch chuyên sâu với công nghệ không chạm, bảo vệ tuyệt đối lớp sơn nguyên bản của xe.' },

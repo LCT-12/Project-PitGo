@@ -113,13 +113,13 @@ export default function About() {
               <p className="role">Leader</p>
             </div>
 
-            <div className="team-member">
+            {/* <div className="team-member">
               <div className="member-image">
                 <img src="/images/member3.jpg" alt="Nguyễn Minh Quang" />
               </div>
               <h4>Nguyễn Minh Quang</h4>
               <p className="role">Member</p>
-            </div>
+            </div> */}
           </div>
         </div>
 

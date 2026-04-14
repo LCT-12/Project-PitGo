@@ -2,47 +2,22 @@ const Car = require("../models/car");
 const cloudinary = require("../config/cloudinary");
 
 // ================= CREATE =================
+// --- HÀM TẠO XE MỚI ---
 exports.createCar = async (req, res) => {
-  try {
-    let imageUrls = [];
-    let publicIds = [];
+    try {
+        const carData = { ...req.body };
+        
+        // Nếu Multer đã upload ảnh lên Cloudinary thành công
+        if (req.file) {
+            carData.image = req.file.path; // req.file.path là link https của Cloudinary
+        }
 
-    // ĐÃ SỬA: Kiểm tra mảng req.files thay vì req.file
-    if (req.files && req.files.length > 0) {
-      // Dùng Promise.all để upload nhiều ảnh cùng lúc
-      const uploadPromises = req.files.map((file) => {
-        return new Promise((resolve, reject) => {
-          const stream = cloudinary.uploader.upload_stream(
-            { folder: "cars" },
-            (error, result) => {
-              if (error) reject(error);
-              resolve(result);
-            }
-          );
-          stream.end(file.buffer);
-        });
-      });
-
-      const results = await Promise.all(uploadPromises);
-      
-      // Tách kết quả trả về thành 2 mảng riêng biệt
-      imageUrls = results.map(result => result.secure_url);
-      publicIds = results.map(result => result.public_id);
+        const newCar = new Car(carData);
+        await newCar.save();
+        res.status(201).json(newCar);
+    } catch (err) {
+        res.status(400).json({ message: err.message });
     }
-
-    const car = await Car.create({
-      ...req.body,
-      images: imageUrls,       // Lưu mảng link ảnh
-      public_ids: publicIds,   // Lưu mảng id ảnh
-      price: Number(req.body.price),
-      year: Number(req.body.year),
-      horsePower: Number(req.body.horsePower),
-      isTrackOnly: req.body.isTrackOnly === 'true'
-    });
-    res.status(201).json(car);
-  } catch (err) {
-    res.status(400).json({ message: err.message });
-  }
 };
 
 // ================= UPDATE =================
